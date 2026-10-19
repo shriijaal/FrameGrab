@@ -1,0 +1,19 @@
+# Android build outputs & local machine config
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/app/src/main/assets/index.html
+android/.idea/
+android/captures/
+android/*.iml
+android/.cxx/
+
+# Release signing key — keep private. Place your own framegrab-release.jks
+# in android/ to produce signed release builds (see android/README.md).
+android/framegrab-release.jks
+
+# OS junk
+Thumbs.db
+desktop.ini
+.DS_Store

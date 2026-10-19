@@ -1,0 +1,62 @@
+plugins {
+    id 'com.android.application'
+}
+
+// Optional release signing: drop your own framegrab-release.jks next to this
+// folder to sign release builds. Without it, assembleRelease produces an
+// unsigned APK (assembleDebug is always signed with the debug keystore).
+def releaseKs = file('../framegrab-release.jks')
+
+android {
+    namespace 'com.framegrab.app'
+    compileSdk 36
+    buildToolsVersion '36.0.0'
+
+    defaultConfig {
+        applicationId 'com.framegrab.app'
+        minSdk 26
+        targetSdk 34
+        versionCode 4
+        versionName '1.8.0'
+    }
+
+    signingConfigs {
+        if (releaseKs.exists()) {
+            release {
+                storeFile releaseKs
+                storePassword 'framegrab'
+                keyAlias 'framegrab'
+                keyPassword 'framegrab'
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            if (releaseKs.exists()) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+}
+
+dependencies {
+}
+
+// Keep the bundled web app in step with the repo-root index.html on every build.
+tasks.register('copyWebApp', Copy) {
+    from rootProject.file('../index.html')
+    into layout.projectDirectory.dir('src/main/assets')
+}
+preBuild.dependsOn 'copyWebApp'
