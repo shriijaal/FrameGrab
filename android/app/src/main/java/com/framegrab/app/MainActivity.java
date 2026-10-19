@@ -489,6 +489,13 @@ public class MainActivity extends Activity {
             Log.i(TAG, "js: " + m);
         }
 
+        // Real system day/night state — the WebView's prefers-color-scheme can lag
+        // behind a live theme switch, so the page asks Android directly.
+        @JavascriptInterface public boolean isDark() {
+            return (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                    == Configuration.UI_MODE_NIGHT_YES;
+        }
+
         @JavascriptInterface public void saveFolder(String name, String mime, String dataUrl) {
             String tree = prefs().getString("folder", null);
             if (tree == null) {
