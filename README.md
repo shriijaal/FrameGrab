@@ -256,6 +256,9 @@ Requirements: JDK 17, Android SDK (platform `android-36`, build-tools `36.0.0`),
 
 ## Changelog
 
+- **1.11.1** — The background remover is live: it runs **rembg's own models** (u2netp / Silueta / ISNet)
+  on-device. Models are downloaded on demand (also from Settings → Background removal) and cached on the
+  device, so the app stays small. The instant Quick mode and the brush/edge tools still work.
 - **1.11.0** — **ASCII Studio**: the full ASCII engine from [asciify-engine](https://github.com/ayangabryl/asciify-engine)
   is now built into the app and works entirely offline. New toolbox tool with 25 render styles, 8 character sets
   and any custom ramp, the complete tone and finish controls, 19 dither algorithms, nine stacking source warps,

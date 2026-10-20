@@ -16,8 +16,8 @@ android {
         applicationId 'com.framegrab.app'
         minSdk 26
         targetSdk 34
-        versionCode 19
-        versionName '1.11.0'
+        versionCode 20
+        versionName '1.11.1'
     }
 
     signingConfigs {
@@ -59,4 +59,9 @@ tasks.register('copyWebApp', Copy) {
     from rootProject.file('../index.html')
     into layout.projectDirectory.dir('src/main/assets')
 }
-preBuild.dependsOn 'copyWebApp'
+// ONNX Runtime sidecars for the on-device background remover (bundled, not downloaded).
+tasks.register('copyBgRuntime', Copy) {
+    from rootProject.file('../bg')
+    into layout.projectDirectory.dir('src/main/assets/bg')
+}
+preBuild.dependsOn 'copyWebApp', 'copyBgRuntime'

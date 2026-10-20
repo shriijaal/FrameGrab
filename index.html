@@ -281,6 +281,19 @@ html{--font:Outfit,system-ui,sans-serif}
 .fi .cmpp button{position:relative;width:38px;height:38px;border-radius:12px;border:1px solid var(--gb);background:color-mix(in srgb,var(--on) 8%,transparent);color:var(--mut);font:inherit;font-weight:700;font-size:13px;line-height:1;padding:0;cursor:pointer}
 .fi .cmpp button::after{content:"";position:absolute;inset:-5px}
 .fi .cmpp button.on{background:var(--pri);color:var(--onp);border-color:transparent}
+.bgm{display:flex;flex-direction:column}
+.bgm .brow{display:flex;align-items:center;gap:10px;padding:10px 0}
+.bgm .brow+.brow{border-top:1px solid color-mix(in srgb,var(--on) 8%,transparent)}
+.bgm .bn{flex:1;min-width:0}
+.bgm .bn b,.bgm .bn small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bgm .bn b{font-weight:600;font-size:14px}
+.bgm .bn small{color:var(--mut);font-size:12px;margin-top:1px}
+.bgm .bp{height:6px;border-radius:99px;background:color-mix(in srgb,var(--on) 10%,transparent);overflow:hidden;margin-top:7px}
+.bgm .bp i{display:block;height:100%;background:var(--pri);border-radius:99px;transition:width .3s}
+.bgm .ba{display:flex;align-items:center;gap:6px;flex:none}
+.bgm .ba .btn{height:36px;padding:0 12px;font-size:13px}
+.bgm .tag{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mut);background:color-mix(in srgb,var(--on) 11%,transparent);border-radius:99px;padding:3px 9px;white-space:nowrap}
+.bgm .tag.on{color:var(--onp);background:var(--pri)}
 .fthumbs{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px}.ft{position:relative;flex:none;width:64px;height:64px;border-radius:14px;overflow:hidden}.ft canvas{width:100%;height:100%}.ft button{position:absolute;top:2px;right:2px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.55);color:#fff;font-size:14px;line-height:1;cursor:pointer;padding:0}
 .chips2{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.g2{border:0;font:inherit;font-size:12px;font-weight:600;cursor:pointer;background:var(--secc);color:var(--onsecc);padding:5px 10px;border-radius:99px}
 .qv{width:100%;border-radius:22px;margin-top:12px;background:#000;aspect-ratio:4/3;object-fit:cover}.qv[hidden]{display:none}
@@ -451,6 +464,10 @@ button,.btn,.tt,.pick,.chip,label.drop{touch-action:manipulation}
   <div class="row"><div>Capture flash<small>Visual shutter feedback</small></div><button class="sw on" data-t="flash" aria-label="Capture flash"></button></div>
   <div class="row"><div>Timecode in filename<small>e.g. clip_00-12.480.png</small></div><button class="sw on" data-t="ts" aria-label="Timecode in filename"></button></div>
   <div class="row"><div>Haptic feedback<small>Vibrate on taps, scrubbing and captures</small></div><button class="sw on" data-t="haptic" aria-label="Haptic feedback"></button></div>
+ </div>
+ <div class="sh">Background removal</div>
+ <div class="card">
+  <div class="row" style="display:block"><div>Segmentation models<small>Downloaded on demand and kept on this device — nothing is uploaded</small></div><div id="bgmodels" style="margin-top:4px"></div></div>
  </div>
  <div class="sh">About</div>
  <div class="card">
@@ -30900,12 +30917,12 @@ film.onpointerdown=e=>{fd=true;film.setPointerCapture(e.pointerId);fseek(e)};
 film.onpointermove=e=>{if(fd)fseek(e)};
 film.onpointerup=film.onpointercancel=()=>{fd=false};
 const CATS=[['edit','Edit'],['conv','Convert & optimize'],['create','Create'],['scan','Scan & analyze']];
-const TL=[['crop','Crop','crp','edit'],['resize','Resize','ires','edit'],['rotate','Rotate & flip','rot','edit'],['filters','Filters','wnd','edit'],['bg','Background remover','bgr','edit','soon'],['wm','Watermark','txt','edit'],['draw','Draw','drw','edit'],
+const TL=[['crop','Crop','crp','edit'],['resize','Resize','ires','edit'],['rotate','Rotate & flip','rot','edit'],['filters','Filters','wnd','edit'],['bg','Background remover','bgr','edit'],['wm','Watermark','txt','edit'],['draw','Draw','drw','edit'],
 ['fmt','Format changer','fmt','conv'],['cprs','Compress','cps','conv'],['rename','Batch rename','ren','conv'],['pdf','Images to PDF','pdf','conv'],
 ['clg','Collage','lib','create'],['split','Image splitter','spl','create'],['ascii','ASCII art','asc','create'],['astudio','ASCII Studio','ast','create'],['qrgen','QR & barcode generator','qrg','create'],
 ['ocr','Text recognition','ocr','scan'],['doc','Document scanner','doc','scan'],['qrs','QR & barcode scanner','qrs','scan'],['pick','Color picker','dro','scan'],['pal','Palette','pal','scan'],['cmp','Compare','cmp','scan'],['b64','Base64','b64','scan']];
 const FD={br:100,ct:100,sa:100,hu:0,bl:0,gr:0,se:0,iv:0},FP={none:{},mono:{gr:100},warm:{se:35,sa:120,br:105},cool:{hu:200,sa:90},vivid:{sa:160,ct:115},fade:{ct:80,br:110,sa:80},noir:{gr:100,ct:140,br:90}};
-const defT=()=>Object.assign({l:0,t:0,r:0,b:0,rs:100,rot:0,fh:0,fv:0,wt:'',ws:8,wo:70,wp:'br',wr:0,wa:0,wg:12,bg:0,bm:'c',bt:30,bf:15,bb:'t',bgc:null,ds:[],dc:'#ff3b30',dw:8,pn:6,cp:50,cg:3,cl:'g',cb:'w',b6:'d',bx:0,bo:0,bd:0,bk:'pick',bz:24,bs:[],bcc:'#ffffff',cr:'4:3',cx:0,sr:3,sc:3,sq:'f',so:'r',ac:80,ak:'std',ai:0,aco:0,ff:'image/webp',fq:85,cf:'image/jpeg',cq:75,cmode:'q',ck:300,cm:0,rp:'{name}',rn:1,rpad:2,rcase:'k',rf:'',rr:'',dm:'color',oe:1,ps:'a4',pmg:18,pq:85,pm:'color',pa:1,cas:'free',rw:0,rh:0,rl:1,dmode:'free',dop:100,dr:[],rotf:0,cgr:0,cgc:0,ol:0},FD);
+const defT=()=>Object.assign({l:0,t:0,r:0,b:0,rs:100,rot:0,fh:0,fv:0,wt:'',ws:8,wo:70,wp:'br',wr:0,wa:0,wg:12,bg:0,bm:'c',bt:30,bf:15,bb:'t',bgc:null,bgm:'ai',ds:[],dc:'#ff3b30',dw:8,pn:6,cp:50,cg:3,cl:'g',cb:'w',b6:'d',bx:0,bo:0,bd:0,bk:'pick',bz:24,bs:[],bcc:'#ffffff',cr:'4:3',cx:0,sr:3,sc:3,sq:'f',so:'r',ac:80,ak:'std',ai:0,aco:0,ff:'image/webp',fq:85,cf:'image/jpeg',cq:75,cmode:'q',ck:300,cm:0,rp:'{name}',rn:1,rpad:2,rcase:'k',rf:'',rr:'',dm:'color',oe:1,ps:'a4',pmg:18,pq:85,pm:'color',pa:1,cas:'free',rw:0,rh:0,rl:1,dmode:'free',dop:100,dr:[],rotf:0,cgr:0,cgc:0,ol:0},FD);
 let TI=null,T=defT(),TN='image',curTool='',PH='';
 $('#tgrid').innerHTML=TL.map(([id,n,ic,soon])=>`<button class="tt glass${soon?' soon':''}" data-t="${id}"><span class="ic"><svg class="i"><use href="#${ic}"/></svg></span>${n}${soon?'<small>Soon</small>':''}</button>`).join('');
 const CF='filter' in CanvasRenderingContext2D.prototype;
@@ -31322,8 +31339,8 @@ $('#fontfile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if
 Promise.all([idb('get','fsel'),idb('get','fbuf'),idb('get','fname')]).then(async([sel,buf,nm])=>{try{if(buf)await loadFont(buf.slice(0),nm||'Custom')}catch(e){}if(sel&&FONTS[sel]&&(sel!=='custom'||FS.name))FS.sel=sel;applyFont()});
 applyFont();
 /* ---- about ---- */
-const APP={v:'1.11.0',build:'2026-10-20'};
-const CHG=[['1.11.0','20 Oct 2026',['ASCII Studio \u2014 the full ASCII engine is built into the app now and works offline: 25 render styles, 8 character sets and any custom ramp, 19 dither algorithms, nine stacking source warps, crop and zoom, per-channel tone curves, masks and a movable light, ten still motions and nineteen pointer effects','A brand-new toolbox tool: open ASCII Studio from the Toolbox grid and drop in a source \u2014 everything renders on your device, nothing is uploaded and nothing is fetched at runtime','All 61 asciify.org looks are in the Studio, one tap each \u2014 projects, composed, finished, characters, dither, print and tiles','Layered compositions: up to eight layers, each with its own style, opacity, blend and placement','Four sources \u2014 your image, the video in the editor, a file (GIF included), or a text banner in 23 fonts','Export to PNG, JPEG, GIF, MP4 and WebM at wallpaper, poster or square sizes, plus plain text and ANSI text','The engine is vendored from npm and bundled into the single-file app, so it keeps working with no connection at all','Credits: asciify-engine, figlet, gifenc, gifuct-js and mediabunny (MIT) \u2014 the licence texts ship in vendor/']],['1.10.2','20 Oct 2026',['New app icon \u2014 the neon gallery-scan artwork is now the launcher icon on your phone (adaptive icon, round icon and legacy icons for every density), and the web app uses it as its favicon']],['1.10.1','20 Oct 2026',['Compare preview fixed: it now starts on its own \u2014 as soon as two images are in the list the first two are compared straight away, the empty state explains what to do instead of showing a blank box, and a single picked image fills the whole preview instead of half a picture next to a black block','Compare: tapping the image that is already A swaps the pair instead of showing the same picture on both sides, and the A / B buttons are now proper touch targets','Toolbox icons now share one theme \u2014 the four categories no longer use four different colours, so the grid reads as a single system']],['1.10.0','20 Oct 2026',['Compare now compares two pictures: tap A and B on any image in the list to pick the pair, then slide the divider (or drag it on the picture) to reveal one over the other \u2014 with a Swap button and A / B markers on the picture itself','Collage: tap any photo right on the collage to select it \u2014 and press-and-drag grabs it in one gesture, no thumbnail hunting','Collage drags now follow your finger at full speed (they crawled at 1/2 to 1/3 speed before) and stop exactly at the crop edge instead of exposing empty background','Collage: pinch the collage to crop the selected photo (the slider stays in sync); double-tap a photo or use the new Reset crop button to put it back','The selection frame now lands exactly on the photo it belongs to (it was mis-scaled on large collages), unselected photos dim so the selection is obvious, and crop/position changes are undoable']],['1.9.9','20 Oct 2026',['Collage: tap any photo right on the collage to select it \u2014 and press-and-drag grabs it in one gesture, no thumbnail hunting','Collage drags now follow your finger at full speed (they crawled at 1/2 to 1/3 speed before) and stop exactly at the crop edge instead of exposing empty background','Collage: pinch the collage to crop the selected photo (the slider stays in sync); double-tap a photo or use the new Reset crop button to put it back','The selection frame now lands exactly on the photo it belongs to (it was mis-scaled on large collages), unselected photos dim so the selection is obvious, and crop/position changes are undoable']],['1.9.8','20 Oct 2026',['Collage spacing fixed on every front: every cell is now clipped (rounded corners or not), so zoomed or dragged photos can never spill over the gaps between them','Setting Rows no longer cuts photos off \u2014 the grid always grows to fit your images, and setting only Rows derives the column count from it','A partly empty last row is centered under the grid instead of leaving a big empty block in the corner','Grid size number fields now match the width and height of every other control instead of sitting small and cramped']],['1.9.7','20 Oct 2026',['Launch theme delay fixed: the Android launch window and WebView surface now follow day/night immediately (no light flash on dark devices), and the full theme — palette plus system dark — is applied by the head script before the first paint, so opening the app never shows a theme switch']],['1.9.6','20 Oct 2026',['The live document viewer is now framed: a tinted surface, hairline border and rounded corners set the preview apart from the page list and tool controls below it']],['1.9.5','20 Oct 2026',['Document preview header rebuilt: the page-count pill and the page-position pill now share one exact size (the position counter no longer inherits the title font size), and the title, page-size caption and counter + zoom controls sit in a fixed two-row grid so the pills keep the same position on every screen width']],['1.9.4','20 Oct 2026',['PDF preview zoom: pinch the preview or use the + and - buttons (50% to 300%); the page counter shows the zoom level, and page snapping releases when a sheet becomes taller than the viewport','Click anywhere on the preview to open the full-screen document viewer at the page you are on','Sheets now keep their true shape at every screen size — landscape pages no longer get squeezed into portrait']],['1.9.3','20 Oct 2026',['The PDF document preview is now a one-page viewport: it shows a single sheet at a time, you scroll to move through the document, and a live page counter follows along']],['1.9.2','20 Oct 2026',['The PDF document preview moved to the top of the Images to PDF panel and stacks the page sheets vertically, one under another']],['1.9.1','20 Oct 2026',['Toolbox cards rebuilt: every category keeps its own icon colour at any screen width, cards hold a steady shape thanks to two-line labels, the coming-soon card wears a proper badge and press feedback got calmer','Settings rows are now separated by hairline dividers and section labels line up with card text']],['1.9.0','20 Oct 2026',['Images to PDF now shows a live document preview: every page rendered as a real sheet in the page size and margin you picked — tap a sheet to inspect it full screen, and the preview updates as you change the settings']],['1.8.1','19 Oct 2026',['Stills three-dot menu fixed: it now opens only when you tap the dots instead of showing on every card at once','Auto theme fixed in the Android app: the app now reads the system day/night setting directly, so light/dark follows the device instantly when auto is selected']],['1.8.0','19 Oct 2026',['Toolbox tools are separate workflows: going back to the toolbox clears the uploaded image and every tool input, so the next tool starts with a fresh upload (pills still switch tools within a session)','Background remover is locked as a Coming soon card until it is properly polished','Stills show their resolution in the top left and keep share, download and delete behind a three-dot menu','Sharing fixed on Android: files open in the system share sheet; on the web nothing changes','Custom save location works on Android: pick a folder once (Folder mode) or choose a place for every save (Ask mode)']],['1.7.2','19 Oct 2026',['Theme now behaves: your Auto/Light/Dark choice and Material palette persist and apply before the first paint, and Auto re-applies live when the system switches between light and dark — including inside the Android app, where platform force-dark is now turned off in favour of the app\u2019s own colors']],['1.7.1','19 Oct 2026',['Android app: installs as a native APK with camera access, system file picker and saving straight to Downloads (web version unchanged)']],['1.7.0','19 Oct 2026',['Nine OCR languages bundled offline: English, Spanish, French, German, Portuguese, Italian, Dutch, Polish and Nepali — with a language picker in the OCR panel','Keep layout option restores line breaks using Tesseract page-layout analysis, and recognition now reports line count, words, confidence and language','Crop, resize, rotate, filters, watermark and draw panels rebuilt with numeric inputs, straighten slider, shape tools and per-stroke undo','Undo history (30 steps) for every edit — toolbar button or Ctrl/Cmd+Z','Document scanner: multi-page scanning, auto-detect scoring with a clear failure hint and easier corner grabbing','Color picker magnifier with HEX, RGB and HSL details, recent colors and palette swatch details with CSS variable export','QR and barcode generator can save vector SVG and place a logo (error correction switches to High)','Compression panel can preview the result on the first image before committing, and failed files are reported','Memory cleanup: object URLs revoked and bitmaps closed when items are removed']],['1.6.0','18 Oct 2026',['Upload from photos, files, stills or the camera on every tool page, plus drag and drop','Previews of everything bundled into your PDF on tool pages, with add, remove and full-size view','Pick several stills at once, and tap any thumbnail to preview it']],['1.5.0','18 Oct 2026',['Images to PDF: select many images or scan pages with your camera and bundle them into one PDF','Arrows, drag and mouse-wheel scrolling for the tool pills','Swipe left and right to move between tabs and tools, and swipe from the left edge to go back','Smoother tool-to-tool transitions']],['1.4.0','18 Oct 2026',['Toolbox is now grouped into Edit, Convert & optimize, Create and Scan & analyze','New tools: Format changer, Compress, Batch rename, Image splitter, ASCII art, QR and barcode generator and scanner, Text recognition and a Document scanner','Smarter background remover with touch-up brushes, subject-only mode and edge controls','Collage maker asks you to pick images and adds cell shapes and rounded corners','More space around the selected option in pickers']],['1.3.0','18 Oct 2026',['Background remover, Draw, Palette, Compare, Collage and Base64 tools','AVIF export, plus a repeat and angle option for watermarks','Custom fonts and this About page','Cleaner single-line option pickers']],
+const APP={v:'1.11.1',build:'2026-10-20'};
+const CHG=[['1.11.1','20 Oct 2026',['Background remover is live \u2014 it now runs rembg\u2019s own segmentation models (u2netp, Silueta, ISNet) on your device, so any subject is cut out cleanly, not just plain backgrounds','Three models, your call: u2netp (4 MB, seconds on a phone), Silueta (42 MB, sharper edges) and ISNet (170 MB, rembg\u2019s default quality)','Models are downloaded when you want them and kept on the device \u2014 nothing is ever uploaded, and only the 2.8 MB engine ships with the app, so it stays small','Model downloads live in the background remover panel and in Settings \u2192 Background removal, with a live progress bar, delete buttons and a Ready / In use badge','The engine runs in a background worker, so the picture never freezes while it works, and the WebView is now cross-origin isolated so the model can use several threads','The instant Quick mode (best on plain or evenly lit backgrounds) is still there, one tap away, and needs no download at all','The brush (erase / restore), shrink / grow edge, keep main subject only and clean colour fringe all work on the AI mask too','The result is a real cut-out with soft edges \u2014 and PNG export keeps the transparency']],['1.11.0','20 Oct 2026',['ASCII Studio \u2014 the full ASCII engine is built into the app now and works offline: 25 render styles, 8 character sets and any custom ramp, 19 dither algorithms, nine stacking source warps, crop and zoom, per-channel tone curves, masks and a movable light, ten still motions and nineteen pointer effects','A brand-new toolbox tool: open ASCII Studio from the Toolbox grid and drop in a source \u2014 everything renders on your device, nothing is uploaded and nothing is fetched at runtime','All 61 asciify.org looks are in the Studio, one tap each \u2014 projects, composed, finished, characters, dither, print and tiles','Layered compositions: up to eight layers, each with its own style, opacity, blend and placement','Four sources \u2014 your image, the video in the editor, a file (GIF included), or a text banner in 23 fonts','Export to PNG, JPEG, GIF, MP4 and WebM at wallpaper, poster or square sizes, plus plain text and ANSI text','The engine is vendored from npm and bundled into the single-file app, so it keeps working with no connection at all','Credits: asciify-engine, figlet, gifenc, gifuct-js and mediabunny (MIT) \u2014 the licence texts ship in vendor/']],['1.10.2','20 Oct 2026',['New app icon \u2014 the neon gallery-scan artwork is now the launcher icon on your phone (adaptive icon, round icon and legacy icons for every density), and the web app uses it as its favicon']],['1.10.1','20 Oct 2026',['Compare preview fixed: it now starts on its own \u2014 as soon as two images are in the list the first two are compared straight away, the empty state explains what to do instead of showing a blank box, and a single picked image fills the whole preview instead of half a picture next to a black block','Compare: tapping the image that is already A swaps the pair instead of showing the same picture on both sides, and the A / B buttons are now proper touch targets','Toolbox icons now share one theme \u2014 the four categories no longer use four different colours, so the grid reads as a single system']],['1.10.0','20 Oct 2026',['Compare now compares two pictures: tap A and B on any image in the list to pick the pair, then slide the divider (or drag it on the picture) to reveal one over the other \u2014 with a Swap button and A / B markers on the picture itself','Collage: tap any photo right on the collage to select it \u2014 and press-and-drag grabs it in one gesture, no thumbnail hunting','Collage drags now follow your finger at full speed (they crawled at 1/2 to 1/3 speed before) and stop exactly at the crop edge instead of exposing empty background','Collage: pinch the collage to crop the selected photo (the slider stays in sync); double-tap a photo or use the new Reset crop button to put it back','The selection frame now lands exactly on the photo it belongs to (it was mis-scaled on large collages), unselected photos dim so the selection is obvious, and crop/position changes are undoable']],['1.9.9','20 Oct 2026',['Collage: tap any photo right on the collage to select it \u2014 and press-and-drag grabs it in one gesture, no thumbnail hunting','Collage drags now follow your finger at full speed (they crawled at 1/2 to 1/3 speed before) and stop exactly at the crop edge instead of exposing empty background','Collage: pinch the collage to crop the selected photo (the slider stays in sync); double-tap a photo or use the new Reset crop button to put it back','The selection frame now lands exactly on the photo it belongs to (it was mis-scaled on large collages), unselected photos dim so the selection is obvious, and crop/position changes are undoable']],['1.9.8','20 Oct 2026',['Collage spacing fixed on every front: every cell is now clipped (rounded corners or not), so zoomed or dragged photos can never spill over the gaps between them','Setting Rows no longer cuts photos off \u2014 the grid always grows to fit your images, and setting only Rows derives the column count from it','A partly empty last row is centered under the grid instead of leaving a big empty block in the corner','Grid size number fields now match the width and height of every other control instead of sitting small and cramped']],['1.9.7','20 Oct 2026',['Launch theme delay fixed: the Android launch window and WebView surface now follow day/night immediately (no light flash on dark devices), and the full theme — palette plus system dark — is applied by the head script before the first paint, so opening the app never shows a theme switch']],['1.9.6','20 Oct 2026',['The live document viewer is now framed: a tinted surface, hairline border and rounded corners set the preview apart from the page list and tool controls below it']],['1.9.5','20 Oct 2026',['Document preview header rebuilt: the page-count pill and the page-position pill now share one exact size (the position counter no longer inherits the title font size), and the title, page-size caption and counter + zoom controls sit in a fixed two-row grid so the pills keep the same position on every screen width']],['1.9.4','20 Oct 2026',['PDF preview zoom: pinch the preview or use the + and - buttons (50% to 300%); the page counter shows the zoom level, and page snapping releases when a sheet becomes taller than the viewport','Click anywhere on the preview to open the full-screen document viewer at the page you are on','Sheets now keep their true shape at every screen size — landscape pages no longer get squeezed into portrait']],['1.9.3','20 Oct 2026',['The PDF document preview is now a one-page viewport: it shows a single sheet at a time, you scroll to move through the document, and a live page counter follows along']],['1.9.2','20 Oct 2026',['The PDF document preview moved to the top of the Images to PDF panel and stacks the page sheets vertically, one under another']],['1.9.1','20 Oct 2026',['Toolbox cards rebuilt: every category keeps its own icon colour at any screen width, cards hold a steady shape thanks to two-line labels, the coming-soon card wears a proper badge and press feedback got calmer','Settings rows are now separated by hairline dividers and section labels line up with card text']],['1.9.0','20 Oct 2026',['Images to PDF now shows a live document preview: every page rendered as a real sheet in the page size and margin you picked — tap a sheet to inspect it full screen, and the preview updates as you change the settings']],['1.8.1','19 Oct 2026',['Stills three-dot menu fixed: it now opens only when you tap the dots instead of showing on every card at once','Auto theme fixed in the Android app: the app now reads the system day/night setting directly, so light/dark follows the device instantly when auto is selected']],['1.8.0','19 Oct 2026',['Toolbox tools are separate workflows: going back to the toolbox clears the uploaded image and every tool input, so the next tool starts with a fresh upload (pills still switch tools within a session)','Background remover is locked as a Coming soon card until it is properly polished','Stills show their resolution in the top left and keep share, download and delete behind a three-dot menu','Sharing fixed on Android: files open in the system share sheet; on the web nothing changes','Custom save location works on Android: pick a folder once (Folder mode) or choose a place for every save (Ask mode)']],['1.7.2','19 Oct 2026',['Theme now behaves: your Auto/Light/Dark choice and Material palette persist and apply before the first paint, and Auto re-applies live when the system switches between light and dark — including inside the Android app, where platform force-dark is now turned off in favour of the app\u2019s own colors']],['1.7.1','19 Oct 2026',['Android app: installs as a native APK with camera access, system file picker and saving straight to Downloads (web version unchanged)']],['1.7.0','19 Oct 2026',['Nine OCR languages bundled offline: English, Spanish, French, German, Portuguese, Italian, Dutch, Polish and Nepali — with a language picker in the OCR panel','Keep layout option restores line breaks using Tesseract page-layout analysis, and recognition now reports line count, words, confidence and language','Crop, resize, rotate, filters, watermark and draw panels rebuilt with numeric inputs, straighten slider, shape tools and per-stroke undo','Undo history (30 steps) for every edit — toolbar button or Ctrl/Cmd+Z','Document scanner: multi-page scanning, auto-detect scoring with a clear failure hint and easier corner grabbing','Color picker magnifier with HEX, RGB and HSL details, recent colors and palette swatch details with CSS variable export','QR and barcode generator can save vector SVG and place a logo (error correction switches to High)','Compression panel can preview the result on the first image before committing, and failed files are reported','Memory cleanup: object URLs revoked and bitmaps closed when items are removed']],['1.6.0','18 Oct 2026',['Upload from photos, files, stills or the camera on every tool page, plus drag and drop','Previews of everything bundled into your PDF on tool pages, with add, remove and full-size view','Pick several stills at once, and tap any thumbnail to preview it']],['1.5.0','18 Oct 2026',['Images to PDF: select many images or scan pages with your camera and bundle them into one PDF','Arrows, drag and mouse-wheel scrolling for the tool pills','Swipe left and right to move between tabs and tools, and swipe from the left edge to go back','Smoother tool-to-tool transitions']],['1.4.0','18 Oct 2026',['Toolbox is now grouped into Edit, Convert & optimize, Create and Scan & analyze','New tools: Format changer, Compress, Batch rename, Image splitter, ASCII art, QR and barcode generator and scanner, Text recognition and a Document scanner','Smarter background remover with touch-up brushes, subject-only mode and edge controls','Collage maker asks you to pick images and adds cell shapes and rounded corners','More space around the selected option in pickers']],['1.3.0','18 Oct 2026',['Background remover, Draw, Palette, Compare, Collage and Base64 tools','AVIF export, plus a repeat and angle option for watermarks','Custom fonts and this About page','Cleaner single-line option pickers']],
  ['1.2.0','17 Oct 2026',['Extract all frames from a video as a ZIP or into a folder','Save location setting, haptic feedback and JXL export','Metadata embedding for PNG, JPG, WebP and JXL']],
  ['1.1.0','17 Oct 2026',['Toolbox with crop, resize, rotate, filters, watermark and color picker','Frame counter, thumbnail strip and live frame rate detection','Layouts for phones, tablets and desktops']],
  ['1.0.0','17 Oct 2026',['First release: pick a video, grab full-resolution stills and export them','Material 3 color styles with a liquid glass look']]];
@@ -31448,44 +31465,159 @@ function bgCenters(d,W,H){
  for(const v of arr){if(out.length>=3||v[3]<tot*.08)break;out.push([v[0]/v[3],v[1]/v[3],v[2]/v[3]])}
  return out.length?out:[[arr[0][0]/arr[0][3],arr[0][1]/arr[0][3],arr[0][2]/arr[0][3]]];
 }
-function bgRemove(c,x){
- const W=c.width,H=c.height,im=x.getImageData(0,0,W,H),d=im.data,bc=T.bgc||autoBg(d,W,H),tol=T.bt/100*170,soft=Math.max(1,T.bf/100*90),N=W*H,dist=new Float32Array(N),rm=new Uint8Array(N);
- for(let i=0,j=0;i<N;i++,j+=4){const p=d[j]-bc[0],q=d[j+1]-bc[1],r=d[j+2]-bc[2];dist[i]=Math.sqrt(p*p+q*q+r*r)}
- if(T.bm==='g'){for(let i=0;i<N;i++)if(dist[i]<=tol)rm[i]=1}
- else{const q=new Int32Array(N);let h=0,t=0;const push=i=>{if(!rm[i]&&dist[i]<=tol){rm[i]=1;q[t++]=i}};
-  const bd=Math.max(2,Math.round(Math.min(W,H)*.012));for(let y=0;y<H;y++){const ey=y<bd||y>=H-bd;for(let u=0;u<W;u++)if(ey||u<bd||u>=W-bd)push(y*W+u)}
-  while(h<t){const i=q[h++],px=i%W;if(px>0)push(i-1);if(px<W-1)push(i+1);if(i>=W)push(i-W);if(i<N-W)push(i+W)}}
- for(let i=0;i<N;i++){const j=i*4+3;
-  if(rm[i])d[j]=0;
-  else if(dist[i]<tol+soft){const px=i%W;if((px>0&&rm[i-1])||(px<W-1&&rm[i+1])||(i>=W&&rm[i-W])||(i<N-W&&rm[i+W]))d[j]=Math.round(255*(dist[i]-tol)/soft)}}
- x.putImageData(im,0,0);
- if(T.bb!=='t'){x.globalCompositeOperation='destination-over';x.fillStyle=T.bb==='k'?'#000':'#fff';x.fillRect(0,0,W,H);x.globalCompositeOperation='source-over'}
-}
-
-function bgRemove(c,x){
- const W=c.width,H=c.height,im=x.getImageData(0,0,W,H),d=im.data,N=W*H,cen=T.bgc?[T.bgc]:bgCenters(d,W,H),cl=cen.map(v=>{const o=[0,0,0];lab(Math.round(v[0]),Math.round(v[1]),Math.round(v[2]),o);return o}),tol=T.bt/100*45,soft=Math.max(.5,T.bf/100*30),dist=new Float32Array(N),rm=new Uint8Array(N),o=[0,0,0];
+function bgMaskColor(d,W,H){
+ const N=W*H,cen=T.bgc?[T.bgc]:bgCenters(d,W,H),cl=cen.map(v=>{const o=[0,0,0];lab(Math.round(v[0]),Math.round(v[1]),Math.round(v[2]),o);return o}),tol=T.bt/100*45,soft=Math.max(.5,T.bf/100*30),dist=new Float32Array(N),rm=new Uint8Array(N),al=new Float32Array(N),o=[0,0,0];
  for(let i=0,j=0;i<N;i++,j+=4){lab(d[j],d[j+1],d[j+2],o);let m=1e9;for(const q of cl){const a=o[0]-q[0],b=o[1]-q[1],e=o[2]-q[2],v=a*a+b*b+e*e;if(v<m)m=v}dist[i]=Math.sqrt(m)}
+ for(let i=0;i<N;i++)al[i]=dist[i]<=tol?0:(dist[i]<tol+soft?(dist[i]-tol)/soft:1);
  if(T.bm==='g'){for(let i=0;i<N;i++)if(dist[i]<=tol)rm[i]=1}
  else{const q=new Int32Array(N);let h=0,t=0;const push=i=>{if(!rm[i]&&dist[i]<=tol){rm[i]=1;q[t++]=i}};
   const bd=Math.max(2,Math.round(Math.min(W,H)*.012));for(let y=0;y<H;y++){const ey=y<bd||y>=H-bd;for(let u=0;u<W;u++)if(ey||u<bd||u>=W-bd)push(y*W+u)}
   while(h<t){const i=q[h++],px=i%W;if(px>0)push(i-1);if(px<W-1)push(i+1);if(i>=W)push(i-W);if(i<N-W)push(i+W)}}
+ return {rm:rm,al:al,ai:0,bc:cen[0]};
+}
+function bgRemove(c,x){
+ const W=c.width,H=c.height,im=x.getImageData(0,0,W,H),d=im.data,N=W*H;
+ const m=(T.bgm==='ai'&&BGMASK.al)?bgMaskAI(W,H):bgMaskColor(d,W,H),rm=m.rm;
  /* keep only the largest subject */
  if(T.bo){const lb=new Int32Array(N),sz=[0];let nl=0;const q=new Int32Array(N);
   for(let s=0;s<N;s++){if(rm[s]||lb[s])continue;nl++;let h=0,t=0,n=0;q[t++]=s;lb[s]=nl;while(h<t){const i=q[h++],px=i%W;n++;const nb=[px>0?i-1:-1,px<W-1?i+1:-1,i>=W?i-W:-1,i<N-W?i+W:-1];for(const k of nb)if(k>=0&&!rm[k]&&!lb[k]){lb[k]=nl;q[t++]=k}}sz.push(n)}
   let best=1;for(let k=1;k<=nl;k++)if(sz[k]>sz[best])best=k;for(let i=0;i<N;i++)if(!rm[i]&&lb[i]!==best)rm[i]=1}
  /* grow / shrink the cut-out */
  const it=Math.abs(T.bx|0);for(let k=0;k<it;k++){const src=rm.slice(),shrink=T.bx<0;for(let i=0;i<N;i++){const px=i%W;const nb=(px>0&&src[i-1])||(px<W-1&&src[i+1])||(i>=W&&src[i-W])||(i<N-W&&src[i+W]);if(shrink){if(!src[i]&&nb)rm[i]=1}else{if(src[i]){const kp=(px>0&&!src[i-1])||(px<W-1&&!src[i+1])||(i>=W&&!src[i-W])||(i<N-W&&!src[i+W]);if(kp)rm[i]=0}}}}
- const bc=cen[0];
+ const bc=m.bc;
  for(let i=0;i<N;i++){const j=i*4+3;
   if(rm[i]){d[j]=0;continue}
-  if(dist[i]<tol+soft){const px=i%W;if((px>0&&rm[i-1])||(px<W-1&&rm[i+1])||(i>=W&&rm[i-W])||(i<N-W&&rm[i+W])){const a=Math.max(.02,Math.min(1,(dist[i]-tol)/soft));d[j]=Math.round(255*a);
-    if(T.bd&&a<1){const k=i*4;for(let z=0;z<3;z++){const v=(d[k+z]-(1-a)*bc[z])/a;d[k+z]=v<0?0:v>255?255:v}}}}}
+  const a=m.al[i];
+  if(a<1){const px=i%W;const nb=(px>0&&rm[i-1])||(px<W-1&&rm[i+1])||(i>=W&&rm[i-W])||(i<N-W&&rm[i+W]);
+   if(m.ai||nb){const av=Math.max(.02,Math.min(1,a));d[j]=Math.round(255*av);
+    if(T.bd&&av<1&&bc){const k=i*4;for(let z=0;z<3;z++){const v=(d[k+z]-(1-av)*bc[z])/av;d[k+z]=v<0?0:v>255?255:v}}}}}
  /* manual touch-up strokes */
  if(T.bs&&T.bs.length){const mc=document.createElement('canvas');mc.width=W;mc.height=H;const mx=mc.getContext('2d');mx.lineCap=mx.lineJoin='round';
   for(const s of T.bs){mx.strokeStyle=mx.fillStyle=s.m==='e'?'#f00':'#0f0';mx.lineWidth=Math.max(1,s.w*H);if(s.p.length<2){mx.beginPath();mx.arc(s.p[0][0]*W,s.p[0][1]*H,mx.lineWidth/2,0,6.3);mx.fill()}else{mx.beginPath();s.p.forEach(([a,b],k)=>k?mx.lineTo(a*W,b*H):mx.moveTo(a*W,b*H));mx.stroke()}}
   const md=mx.getImageData(0,0,W,H).data;for(let i=0;i<N;i++){const k=i*4;if(md[k+3]>100){if(md[k+1]>md[k])d[k+3]=255;else d[k+3]=0}}}
  x.putImageData(im,0,0);
  if(T.bb!=='t'){x.globalCompositeOperation='destination-over';x.fillStyle=T.bb==='k'?'#000':T.bb==='c'?T.bcc:'#fff';x.fillRect(0,0,W,H);x.globalCompositeOperation='source-over'}
+}
+/* ================= background removal: on-device rembg (u2net-family ONNX) ================= */
+const BGMODELS=[
+ {id:'u2netp',name:'u2netp',size:4564553,note:'Fast \u00b7 seconds on a phone',input:320},
+ {id:'silueta',name:'Silueta',size:44183936,note:'Sharper edges \u00b7 slower',input:320},
+ {id:'isnet-general-use',name:'ISNet',size:178658201,note:'rembg default \u00b7 best quality, slow on phones',input:1024}
+];
+const BGBASE='https://huggingface.co/tomjackson2023/rembg/resolve/main/';
+const BGCACHE='fg-bg-models';
+const BGST={model:'u2netp',have:{},dl:{},err:'',busy:0};
+let BGMASK={key:'',w:0,h:0,al:null};
+let BGENG={w:null,model:'',inp:'',dims:null,ready:0,loading:0,err:''};
+const bgCache=()=>caches.open(BGCACHE);
+const bgUrl=id=>BGBASE+id+'.onnx';
+async function bgHave(id){try{const c=await bgCache();return !!(await c.match(bgUrl(id)))}catch(e){return false}}
+async function bgModelBuf(id){try{const c=await bgCache();const r=await c.match(bgUrl(id));return r?await r.arrayBuffer():null}catch(e){return null}}
+async function bgDelModel(id){try{const c=await bgCache();await c.delete(bgUrl(id))}catch(e){}}
+async function bgStoreModel(id,blob){const c=await bgCache();await c.put(bgUrl(id),new Response(blob,{headers:{'content-type':'application/octet-stream'}}))}
+async function bgDownload(id){
+ if(BGST.dl[id])return;const m=BGMODELS.find(x=>x.id===id);if(!m)return;
+ BGST.dl[id]={pct:0,msg:'Starting\u2026'};bgRenderModels();
+ try{
+  const res=await fetch(bgUrl(id));
+  if(!res.ok)throw new Error('Server returned '+res.status);
+  const len=Number(res.headers.get('content-length'))||m.size,chunks=[];let got=0;
+  if(res.body&&res.body.getReader){const rd=res.body.getReader();for(;;){const{done,value}=await rd.read();if(done)break;chunks.push(value);got+=value.length;BGST.dl[id]={pct:Math.min(99,Math.round(got/len*100)),msg:'Downloading \u00b7 '+Math.round(got/1048576)+' of '+Math.round(len/1048576)+' MB'};bgRenderModels()}}
+  else chunks.push(await res.arrayBuffer());
+  const blob=new Blob(chunks,{type:'application/octet-stream'});chunks.length=0;
+  await bgStoreModel(id,blob);
+  BGST.have[id]=1;delete BGST.dl[id];bgRenderModels();
+  if(BGST.model===id){BGENG.ready=0;BGENG.model='';bgCompute(true)}
+ }catch(e){BGST.dl[id]={pct:0,msg:'Failed \u00b7 '+(e&&e.message||'error'),err:1};bgRenderModels()}
+}
+const BGWK=`self.onmessage=function(e){var d=e.data;
+if(d.t==='init'){try{importScripts(d.glue);self.ort.env.wasm.wasmBinary=d.wasm;self.ort.env.wasm.numThreads=d.threads;self.ort.env.wasm.proxy=false;self.ort.InferenceSession.create(d.model,{executionProviders:['wasm']}).then(function(s){self.S=s;self.postMessage({t:'ready',inp:s.inputNames[0],shape:(s.inputMetadata&&s.inputMetadata[0]&&s.inputMetadata[0].shape)||null})},function(er){self.postMessage({t:'err',m:(er&&er.message)||'could not open the model'})})}catch(er){self.postMessage({t:'err',m:(er&&er.message)||'could not start the engine'})}}
+else if(d.t==='run'){try{var feeds={};feeds[d.inp]=new self.ort.Tensor('float32',d.data,d.dims);self.S.run(feeds).then(function(r){var k=Object.keys(r)[0],o=r[k];self.postMessage({t:'mask',data:o.data,w:o.dims[o.dims.length-1],h:o.dims[o.dims.length-2]},[o.data.buffer])},function(er){self.postMessage({t:'err',m:(er&&er.message)||'inference failed'})})}catch(er){self.postMessage({t:'err',m:(er&&er.message)||'inference failed'})}}};`;
+async function bgWasm(){
+ let r=await fetch(new URL('bg/ort-wasm-simd-threaded.wasm.gz',location.href));
+ if(!r.ok||!r.body){r=await fetch(new URL('bg/ort-wasm-simd-threaded.wasm',location.href));
+  if(!r.ok||!r.body)throw new Error('Engine file missing ('+r.status+')');
+  return await r.arrayBuffer()}
+ const b=await r.arrayBuffer(),h=new Uint8Array(b,0,2);
+ if(h[0]===0x1f&&h[1]===0x8b)return await new Response(new Blob([b]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+ return b;
+}
+async function bgInit(){
+ if(BGENG.ready&&BGENG.model===BGST.model)return 1;
+ if(BGENG.loading)return 0;
+ BGENG.loading=1;BGENG.err='';bgRenderModels();
+ try{
+  const wasm=await bgWasm();
+  const mb=await bgModelBuf(BGST.model);
+  if(!mb)throw new Error('Model not downloaded yet');
+  if(BGENG.w){try{BGENG.w.terminate()}catch(e){}}
+  const w=new Worker(URL.createObjectURL(new Blob([BGWK],{type:'text/javascript'})));
+  BGENG.w=w;BGENG.model=BGST.model;BGENG.ready=0;
+  const th=(self.crossOriginIsolated&&(navigator.hardwareConcurrency||1)>1)?Math.min(4,navigator.hardwareConcurrency):1;
+  await new Promise((res,rej)=>{const to=setTimeout(()=>rej(new Error('Loading the model timed out')),180000);
+   w.onmessage=e=>{const d=e.data;if(d.t==='ready'){clearTimeout(to);BGENG.inp=d.inp;BGENG.dims=(d.shape&&d.shape.length===4)?[d.shape[2],d.shape[3]]:null;res(1)}else if(d.t==='err'){clearTimeout(to);rej(new Error(d.m))}};
+   w.onerror=ev=>{clearTimeout(to);rej(new Error(ev.message||'Engine crashed'))};
+   w.postMessage({t:'init',glue:new URL('bg/ort.wasm.min.js',location.href).href,wasm:wasm,model:mb,threads:th},[wasm,mb])});
+  BGENG.ready=1;BGENG.loading=0;bgRenderModels();return 1;
+ }catch(e){BGENG.err=(e&&e.message)||'Could not start the engine';BGENG.loading=0;BGENG.ready=0;bgRenderModels();return 0}
+}
+function bgRun(dat,dims){
+ const w=BGENG.w;if(!w)return Promise.reject(new Error('Engine not ready'));
+ return new Promise((res,rej)=>{const to=setTimeout(()=>rej(new Error('The model took too long')),600000);
+  w.onmessage=e=>{const d=e.data;if(d.t==='mask'){clearTimeout(to);res(d)}else if(d.t==='err'){clearTimeout(to);rej(new Error(d.m))}};
+  w.postMessage({t:'run',inp:BGENG.inp,data:dat,dims:dims},[dat.buffer])});
+}
+function bgKey(){const t=TI;return (t?(t.src||t.name||'img'):'')+'|'+BGST.model+'|'+(t?((t.naturalWidth||t.width||0)+'x'+(t.naturalHeight||t.height||0)):'')}
+async function bgCompute(force){
+ if(T.bgm!=='ai'||!TI)return;
+ const key=bgKey();
+ if(!force&&BGMASK.key===key&&BGMASK.al)return;
+ if(BGST.busy)return;
+ BGST.busy=1;BGST.err='';bgRenderModels();
+ try{
+  if(!BGST.have[BGST.model]){BGST.busy=0;bgRenderModels();return}
+  const m=BGMODELS.find(x=>x.id===BGST.model)||BGMODELS[0];
+  if(!await bgInit())throw new Error(BGENG.err||'Engine unavailable');
+  const SZ=(BGENG.dims&&BGENG.dims[0]?BGENG.dims:[m.input,m.input]),S=SZ[0],dat=new Float32Array(3*S*S),cv=document.createElement('canvas');
+  cv.width=S;cv.height=S;const x=cv.getContext('2d',{willReadFrequently:true});
+  x.drawImage(TI,0,0,S,S);
+  const id=x.getImageData(0,0,S,S).data,n=S*S;
+  for(let i=0,j=0;i<n;i++,j+=4){dat[i]=((id[j]/255)-0.485)/0.229;dat[n+i]=((id[j+1]/255)-0.456)/0.224;dat[2*n+i]=((id[j+2]/255)-0.406)/0.225}
+  const r=await bgRun(dat,[1,3,S,S]);
+  const out=new Float32Array(r.data.length);let mn=1e9,mx=-1e9;
+  for(let i=0;i<r.data.length;i++){const v=r.data[i];if(v<mn)mn=v;if(v>mx)mx=v}
+  const sc=mx-mn>1e-6?1/(mx-mn):0;
+  for(let i=0;i<r.data.length;i++)out[i]=(r.data[i]-mn)*sc;
+  BGMASK={key:key,w:r.w,h:r.h,al:out};
+ }catch(e){BGST.err=(e&&e.message)||'Background removal failed'}
+ BGST.busy=0;bgRenderModels();draw();
+}
+function bgMaskAI(W,H){
+ const N=W*H,mw=BGMASK.w,mh=BGMASK.h,ma=BGMASK.al,rm=new Uint8Array(N),al=new Float32Array(N);
+ for(let y=0;y<H;y++){
+  const fy=Math.min(mh-1,Math.max(0,(y+0.5)/H*mh-0.5)),y0=Math.floor(fy),y1=Math.min(mh-1,y0+1),wy=fy-y0;
+  for(let xx=0;xx<W;xx++){
+   const fx=Math.min(mw-1,Math.max(0,(xx+0.5)/W*mw-0.5)),x0=Math.floor(fx),x1=Math.min(mw-1,x0+1),wx=fx-x0;
+   const a=(ma[y0*mw+x0]*(1-wx)+ma[y0*mw+x1]*wx)*(1-wy)+(ma[y1*mw+x0]*(1-wx)+ma[y1*mw+x1]*wx)*wy;
+   const i=y*W+xx;al[i]=a;rm[i]=a<0.5?1:0;}}
+ return {rm:rm,al:al,ai:1,bc:T.bgc||null};
+}
+function bgModelsHTML(){
+ const rows=BGMODELS.map(m=>{
+  const have=BGST.have[m.id],dl=BGST.dl[m.id],on=BGST.model===m.id;
+  const tag=on?'<span class="tag on">In use</span>':(have?'<span class="tag">Ready</span>':'');
+  const act=have?(on?'':'<button class="btn glass" data-x="bguse" data-v="'+m.id+'">Use</button><button class="btn glass" data-x="bgdel" data-v="'+m.id+'">Delete</button>'):(dl?'':'<button class="btn glass" data-x="bgdl" data-v="'+m.id+'">Download</button>');
+  const sz=Math.round(m.size/1048576*10)/10;
+  return '<div class="brow"><div class="bn"><b>'+m.name+'</b><small>'+sz+' MB \u00b7 '+m.note+'</small>'+(dl?'<div class="bp"><i style="width:'+dl.pct+'%"></i></div><small style="font-size:11px;margin-top:4px">'+dl.msg+'</small>':'')+'</div><div class="ba">'+tag+act+'</div></div>';
+ }).join('');
+ return '<div class="bgm">'+rows+'</div>';
+}
+function bgRenderModels(){
+ const a=$('#bgmodels'),b=$('#tp .bgmodels');
+ if(a)a.innerHTML=bgModelsHTML();
+ if(b)b.innerHTML=bgModelsHTML();
+ const s=$('#bgstatus');
+ if(s)s.textContent=BGST.err||(BGST.busy?'Working\u2026':(BGENG.loading?'Loading the model\u2026':(BGST.have[BGST.model]?'Model ready \u00b7 tap the picture to see the result':'Download a model to remove backgrounds with AI')));
 }
 /* ---- splitter ---- */
 function splitRect(W,H){if(T.sq==='f')return[0,0,W,H];const [a,b]=T.sq.split(':').map(Number),tg=(T.sc*a/b)/T.sr;if(W/H>tg){const w=Math.round(H*tg);return[Math.round((W-w)/2),0,w,H]}const h=Math.round(W/tg);return[0,Math.round((H-h)/2),W,h]}
@@ -32336,14 +32468,18 @@ async function pdfBlob(c){
 /* ---- new panels (PY) ---- */
 const stepBtn=(a,v,t)=>`<button class="btn glass" data-x="${a}" data-v="${v}">${t}</button>`;
 const PY={
-  bg:()=>'<div class="row" style="padding:0 0 12px"><div>Remove background<small>Best on plain or evenly lit backgrounds</small></div><button class="sw'+(T.bg?' on':'')+'" data-x="bg" aria-label="Remove background"></button></div>'
-  +sl('bt','Tolerance',0,100,'%')+sl('bf','Edge softness',0,100,'%')+sl('bx','Shrink / grow edge',-6,6,'px')
-  +'<div class="lbl">Method</div>'+fseg('bm','bm',T.bm,[['c','Edges only'],['g','Everywhere']])
-  +'<div class="row" style="padding:12px 0 0"><div>Keep main subject only<small>Removes leftover specks</small></div><button class="sw'+(T.bo?' on':'')+'" data-x="bo" aria-label="Keep main subject"></button></div>'
-  +'<div class="row" style="padding:12px 0 0"><div>Clean color fringe<small>Removes the old background tint on edges</small></div><button class="sw'+(T.bd?' on':'')+'" data-x="bd" aria-label="Clean fringe"></button></div>'
-  +'<div class="lbl">Replace with</div>'+fseg('bb','bb',T.bb,[['t','Clear'],['w','White'],['k','Black'],['c','Color']])+(T.bb==='c'?'<input type="color" class="tin" data-k="bcc" value="'+T.bcc+'" style="height:46px;padding:4px;margin-top:10px">':'')
-  +'<div class="lbl">Touch up</div>'+fseg('bk','bk',T.bk,[['pick','Pick color'],['erase','Erase'],['restore','Restore']])+(T.bk==='pick'?'':sl('bz','Brush size',4,80,'px')+'<div class="btns" style="margin-top:10px"><button class="btn glass" data-x="bundo">Undo stroke</button><button class="btn glass" data-x="bclr">Clear strokes</button></div>')
-  +'<div class="pk" style="margin-top:14px"><i style="background:'+(T.bgc?'rgb('+T.bgc.map(Math.round)+')':'transparent')+';border:2px dashed var(--mut)"></i><b>'+(T.bgc?'Picked background color':'Background detected from the edges')+'</b><button class="btn glass" data-x="bauto" style="height:44px;padding:0 14px">Auto</button></div><div class="hint">'+(T.bk==='pick'?'Tap the image to choose the background color':'Paint over the image to erase or restore parts')+'</div>',
+  bg:()=>{const ai=T.bgm!=='q';
+   return '<div class="row" style="padding:0 0 12px"><div>Remove background<small>'+(ai?'AI model finds the subject in any scene':'Best on plain or evenly lit backgrounds')+'</small></div><button class="sw'+(T.bg?' on':'')+'" data-x="bg" aria-label="Remove background"></button></div>'
+   +'<div class="lbl">Method</div><div class="seg pre"><button data-x="bgmode" data-v="ai" class="'+(ai?'on':'')+'">AI model</button><button data-x="bgmode" data-v="q" class="'+(ai?'':'on')+'">Quick</button></div>'
+   +(ai?'<div class="lbl">Model</div><div class="bgmodels">'+bgModelsHTML()+'</div><div class="info" id="bgstatus"></div>'
+     :sl('bt','Tolerance',0,100,'%')+sl('bf','Edge softness',0,100,'%')+'<div class="lbl">Where</div>'+fseg('bm','bm',T.bm,[['c','Edges only'],['g','Everywhere']])
+      +'<div class="row" style="padding:12px 0 0"><div>Background colour<small>'+(T.bgc?'Picked':'Detected from the edges')+'</small></div><button class="btn glass" data-x="bauto" style="height:40px;padding:0 14px">Auto</button></div>')
+   +sl('bx','Shrink / grow edge',-6,6,'px')
+   +'<div class="row" style="padding:12px 0 0"><div>Keep main subject only<small>Removes leftover specks</small></div><button class="sw'+(T.bo?' on':'')+'" data-x="bo" aria-label="Keep main subject"></button></div>'
+   +'<div class="row" style="padding:12px 0 0"><div>Clean color fringe<small>Removes the old background tint on edges</small></div><button class="sw'+(T.bd?' on':'')+'" data-x="bd" aria-label="Clean fringe"></button></div>'
+   +'<div class="lbl">Replace with</div>'+fseg('bb','bb',T.bb,[['t','Clear'],['w','White'],['k','Black'],['c','Color']])+(T.bb==='c'?'<input type="color" class="tin" data-k="bcc" value="'+T.bcc+'" style="height:46px;padding:4px;margin-top:10px">':'')
+   +'<div class="lbl">Touch up</div>'+fseg('bk','bk',T.bk,[['pick','Pick color'],['erase','Erase'],['restore','Restore']])+(T.bk==='pick'?'':sl('bz','Brush size',4,80,'px')+'<div class="btns" style="margin-top:10px"><button class="btn glass" data-x="bundo">Undo stroke</button><button class="btn glass" data-x="bclr">Clear strokes</button></div>')
+   +'<div class="hint">Paint over the picture to erase or restore parts. The brush works on the AI mask too.</div>'},
  clg:()=>'<div class="fthumbs">'+CI.map((im,i)=>`<div class="ft${CISEL===i?' on':''}" data-x="csel" data-v="${i}"><canvas data-th="${i}" data-lb="ci" data-v="${i}" width="64" height="64"></canvas><button data-x="crm" data-v="${i}" aria-label="Remove">\u00d7</button></div>`).join('')+'</div><div class="btns"><button class="btn glass" data-x="cadd">Add images</button><button class="btn glass" data-x="cst">Add stills</button></div>'
   +(CISEL>=0&&CI[CISEL]?'<div class="info">Image '+(CISEL+1)+' selected — drag to reposition, pinch to crop, double-tap to reset</div><div class="lbl">Zoom<span>'+(CM[CISEL]?Math.round(CM[CISEL].zoom*100):100)+'%</span></div><input type="range" data-zoom="1" min="100" max="300" value="'+(CM[CISEL]?Math.round(CM[CISEL].zoom*100):100)+'" style="--p:'+((CM[CISEL]?CM[CISEL].zoom:1)-1)/2*100+'%"><div class="btns" style="margin-top:12px"><button class="btn glass" data-x="crot90">Rotate 90°</button><button class="btn glass" data-x="cres">Reset crop</button><button class="btn glass" data-x="crm2">Remove</button><button class="btn glass" data-x="csel0">Deselect</button></div>':'')
   +'<div class="lbl">Layout</div>'+fseg('cl','cl',T.cl,[['g','Grid'],['r','Row'],['c','Column']])+'<div class="lbl">Cell shape</div>'+fseg('cr','cr',T.cr,[['1:1','Square'],['4:3','4:3'],['3:4','3:4'],['16:9','16:9']])+'<div class="lbl">Grid size<span>0 = automatic</span></div><div class="btns"><input class="tin numin" type="number" min="0" max="12" data-k="cgr" value="'+T.cgr+'" placeholder="Columns" aria-label="Grid columns"><input class="tin numin" type="number" min="0" max="12" data-k="cgc" value="'+T.cgc+'" placeholder="Rows" aria-label="Grid rows"></div>'+sl('cg','Spacing',0,10,'%')+sl('cx','Corner radius',0,25,'%')+'<div class="lbl">Background</div>'+fseg('cb','cb',T.cb,[['w','White'],['k','Black'],['t','Clear']])+'<div class="btns" style="margin-top:12px"><button class="btn glass" data-x="cclr">Clear all</button></div>',
@@ -32372,7 +32508,7 @@ $('#tp').addEventListener('click',async e=>{
  if(!NOPUSH.has(a))pushHistory();
  switch(a){
      case 'wr':T.wr^=1;re(1);break;
-   case 'bg':T.bg^=1;re(1);break;
+   case 'bg':T.bg^=1;re(1);if(T.bg)bgCompute(true);break;
    case 'bm':T.bm=v;re(1);break;
    case 'bb':T.bb=v;re(1);break;
    case 'bauto':T.bgc=null;re(1);break;
@@ -32506,7 +32642,7 @@ function buildCollage(rp=true){
  TI=c;TN='collage';const wasNeed=$('.cvw').hidden;if(rp||wasNeed)setTool(curTool);else draw();
 }
 /* thumbnails after any collage panel render */
-const _panel=panel;panel=function(){_panel();$$('#tp canvas[data-th]').forEach(cv=>{const im=CI[+cv.dataset.th];if(!im)return;const x2=cv.getContext('2d'),s=Math.max(64/im.width,64/im.height);x2.drawImage(im,(64-im.width*s)/2,(64-im.height*s)/2,im.width*s,im.height*s)});if(curTool==='rename')rnPreview();if(curTool==='ascii'&&ASC){const o=$('#ato');if(o)o.value=ASC}if(curTool==='ocr'&&OCRT){const o=$('#oto');if(o)o.value=OCRT}if(curTool==='pick')renderPk();upTUndo()};
+const _panel=panel;panel=function(){_panel();$$('#tp canvas[data-th]').forEach(cv=>{const im=CI[+cv.dataset.th];if(!im)return;const x2=cv.getContext('2d'),s=Math.max(64/im.width,64/im.height);x2.drawImage(im,(64-im.width*s)/2,(64-im.height*s)/2,im.width*s,im.height*s)});if(curTool==='rename')rnPreview();if(curTool==='ascii'&&ASC){const o=$('#ato');if(o)o.value=ASC}if(curTool==='ocr'&&OCRT){const o=$('#oto');if(o)o.value=OCRT}if(curTool==='pick')renderPk();upTUndo();bgRenderModels()};
 /* ---- bg brush pointer ---- */
 let bstk=null;
 $('#tcv').addEventListener('pointerdown',e=>{if(curTool!=='bg'||T.bk==='pick'||!TI)return;e.preventDefault();const cv=$('#tcv');cv.setPointerCapture(e.pointerId);bstk={m:T.bk==='erase'?'e':'r',w:T.bz/400,p:[npt(e)]};T.bs.push(bstk);const x=cv.getContext('2d');x.fillStyle=bstk.m==='e'?'rgba(255,0,0,.5)':'rgba(0,200,0,.5)';x.beginPath();x.arc(bstk.p[0][0]*cv.width,bstk.p[0][1]*cv.height,Math.max(1,bstk.w*cv.height)/2,0,6.3);x.fill()});
@@ -32519,7 +32655,6 @@ $('#tcv').addEventListener('pointermove',e=>{if(dragC<0)return;DOC.q[dragC]=npt(
 const dEnd=()=>{if(dragC>=0){dragC=-1;pushHistory()}};$('#tcv').addEventListener('pointerup',dEnd);$('#tcv').addEventListener('pointercancel',dEnd);
 /* ---- overrides: setTool + draw ---- */
 function setTool(id){
- if(id==='bg')return toast('Background remover is coming soon');
  curTool=id;const t=TL.find(x=>x[0]===id),k=kindOf(id),need=needInput(id);
  $('#tname').textContent=t[1];
  let h='',pc='';TL.forEach(x=>{if(x[4]==='soon')return;if(pc&&x[3]!==pc)h+='<i class="tdiv"></i>';pc=x[3];h+=`<button class="${x[0]===id?'on':''}" data-t="${x[0]}">${x[1]}</button>`});const tb0=$('#ttabs');if(!tb0.children.length)tb0.innerHTML=h;else $$('#ttabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===id));
@@ -32672,7 +32807,7 @@ function snapT(){const s={...T};s.ds=T.ds.map(cloneS);s.bs=(T.bs||[]).map(cloneS
 function pushHistory(){try{HIST.push(snapT());if(HIST.length>30)HIST.shift()}catch(e){}upTUndo()}
 function upTUndo(){const b=$('#tundo');if(b)b.disabled=!HIST.length}
 function undo(){if(!HIST.length)return toast('Nothing to undo');const st=HIST.pop();T={...st};delete T._cm;if(st._cm){CM=st._cm.map(m=>({...m}));if(CISEL>=CM.length)CISEL=-1}panel();draw();setBk();toast('Undone');upTUndo()}
-const NOPUSH=new Set(['e_pick','e_stills','e_cam','fadd','fclr','runfmt','runcp','runrn','runsp','runocr','otc','ots','atc','ats','qscan','qcam','qcp','b6g','b6c','b6s','b6h','cpy','cpall','cpysel','ccss','ddet','dcam','dpdf','dsundo','padd','pcam','pst','pclr','pup','pdn','prm','prm2','ptopen','runpdf','sharepdf','dtopdf','frm','cpprev','cadd','cst','bclr','rtok','spre','gsv','glp','glx','dcap','ddone','bauto','dsclear','pickfont','olang','dfin','wimgp','cmpa','cmpb','cmpswap','astsec','astcat','astset','astsw','astlook','astsrc','astpick','astexport','astcopy','asttxt','astansi','astfont','astwarp','astcurve','astlayadd','astlaytext','astlayrm','astlayup','astlaydn','astlayvis','astlayblend']);
+const NOPUSH=new Set(['e_pick','e_stills','e_cam','fadd','fclr','runfmt','runcp','runrn','runsp','runocr','otc','ots','atc','ats','qscan','qcam','qcp','b6g','b6c','b6s','b6h','cpy','cpall','cpysel','ccss','ddet','dcam','dpdf','dsundo','padd','pcam','pst','pclr','pup','pdn','prm','prm2','ptopen','runpdf','sharepdf','dtopdf','frm','cpprev','cadd','cst','bclr','rtok','spre','gsv','glp','glx','dcap','ddone','bauto','dsclear','pickfont','olang','dfin','wimgp','cmpa','cmpb','cmpswap','bgdl','bguse','bgdel','bgmode','astsec','astcat','astset','astsw','astlook','astsrc','astpick','astexport','astcopy','asttxt','astansi','astfont','astwarp','astcurve','astlayadd','astlaytext','astlayrm','astlayup','astlaydn','astlayvis','astlayblend']);
 $('#tp').addEventListener('change',e=>{if(e.target.type==='range')sliding=0});
 $('#tundo').onclick=undo;
 /* hidden file inputs: watermark image + QR logo */
@@ -32777,7 +32912,7 @@ addEventListener('pointermove',e=>{if(!dg)return;const dx=e.clientX-dg.x;if(Math
 addEventListener('pointerup',()=>{if(dg){const m=dg.m;dg=null;tabs.style.scrollBehavior='';if(m)tabs.addEventListener('click',ev=>{ev.stopPropagation();ev.preventDefault()},{capture:true,once:true})}});
 /* ---- swipe gestures ---- */
 let sw=null;
-document.addEventListener('touchstart',e=>{if(e.touches.length!==1){sw=null;return}const t=e.touches[0];sw={x:t.clientX,y:t.clientY,t:Date.now(),skip:!!e.target.closest('input,textarea,select,canvas,video,.seg,.tabw,.rrow,.fthumbs,.flist,.sws,.sheet,.film,.nav,.prog,.ptr-row,.lb,.stg,[data-noswipe]')}},{passive:true});
+document.addEventListener('touchstart',e=>{if(e.touches.length!==1){sw=null;return}const t=e.touches[0];sw={x:t.clientX,y:t.clientY,t:Date.now(),skip:!!e.target.closest('input,textarea,select,canvas,video,.seg,.tabw,.rrow,.fthumbs,.flist,.sws,.sheet,.film,.nav,.prog,.ptr-row,.lb,.stg,#tp,#ttabs,#tabw,[data-noswipe]')}},{passive:true});
 document.addEventListener('touchend',e=>{
  if(!sw)return;const s=sw;sw=null;const t=e.changedTouches[0],dx=t.clientX-s.x,dy=t.clientY-s.y;if(Date.now()-s.t>800||$('#sheet').classList.contains('on')||$('#lb').classList.contains('on')||$('#stp').classList.contains('on'))return;
  const edge=s.x<26&&dx>50&&Math.abs(dy)<70;
@@ -32787,7 +32922,8 @@ document.addEventListener('touchend',e=>{
 function swipeNav(d){
  if(cur==='tools'&&!$('#tw').hidden){
   if(d==='back'){$('#tback').click();haptic('select');return}
-  const i=TL.findIndex(x=>x[0]===curTool),n=i+d;if(n>=0&&n<TL.length){tdir=d;setTool(TL[n][0]);haptic('select')}return;
+  /* swiping to change the tool fought with scrolling and with picking options */
+  return;
  }
  if(cur==='editor'){if(d==='back'){go('home');haptic('select')}return}
  const i=NAV.indexOf(cur),n=i+(d==='back'?-1:d);if(i>=0&&n>=0&&n<NAV.length){go(NAV[n]);haptic('select')}
@@ -32865,6 +33001,13 @@ document.addEventListener('click',e=>{
  if(x.dataset.x==='ptopen'){curTool='pdf';setTool('pdf')}
  else if(x.dataset.x==='prm2'){PG.splice(+x.dataset.v,1);afterPg()}
 });
+/* ---- background removal model manager ---- */
+document.addEventListener('click',e=>{const b=e.target.closest('[data-x="bgdl"],[data-x="bguse"],[data-x="bgdel"],[data-x="bgmode"]');if(!b)return;const a=b.dataset.x,v=b.dataset.v;
+ if(a==='bgdl')bgDownload(v);
+ else if(a==='bguse'){BGST.model=v;BGENG.ready=0;BGENG.model='';BGMASK={key:'',w:0,h:0,al:null};T.bgm='ai';panel();bgRenderModels();bgCompute(true)}
+ else if(a==='bgdel')bgDelModel(v).then(()=>{BGST.have[v]=0;if(BGST.model===v)BGST.model=BGMODELS[0].id;bgRenderModels();panel()});
+ else if(a==='bgmode'){T.bgm=v;panel();draw();if(v==='ai')bgCompute(true)}});
+addEventListener('load',()=>{bgRenderModels()});
 /* ---- PDF tray (shows what is bundled) ---- */
 function trayHTML(){
  if(!PG.length)return'';

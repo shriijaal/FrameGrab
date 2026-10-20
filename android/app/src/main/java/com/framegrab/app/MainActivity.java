@@ -185,6 +185,9 @@ public class MainActivity extends Activity {
             String mime = mimeFor(asset);
             Map<String, String> headers = new HashMap<>();
             headers.put("Cache-Control", "no-store");
+            // Cross-origin isolation lets the ONNX runtime use SharedArrayBuffer (multi-threaded inference).
+            headers.put("Cross-Origin-Opener-Policy", "same-origin");
+            headers.put("Cross-Origin-Embedder-Policy", "credentialless");
             String encoding = mime.startsWith("text/") || mime.contains("javascript") ? "UTF-8" : null;
             return new WebResourceResponse(mime, encoding, 200, "OK", headers, in);
         } catch (Exception e) {
