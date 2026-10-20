@@ -180,6 +180,8 @@ Requirements: JDK 17, Android SDK (platform `android-36`, build-tools `36.0.0`),
 
 ## Changelog
 
+- **1.9.3** — The PDF document preview is a one-page viewport: one sheet at a time, scroll to page through it,
+  with a live page counter.
 - **1.9.2** — The PDF document preview sits at the top of the Images to PDF panel, stacked vertically.
 - **1.9.1** — Toolbox cards rebuilt (per-category icon colors that hold at any width, steady two-line labels,
   proper coming-soon badge); settings rows gain hairline dividers with aligned section labels.
