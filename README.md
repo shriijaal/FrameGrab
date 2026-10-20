@@ -180,6 +180,8 @@ Requirements: JDK 17, Android SDK (platform `android-36`, build-tools `36.0.0`),
 
 ## Changelog
 
+- **1.9.7** — Launch theme delay fixed: day/night launch window + WebView surface on Android, and full theme
+  (palette + system dark) applied in the head script before the first paint — no visible switch on open.
 - **1.9.6** — The live document viewer gets a tinted background, hairline border and rounded corners, clearly
   separating the preview from the page list and tool sections below it.
 - **1.9.5** — Document preview header tidied: equal-sized page pills (the `15 / 15` counter no longer renders
