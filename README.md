@@ -180,6 +180,8 @@ Requirements: JDK 17, Android SDK (platform `android-36`, build-tools `36.0.0`),
 
 ## Changelog
 
+- **1.9.6** — The live document viewer gets a tinted background, hairline border and rounded corners, clearly
+  separating the preview from the page list and tool sections below it.
 - **1.9.5** — Document preview header tidied: equal-sized page pills (the `15 / 15` counter no longer renders
   at title size) and a fixed two-row grid so title, caption and counter + zoom never jump around.
 - **1.9.4** — PDF preview zoom (pinch or +/− buttons, 50–300%) with a live counter; click anywhere on the
