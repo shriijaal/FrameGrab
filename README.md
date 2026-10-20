@@ -180,6 +180,9 @@ Requirements: JDK 17, Android SDK (platform `android-36`, build-tools `36.0.0`),
 
 ## Changelog
 
+- **1.9.8** — Collage spacing fixed on every front: cells are clipped so photos can't spill into the gaps,
+  Rows never cuts images off (grid grows, or columns derive from Rows), a partial last row centers instead of
+  leaving an empty block, and Grid size fields match every other control.
 - **1.9.7** — Launch theme delay fixed: day/night launch window + WebView surface on Android, and full theme
   (palette + system dark) applied in the head script before the first paint — no visible switch on open.
 - **1.9.6** — The live document viewer gets a tinted background, hairline border and rounded corners, clearly
