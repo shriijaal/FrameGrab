@@ -74,7 +74,7 @@ Filters (brightness/contrast/saturation/… with live preview), Background remov
 Watermark (text or image), Draw (brush, shapes, per-stroke undo).
 
 **Convert & optimize** — Format changer (incl. AVIF/JXL), Compress (with pre-commit preview), Batch rename,
-**Images to PDF** (multi-page, reorder, camera scanning, quality options).
+**Images to PDF** (multi-page, reorder, camera scanning, live document preview, quality options).
 
 **Create** — Collage (grid layouts), Image splitter, ASCII art, QR & barcode generator (SVG export, logo support,
 error correction) and a QR/barcode **scanner**.
@@ -180,6 +180,10 @@ Requirements: JDK 17, Android SDK (platform `android-36`, build-tools `36.0.0`),
 
 ## Changelog
 
+- **1.9.0** — Images to PDF shows a live document preview: pages rendered as sheets at the chosen size and margin,
+  updating with the settings; tap a sheet to inspect it full screen.
+- **1.8.1** — Stills three-dot menu opens only when tapped; Auto theme in the Android app follows the device
+  light/dark switch instantly (reads the system setting directly).
 - **1.8.0** — Toolbox tools are separate workflows (returning to the toolbox resets inputs); background remover
   locked as *Coming soon*; stills show resolution + a share/download/delete menu; Android share sheet fixed;
   Android custom save locations (folder mode + ask mode) work.
