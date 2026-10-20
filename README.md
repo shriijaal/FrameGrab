@@ -180,6 +180,9 @@ Requirements: JDK 17, Android SDK (platform `android-36`, build-tools `36.0.0`),
 
 ## Changelog
 
+- **1.10.2** — New app icon: the neon gallery-scan artwork is now the launcher icon (adaptive + round +
+  legacy for every density) and the web app's favicon.
+
 - **1.10.1** — Compare preview fixed: it auto-starts with the first two images, explains the empty state,
   shows a single picked image full-frame, and swaps when you tap the image that is already A.
   Toolbox icons now share one theme instead of four different colours.
