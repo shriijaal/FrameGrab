@@ -180,6 +180,10 @@ Requirements: JDK 17, Android SDK (platform `android-36`, build-tools `36.0.0`),
 
 ## Changelog
 
+- **1.10.1** — Compare preview fixed: it auto-starts with the first two images, explains the empty state,
+  shows a single picked image full-frame, and swaps when you tap the image that is already A.
+  Toolbox icons now share one theme instead of four different colours.
+
 - **1.10.0** — Compare now takes **two images**: tap A and B on any picture in the list and slide the
   divider (or drag it on the picture) to reveal one over the other, with Swap and A/B markers.
   Collage editing also rebuilt: tap a photo on the collage to select it and drag it immediately
