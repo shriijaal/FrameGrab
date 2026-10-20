@@ -180,6 +180,8 @@ Requirements: JDK 17, Android SDK (platform `android-36`, build-tools `36.0.0`),
 
 ## Changelog
 
+- **1.9.1** — Toolbox cards rebuilt (per-category icon colors that hold at any width, steady two-line labels,
+  proper coming-soon badge); settings rows gain hairline dividers with aligned section labels.
 - **1.9.0** — Images to PDF shows a live document preview: pages rendered as sheets at the chosen size and margin,
   updating with the settings; tap a sheet to inspect it full screen.
 - **1.8.1** — Stills three-dot menu opens only when tapped; Auto theme in the Android app follows the device
