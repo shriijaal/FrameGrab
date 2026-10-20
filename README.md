@@ -180,6 +180,15 @@ Requirements: JDK 17, Android SDK (platform `android-36`, build-tools `36.0.0`),
 
 ## Changelog
 
+- **1.10.0** — Compare now takes **two images**: tap A and B on any picture in the list and slide the
+  divider (or drag it on the picture) to reveal one over the other, with Swap and A/B markers.
+  Collage editing also rebuilt: tap a photo on the collage to select it and drag it immediately
+  (1:1 speed, clamped at the crop edge), pinch to crop, double-tap or Reset crop to restore; the selection
+  frame is accurate, unselected photos dim, and position/crop changes are undoable.
+
+- **1.9.9** — Collage editing rebuilt: tap a photo on the collage to select it and drag it immediately
+  (1:1 speed, clamped at the crop edge), pinch to crop, double-tap or Reset crop to restore; the selection
+  frame is accurate, unselected photos dim, and position/crop changes are undoable.
 - **1.9.8** — Collage spacing fixed on every front: cells are clipped so photos can't spill into the gaps,
   Rows never cuts images off (grid grows, or columns derive from Rows), a partial last row centers instead of
   leaving an empty block, and Grid size fields match every other control.
