@@ -1,0 +1,19 @@
+{
+  "name": "framegrab-tools",
+  "private": true,
+  "version": "1.11.0",
+  "type": "module",
+  "description": "Build tooling for FrameGrab. Bundles asciify-engine into the single-file web app.",
+  "scripts": {
+    "build": "node build-engine.mjs && node build-studio.mjs",
+    "engine": "node build-engine.mjs",
+    "studio": "node build-studio.mjs",
+    "looks": "node extract-looks.mjs",
+    "check": "node check-app.mjs && node check-bundle.mjs",
+    "test": "node test-studio.mjs"
+  },
+  "devDependencies": {
+    "asciify-engine": "4.29.0",
+    "esbuild": "^0.25.0"
+  }
+}

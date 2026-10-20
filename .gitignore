@@ -4,6 +4,7 @@ android/build/
 android/app/build/
 android/local.properties
 android/app/src/main/assets/index.html
+android/app/src/main/assets/bg/
 android/.idea/
 android/captures/
 android/*.iml
@@ -17,3 +18,9 @@ android/framegrab-release.jks
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# Build tooling (dev only — the engine is bundled into index.html)
+tools/node_modules/
+tools/dist/
+tools/shots/
+

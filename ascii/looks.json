@@ -1,0 +1,1441 @@
+[
+ {
+  "id": "album",
+  "name": "Album cover",
+  "category": "Projects",
+  "use": "a performer or portrait lit by colored light, as a square record or single cover; streaming artwork and gig visuals.",
+  "settings": {
+   "aspectRatio": "1:1",
+   "style": "dots",
+   "cellSize": 5,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#060608"
+   },
+   "color": {
+    "saturation": 1.35,
+    "brightness": 0.1,
+    "contrast": 1.1
+   },
+   "effects": {
+    "characterBloom": 0.35,
+    "vignette": 0.3,
+    "grain": 0.12
+   }
+  },
+  "exportSize": {
+   "format": "png",
+   "width": 3000,
+   "height": 3000
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "editorial",
+  "name": "Editorial",
+  "category": "Projects",
+  "use": "a magazine-style portrait engraved in fine ink on warm paper, in a 3:4 cover frame; features, interviews, about pages and print.",
+  "settings": {
+   "aspectRatio": "3:4",
+   "style": "engraving",
+   "cellSize": 4,
+   "ink": "#1b1a18",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#f2eee6"
+   },
+   "print": {
+    "invert": true,
+    "angle": -40,
+    "weight": 1.15
+   },
+   "color": {
+    "contrast": 1.4,
+    "gamma": 0.85
+   }
+  },
+  "exportSize": {
+   "format": "png",
+   "width": 2400,
+   "height": 3200
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "product",
+  "name": "Studio product",
+  "category": "Projects",
+  "use": "a product on a plain backdrop, painted in small strokes of its own colors over a soft studio gradient; product heroes, launch pages and packaging shots.",
+  "settings": {
+   "style": "pointillism",
+   "cellSize": 3,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "gradient",
+    "color": "#f4f1ec",
+    "color2": "#dcd5ca"
+   },
+   "print": {
+    "invert": true,
+    "density": 1.3,
+    "weight": 1.2
+   },
+   "color": {
+    "saturation": 1.35,
+    "contrast": 1.25
+   }
+  },
+  "exportSize": {
+   "format": "png",
+   "width": 3200,
+   "height": 2400
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "concrete",
+  "name": "Concrete poster",
+  "category": "Projects",
+  "use": "architecture with a strong repeating structure, cut as cream engraving into a terracotta poster; exhibition, property and city posters.",
+  "settings": {
+   "aspectRatio": "3:4",
+   "style": "engraving",
+   "cellSize": 4,
+   "ink": "#f3e9d8",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#a8432a"
+   },
+   "print": {
+    "angle": 0,
+    "weight": 1.2
+   },
+   "color": {
+    "contrast": 1.6,
+    "gamma": 0.8
+   }
+  },
+  "exportSize": {
+   "format": "png",
+   "width": 2400,
+   "height": 3200
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "postcard",
+  "name": "Postcard",
+  "category": "Projects",
+  "use": "sunny travel photos as a vintage travel poster in five flat inks; postcards, travel guides, tourism and summer campaigns.",
+  "settings": {
+   "style": "dither",
+   "cellSize": 6,
+   "ink": "#16324f",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#f4ead5"
+   },
+   "color": {
+    "saturation": 1.2,
+    "contrast": 1.1
+   },
+   "dither": {
+    "algorithm": "atkinson",
+    "palette": "custom",
+    "colors": [
+     "#16324f",
+     "#2f7f86",
+     "#e9b44c",
+     "#e76f51",
+     "#f4ead5"
+    ],
+    "scale": 3
+   }
+  },
+  "exportSize": {
+   "format": "png",
+   "width": 2400,
+   "height": 1800
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "botanical",
+  "name": "Botanical plate",
+  "category": "Projects",
+  "use": "a single flower, leaf or specimen on a plain ground as a hand-colored botanical plate; prints, packaging, wellness and garden brands.",
+  "settings": {
+   "aspectRatio": "3:4",
+   "style": "crosshatch",
+   "cellSize": 4,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#f3efe4"
+   },
+   "print": {
+    "invert": true
+   },
+   "color": {
+    "saturation": 1.3,
+    "contrast": 1.15
+   }
+  },
+  "exportSize": {
+   "format": "png",
+   "width": 2480,
+   "height": 3307
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "stadium",
+  "name": "Stadium",
+  "category": "Projects",
+  "use": "athletes and action against a pale, open sky as a bold two-ink halftone poster; sports, events, fitness and match-day graphics.",
+  "settings": {
+   "aspectRatio": "3:4",
+   "style": "dither",
+   "cellSize": 6,
+   "ink": "#151413",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#f2ebdd"
+   },
+   "color": {
+    "contrast": 1.35,
+    "whitePoint": 0.85,
+    "gamma": 0.85
+   },
+   "dither": {
+    "algorithm": "halftone",
+    "palette": "custom",
+    "colors": [
+     "#f2ebdd",
+     "#d7322a",
+     "#151413"
+    ],
+    "scale": 3
+   }
+  },
+  "exportSize": {
+   "format": "png",
+   "width": 2400,
+   "height": 3200
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "lookbook",
+  "name": "Lookbook",
+  "category": "Projects",
+  "use": "full-length fashion and product shots on a pale studio ground, stippled in the garment colors; lookbooks, shop pages and campaign posters.",
+  "settings": {
+   "aspectRatio": "3:4",
+   "style": "stipple",
+   "cellSize": 3,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#efebe4"
+   },
+   "print": {
+    "invert": true,
+    "density": 1.4,
+    "weight": 1.3
+   },
+   "color": {
+    "saturation": 1.5,
+    "contrast": 1.3
+   }
+  },
+  "exportSize": {
+   "format": "png",
+   "width": 2400,
+   "height": 3200
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "nightcity",
+  "name": "Night city",
+  "category": "Projects",
+  "use": "neon streets, rain and city lights as a glowing 16:9 cyberpunk frame; game, music, tech and event heroes.",
+  "settings": {
+   "aspectRatio": "16:9",
+   "style": "dots",
+   "cellSize": 4,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#05050a"
+   },
+   "color": {
+    "saturation": 1.5,
+    "brightness": 0.25,
+    "gamma": 1.3
+   },
+   "effects": {
+    "characterBloom": 0.45,
+    "rgbSplit": 0.15,
+    "scanlines": 0.12,
+    "vignette": 0.3
+   }
+  },
+  "exportSize": {
+   "format": "png",
+   "width": 3840,
+   "height": 2160
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "sumi",
+  "name": "Sumi ink",
+  "category": "Projects",
+  "use": "quiet, misty subjects with lots of empty space as an ink-wash study; tea, wellness, calm brands and minimal print.",
+  "settings": {
+   "style": "stipple",
+   "cellSize": 4,
+   "ink": "#161513",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#efe8da"
+   },
+   "print": {
+    "invert": true,
+    "density": 1.3,
+    "weight": 1.3
+   },
+   "color": {
+    "contrast": 1.6
+   }
+  },
+  "exportSize": {
+   "format": "png",
+   "width": 3000,
+   "height": 2250
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "wirephoto",
+  "name": "Wire photo",
+  "category": "Projects",
+  "use": "news-like and historic moments as a grainy wire-service halftone on newsprint; anniversaries, timelines, editorial and documentary pages.",
+  "settings": {
+   "style": "dither",
+   "cellSize": 6,
+   "ink": "#1c1b18",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#e9e3d6"
+   },
+   "color": {
+    "contrast": 1.25,
+    "whitePoint": 0.72,
+    "shadows": 0.35
+   },
+   "dither": {
+    "algorithm": "halftone",
+    "palette": "custom",
+    "colors": [
+     "#e9e3d6",
+     "#1c1b18"
+    ],
+    "scale": 2
+   },
+   "effects": {
+    "grain": 0.3,
+    "vignette": 0.2
+   }
+  },
+  "exportSize": {
+   "format": "png",
+   "width": 2400,
+   "height": 1800
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "gamebox",
+  "name": "Game box",
+  "category": "Projects",
+  "use": "fantasy and adventure scenes as 16-color box art from an old cartridge; indie game pages, streams and merch.",
+  "settings": {
+   "style": "dither",
+   "cellSize": 6,
+   "ink": "#fff1e8",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#000000"
+   },
+   "color": {
+    "saturation": 1.2,
+    "contrast": 1.1
+   },
+   "dither": {
+    "algorithm": "bayer4",
+    "palette": "pico8",
+    "scale": 3
+   }
+  },
+  "exportSize": {
+   "format": "png",
+   "width": 1200,
+   "height": 900
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "sticker",
+  "name": "Mascot sticker",
+  "category": "Projects",
+  "use": "a character, toy or logo mark on a plain dark ground as a chunky transparent sticker; mascots, app icons, chat stickers and merch.",
+  "settings": {
+   "aspectRatio": "1:1",
+   "style": "blocks",
+   "cellSize": 5,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "transparent"
+   },
+   "color": {
+    "saturation": 1.4,
+    "contrast": 1.15,
+    "brightness": 0.05
+   }
+  },
+  "exportSize": {
+   "format": "png",
+   "width": 2048,
+   "height": 2048
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "lockscreen",
+  "name": "Lock screen",
+  "category": "Projects",
+  "use": "tall subjects (waterfalls, trees, towers, a standing figure) as a 9:16 phone wallpaper with glowing dots over a deep gradient.",
+  "settings": {
+   "aspectRatio": "9:16",
+   "style": "dots",
+   "cellSize": 4,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "gradient",
+    "color": "#04120d",
+    "color2": "#12332a"
+   },
+   "color": {
+    "saturation": 1.3,
+    "brightness": 0.1,
+    "contrast": 1.1
+   },
+   "effects": {
+    "characterBloom": 0.3
+   }
+  },
+  "exportSize": {
+   "format": "png",
+   "width": 1290,
+   "height": 2293
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "frost",
+  "name": "Frosted glass",
+  "category": "Composed",
+  "use": "sunsets, skylines and silhouettes as white frost characters over a soft, full-color blur of the photo; premium wallpapers and covers.",
+  "settings": {
+   "style": "ascii",
+   "cellSize": 4,
+   "ink": "#fff7ef",
+   "backdrop": {
+    "mode": "blurred",
+    "blur": 10,
+    "opacity": 1
+   },
+   "color": {
+    "contrast": 1.2,
+    "brightness": 0.05
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "bokeh",
+  "name": "Bokeh",
+  "category": "Composed",
+  "use": "flowers, gardens and lights as glowing color dots over their own soft focus; spring campaigns, calm wallpapers, music covers.",
+  "settings": {
+   "style": "dots",
+   "cellSize": 6,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "blurred",
+    "blur": 32,
+    "opacity": 1
+   },
+   "color": {
+    "saturation": 1.3,
+    "brightness": 0.12,
+    "contrast": 1.1
+   },
+   "effects": {
+    "characterBloom": 0.25
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "cutout",
+  "name": "Cutout",
+  "category": "Composed",
+  "use": "a subject on a dark or plain background as a sticker with a transparent ground; overlays on any color, product cut-outs, layered heroes.",
+  "settings": {
+   "style": "mixed",
+   "cellSize": 5,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "transparent"
+   },
+   "color": {
+    "saturation": 1.8,
+    "contrast": 1.3,
+    "tint": "#7d7368",
+    "amount": 0.45,
+    "blend": "multiply"
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "halo",
+  "name": "Halo overlay",
+  "category": "Composed",
+  "use": "a glowing white dot artwork with a transparent ground, to lay over video, gradients or brand color; launch heroes and title cards.",
+  "settings": {
+   "style": "dots",
+   "cellSize": 5,
+   "ink": "#f4f1ea",
+   "backdrop": {
+    "mode": "transparent"
+   },
+   "color": {
+    "contrast": 1.2
+   },
+   "effects": {
+    "characterBloom": 0.4
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "afterglow",
+  "name": "Afterglow",
+  "category": "Composed",
+  "use": "a bright figure or object on black, redrawn in warm light characters over a dusk gradient; event posters, music and campaign heroes.",
+  "settings": {
+   "style": "ascii",
+   "cellSize": 4,
+   "ink": "#fff0dc",
+   "backdrop": {
+    "mode": "gradient",
+    "color": "#1c1433",
+    "color2": "#b4492f"
+   },
+   "color": {
+    "contrast": 1.2,
+    "blackPoint": 0.25
+   },
+   "effects": {
+    "characterBloom": 0.3
+   }
+  },
+  "overrides": {
+   "backdrop": {
+    "color": "#0e2a3a",
+    "color2": "#d98f3c"
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "neon",
+  "name": "Neon",
+  "category": "Composed",
+  "use": "night photos with bright, saturated lights, redrawn as glowing colored characters; nightlife, festival and music artwork.",
+  "settings": {
+   "style": "ascii",
+   "cellSize": 4,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#07070a"
+   },
+   "color": {
+    "saturation": 1.3
+   },
+   "effects": {
+    "characterBloom": 0.6
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "cobalt",
+  "name": "Cobalt",
+  "category": "Composed",
+  "use": "a pale sculpture, portrait or product on a dark ground, set in cream characters on saturated ultramarine; gallery posters and confident brand heroes.",
+  "settings": {
+   "style": "ascii",
+   "cellSize": 3,
+   "ink": "#f2ede2",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#1f3ea8"
+   },
+   "color": {
+    "contrast": 1.3,
+    "blackPoint": 0.15
+   }
+  },
+  "overrides": {
+   "backdrop": {
+    "color": "#0f5c4a"
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "cameo",
+  "name": "Cameo",
+  "category": "Composed",
+  "use": "a portrait engraved inside an oval on warm paper, like a stamp or banknote vignette; invitations, about pages, memorial and heritage artwork.",
+  "settings": {
+   "style": "engraving",
+   "cellSize": 4,
+   "ink": "#2a2620",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#ece6d8"
+   },
+   "print": {
+    "invert": true,
+    "angle": -30,
+    "weight": 1.05
+   },
+   "mask": {
+    "enabled": true,
+    "shapes": [
+     {
+      "kind": "ellipse",
+      "x": 0.32,
+      "y": 0.12,
+      "width": 0.36,
+      "height": 0.76
+     }
+    ]
+   }
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "gilded",
+  "name": "Gilded",
+  "category": "Composed",
+  "use": "jewelry, watches, metalwork and ornament as gold engraving on black; luxury product pages, labels and premium dark heroes.",
+  "settings": {
+   "style": "engraving",
+   "cellSize": 4,
+   "ink": "#d9b26a",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#0b0a08"
+   },
+   "print": {
+    "angle": -35,
+    "weight": 1.1
+   },
+   "color": {
+    "contrast": 1.35,
+    "brightness": 0.05
+   },
+   "effects": {
+    "characterBloom": 0.2
+   }
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "overprint",
+  "name": "Overprint",
+  "category": "Composed",
+  "use": "bright photos with hard, graphic shadows, where the shadows fill with type over the sharp original; travel, editorial and summer campaign artwork.",
+  "settings": {
+   "style": "ascii",
+   "cellSize": 6,
+   "ink": "#0b2530",
+   "backdrop": {
+    "mode": "source",
+    "opacity": 1
+   },
+   "color": {
+    "levels": "none",
+    "curves": {
+     "rgb": [
+      [
+       0,
+       1
+      ],
+      [
+       0.3,
+       1
+      ],
+      [
+       0.45,
+       0
+      ],
+      [
+       1,
+       0
+      ]
+     ]
+    }
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "cinema",
+  "name": "Cinema",
+  "category": "Finished",
+  "use": "landscapes, roads and wide scenes as a film still: warm-white characters over the photo's own soft color, with a vignette, film grain and a little bloom; trailers, story heroes and posters.",
+  "settings": {
+   "style": "ascii",
+   "cellSize": 4,
+   "ink": "#fff1de",
+   "backdrop": {
+    "mode": "blurred",
+    "blur": 14,
+    "opacity": 1
+   },
+   "color": {
+    "contrast": 1.15
+   },
+   "effects": {
+    "vignette": 0.45,
+    "grain": 0.22,
+    "bloom": 0.15
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "darkroom",
+  "name": "Darkroom",
+  "category": "Finished",
+  "use": "still lifes, portraits and low-key photos as a print glowing out of the dark; book covers, gallery walls and quiet dark heroes.",
+  "settings": {
+   "style": "ascii",
+   "cellSize": 5,
+   "ink": "#efe6d6",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#080706"
+   },
+   "color": {
+    "contrast": 1.15,
+    "brightness": 0.35,
+    "gamma": 2
+   },
+   "effects": {
+    "vignette": 0.45,
+    "bloom": 0.4,
+    "grain": 0.12
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "broadcast",
+  "name": "Broadcast",
+  "category": "Finished",
+  "use": "space, sport and news-like photos as a live transmission: a fine pixel picture with scanlines, a chromatic fringe, RGB split and a slight tube curve; launch and live-event artwork.",
+  "settings": {
+   "style": "pixel",
+   "cellSize": 3,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#06080b"
+   },
+   "color": {
+    "saturation": 1.15,
+    "contrast": 1.05
+   },
+   "effects": {
+    "scanlines": 0.35,
+    "prism": 0.3,
+    "rgbSplit": 0.25,
+    "crt": 0.15,
+    "vignette": 0.25
+   }
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "tape",
+  "name": "Tape",
+  "category": "Finished",
+  "use": "action, skate and music photos as a worn tape frame: halftone dots in source color with glitch bands, color split, scanlines and grain; merch, flyers and social cuts.",
+  "settings": {
+   "style": "dots",
+   "cellSize": 4,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#0b0a0c"
+   },
+   "color": {
+    "saturation": 1.3,
+    "contrast": 1.1,
+    "brightness": 0.15
+   },
+   "effects": {
+    "glitch": 0.15,
+    "rgbSplit": 0.35,
+    "scanlines": 0.2,
+    "grain": 0.25
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "miniature",
+  "name": "Miniature",
+  "category": "Finished",
+  "use": "aerial views of towns, harbors and crowds as a tilt-shift model, sharp in a band and softly blurred above and below; travel and city artwork.",
+  "settings": {
+   "style": "pixel",
+   "cellSize": 4,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#0b0b0a"
+   },
+   "color": {
+    "saturation": 1.35,
+    "contrast": 1.1
+   },
+   "effects": {
+    "blur": 6,
+    "blurType": "progressive",
+    "focus": 0.55,
+    "sharpen": 0.3
+   }
+  },
+  "overrides": {
+   "effects": {
+    "focus": 0.4
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "archive",
+  "name": "Archive",
+  "category": "Finished",
+  "use": "historic, travel and heritage photos as an aged print, with sepia ink, dust, grain and a vignette; anniversaries, museums and about pages.",
+  "settings": {
+   "style": "ascii",
+   "cellSize": 4,
+   "ink": "#e9d8b4",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#17130e"
+   },
+   "color": {
+    "contrast": 1.4
+   },
+   "effects": {
+    "dust": 0.45,
+    "grain": 0.3,
+    "vignette": 0.4
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "velocity",
+  "name": "Velocity",
+  "category": "Finished",
+  "use": "headlights, tunnels and anything rushing toward the camera, with a radial speed blur and glowing highlights; automotive, sport and launch heroes.",
+  "settings": {
+   "style": "ascii",
+   "cellSize": 4,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#08080a"
+   },
+   "color": {
+    "saturation": 1.25,
+    "brightness": 0.2,
+    "gamma": 1.3
+   },
+   "effects": {
+    "blur": 4,
+    "blurType": "radial",
+    "focus": 0.5,
+    "bloom": 0.3,
+    "vignette": 0.25
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "poppress",
+  "name": "Pop press",
+  "category": "Finished",
+  "use": "bold, saturated product and car photos as a comic-print page, with a halftone screen over shaded blocks in source color; packaging, merch and pop posters.",
+  "settings": {
+   "style": "blocks",
+   "cellSize": 4,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#0b0b0a"
+   },
+   "color": {
+    "saturation": 1.4,
+    "contrast": 1.15,
+    "brightness": 0.2,
+    "gamma": 1.3
+   },
+   "effects": {
+    "halftone": 0.35,
+    "sharpen": 0.4
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "ascii",
+  "name": "Signature ASCII",
+  "category": "Characters",
+  "use": "the house look; a portrait, sculpture or product as a dark wallpaper, a hero artwork or a cover.",
+  "engineLook": "ascii",
+  "settings": {
+   "hover": {
+    "effect": "trail",
+    "strength": 0.7,
+    "radius": 0.4
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "night",
+  "name": "Night signal",
+  "category": "Characters",
+  "use": "moodier, filmic portraits and night scenes; album art and dark posters.",
+  "engineLook": "night",
+  "settings": {},
+  "maxCells": 65536
+ },
+ {
+  "id": "terminal",
+  "name": "Phosphor",
+  "category": "Characters",
+  "use": "a CRT or terminal feel on a portrait or product; developer-tool heroes and dark wallpapers.",
+  "engineLook": "terminal",
+  "settings": {},
+  "maxCells": 32768
+ },
+ {
+  "id": "wallpaper",
+  "name": "Wallpaper",
+  "category": "Characters",
+  "use": "a living desktop or phone wallpaper, a screensaver, or a full-bleed artwork that moves on its own.",
+  "engineLook": "wallpaper",
+  "settings": {},
+  "exportSize": {
+   "format": "mp4",
+   "width": 1920,
+   "height": 1440
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "blueprint",
+  "name": "Blueprint",
+  "category": "Characters",
+  "use": "architecture, machines and products drawn as technical linework; engineering and hardware heroes.",
+  "engineLook": "blueprint",
+  "settings": {},
+  "maxCells": 65536
+ },
+ {
+  "id": "mixed",
+  "name": "Type case",
+  "category": "Characters",
+  "use": "a playful, typographic take on a colorful subject; posters, merch and editorial openers.",
+  "settings": {
+   "style": "mixed",
+   "cellSize": 5,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#0b0b0a"
+   },
+   "color": {
+    "contrast": 1.2,
+    "brightness": 0.15
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "blocks",
+  "name": "ANSI blocks",
+  "category": "Characters",
+  "use": "bold, colorful subjects as shaded block characters, like ANSI art from a BBS; retro, game and music artwork.",
+  "settings": {
+   "style": "blocks",
+   "cellSize": 5,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#0b0b0a"
+   },
+   "color": {
+    "saturation": 1.15,
+    "contrast": 1.1
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "braille",
+  "name": "Braille",
+  "category": "Characters",
+  "use": "fine, graphic subjects on black (leaves, feathers, line-like forms) drawn in tiny braille dots; delicate dark wallpapers and editorial openers.",
+  "settings": {
+   "style": "braille",
+   "cellSize": 3,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#0b0b0a"
+   },
+   "color": {
+    "contrast": 1.4,
+    "brightness": 0.15,
+    "saturation": 1.3,
+    "gamma": 1.3
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "cross",
+  "name": "Cross-stitch",
+  "category": "Characters",
+  "use": "birds, flowers and folk subjects as colored stitches on dark cloth; craft, seasonal and gift artwork.",
+  "settings": {
+   "style": "cross",
+   "cellSize": 4,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#191d26"
+   },
+   "color": {
+    "saturation": 1.5,
+    "brightness": 0.2,
+    "contrast": 1.2
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "diagonal",
+  "name": "Storm",
+  "category": "Characters",
+  "use": "rain, wind and streaks of light drawn in slanted strokes; moody posters, weather stories and dark section artwork.",
+  "settings": {
+   "style": "diagonal",
+   "cellSize": 4,
+   "ink": "#eef3f5",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#10161b"
+   },
+   "color": {
+    "contrast": 1.25,
+    "brightness": 0.15,
+    "gamma": 1.8
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "diamond",
+  "name": "Jewel box",
+  "category": "Characters",
+  "use": "iridescent, richly colored subjects (feathers, gems, beetles, fabric) set in diamond characters; fashion, beauty and jewelry artwork.",
+  "settings": {
+   "style": "diamond",
+   "cellSize": 5,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#07070a"
+   },
+   "color": {
+    "saturation": 1.4,
+    "brightness": 0.3,
+    "contrast": 1.25,
+    "gamma": 1.6,
+    "blackPoint": 0.15
+   },
+   "effects": {
+    "characterBloom": 0.35
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "print",
+  "name": "Newsprint",
+  "category": "Dither",
+  "use": "bright, high-key photos as an editorial print; zines, press pages, quiet light-theme heroes.",
+  "engineLook": "print",
+  "settings": {},
+  "maxCells": 131072
+ },
+ {
+  "id": "handheld",
+  "name": "Pocket camera",
+  "category": "Dither",
+  "use": "a nostalgic, low-fi portrait or pet photo; game and music artwork.",
+  "engineLook": "handheld",
+  "settings": {},
+  "maxCells": 131072
+ },
+ {
+  "id": "riso",
+  "name": "Two inks",
+  "category": "Dither",
+  "use": "posters, gig flyers and covers with a printed, two-color feel on warm paper.",
+  "engineLook": "riso",
+  "settings": {},
+  "overrides": {
+   "ink": "#1f3b73",
+   "dither": {
+    "colors": [
+     "#f0ece3",
+     "#e0674a",
+     "#1f3b73"
+    ]
+   }
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "dots",
+  "name": "Halftone",
+  "category": "Print",
+  "use": "a bold, graphic portrait; band posters, covers and dark heroes that read from far away.",
+  "settings": {
+   "style": "dots",
+   "cellSize": 5,
+   "ink": "#e6e3da",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#0b0b0a"
+   },
+   "color": {
+    "contrast": 1.3,
+    "brightness": 0.15
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "cmyk",
+  "name": "Four-color press",
+  "category": "Print",
+  "use": "bright, saturated product and still-life photos as a pop print; packaging, merch and posters.",
+  "settings": {
+   "style": "cmyk",
+   "cellSize": 5,
+   "colorMode": "source"
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "stipple",
+  "name": "Stipple",
+  "category": "Print",
+  "use": "a quiet, drawn portrait in fine dots; book covers, editorial portraits, dark wallpapers.",
+  "settings": {
+   "style": "stipple",
+   "cellSize": 4,
+   "ink": "#e6e3da",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#0b0b0a"
+   },
+   "color": {
+    "contrast": 1.35,
+    "brightness": 0.2,
+    "gamma": 1.3
+   }
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "engraving",
+  "name": "Banknote",
+  "category": "Print",
+  "use": "architecture, portraits and objects as a steel engraving; certificates, invitations, premium light-theme heroes.",
+  "settings": {
+   "style": "engraving",
+   "cellSize": 5,
+   "ink": "#22201c",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#ece8de"
+   },
+   "print": {
+    "invert": true,
+    "angle": -35,
+    "weight": 1.1
+   },
+   "color": {
+    "contrast": 1.25
+   }
+  },
+  "overrides": {
+   "print": {
+    "angle": 20
+   }
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "crosshatch",
+  "name": "Pen and ink",
+  "category": "Print",
+  "use": "sculpture, portraits and figures drawn in crossing pen lines; editorial illustration and posters.",
+  "settings": {
+   "style": "crosshatch",
+   "cellSize": 5,
+   "ink": "#22201c",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#ece8de"
+   },
+   "print": {
+    "invert": true
+   }
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "pointillism",
+  "name": "Pointillist",
+  "category": "Print",
+  "use": "still lifes, fruit, flowers and landscapes as a painted canvas; gallery-style wallpapers.",
+  "settings": {
+   "style": "pointillism",
+   "cellSize": 3,
+   "colorMode": "source",
+   "print": {
+    "weight": 1.6,
+    "density": 1.3
+   },
+   "backdrop": {
+    "mode": "solid",
+    "color": "#0b0b0a"
+   },
+   "color": {
+    "brightness": 0.25,
+    "saturation": 1.3
+   }
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "woodblock",
+  "name": "Woodcut",
+  "category": "Print",
+  "use": "landscapes and silhouettes with big tonal masses as a carved woodblock print on paper; book covers, labels and outdoor brand artwork.",
+  "settings": {
+   "style": "woodblock",
+   "cellSize": 8,
+   "ink": "#1d1a16",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#ebe3d2"
+   },
+   "print": {
+    "invert": true,
+    "angle": 0,
+    "roughness": 0.3,
+    "weight": 0.9
+   },
+   "color": {
+    "contrast": 1.2,
+    "whitePoint": 0.7,
+    "gamma": 1.6,
+    "shadows": 0.3
+   }
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "risograph",
+  "name": "Riso duotone",
+  "category": "Print",
+  "use": "bright, saturated photos (pools, sport, summer) as a two-screen riso print with offset registration; zines, gig posters and summer campaigns.",
+  "settings": {
+   "style": "risograph",
+   "cellSize": 5,
+   "colorMode": "source",
+   "ink": "#2853a5",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#f4ebd0"
+   },
+   "print": {
+    "secondaryInk": "#f2594b",
+    "registration": 0.35,
+    "density": 1.2
+   }
+  },
+  "overrides": {
+   "print": {
+    "registration": 0.1
+   }
+  },
+  "maxCells": 131072
+ },
+ {
+  "id": "mosaic",
+  "name": "Mosaic study",
+  "category": "Tiles",
+  "use": "colorful subjects as separated tiles; gallery walls, covers and calm wallpapers.",
+  "engineLook": "mosaic",
+  "settings": {},
+  "maxCells": 32768
+ },
+ {
+  "id": "bricks",
+  "name": "Brickwork",
+  "category": "Tiles",
+  "use": "a toy-brick build of a photo; playful posters, kids' and game artwork.",
+  "engineLook": "bricks",
+  "settings": {
+   "hover": {
+    "effect": "water",
+    "radius": 0.35
+   }
+  },
+  "maxCells": 32768
+ },
+ {
+  "id": "voxel",
+  "name": "Little volumes",
+  "category": "Tiles",
+  "use": "a photo as small isometric blocks; game, 3D and product artwork with depth.",
+  "engineLook": "voxel",
+  "settings": {},
+  "maxCells": 32768
+ },
+ {
+  "id": "disco",
+  "name": "Mirror room",
+  "category": "Tiles",
+  "use": "night scenes, music and event artwork as faceted mirror tiles under one light.",
+  "engineLook": "disco",
+  "settings": {},
+  "overrides": {
+   "lights": [
+    {
+     "x": 0.75,
+     "y": 0.2,
+     "radius": 0.28,
+     "intensity": 0.28,
+     "color": "#f4efe4"
+    }
+   ]
+  },
+  "maxCells": 32768
+ },
+ {
+  "id": "pixel",
+  "name": "Pixel",
+  "category": "Tiles",
+  "use": "an eight-bit take on a colorful photo; game, music and avatar artwork.",
+  "settings": {
+   "style": "pixel",
+   "cellSize": 6,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#0b0b0a"
+   },
+   "color": {
+    "saturation": 0.85
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "hex",
+  "name": "Honeycomb",
+  "category": "Tiles",
+  "use": "landscapes, water and skies as hexagonal tiles; calm wallpapers and section artwork.",
+  "settings": {
+   "style": "hex",
+   "cellSize": 7,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#0b0b0a"
+   },
+   "color": {
+    "saturation": 0.6
+   }
+  },
+  "maxCells": 65536
+ },
+ {
+  "id": "led",
+  "name": "Scoreboard",
+  "category": "Tiles",
+  "use": "cities, stages and night photos as a wall of round emitters; event, sport and music artwork.",
+  "settings": {
+   "style": "led",
+   "cellSize": 5,
+   "colorMode": "source",
+   "backdrop": {
+    "mode": "solid",
+    "color": "#0b0b0a"
+   },
+   "color": {
+    "saturation": 1.2,
+    "contrast": 1.1,
+    "brightness": 0.2
+   }
+  },
+  "maxCells": 32768
+ }
+]
