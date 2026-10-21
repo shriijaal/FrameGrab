@@ -74,12 +74,37 @@ libjxl). Resolution presets (never upscale), per-format quality, optional metada
 
 Every tool accepts upload, drag & drop, stills, or camera capture.
 
-**Edit** — Crop (aspect presets, straighten), Resize (lock, never-upscale), Rotate & flip (straighten slider),
-Filters (brightness/contrast/saturation/… with live preview), Background remover *(coming soon — currently locked)*,
-Watermark (text or image), Draw (brush, shapes, per-stroke undo).
+**Edit** — Crop (aspect presets, straighten, an edge magnet you can switch off), Resize (lock, never-upscale),
+Rotate & flip (straighten slider), Filters (brightness/contrast/saturation/… with live preview),
+**Background remover** (on-device AI subject detection plus a magic eraser), Watermark (text or image),
+Draw (brush, shapes, per-stroke undo, **stroke stabilizer**).
+
+### Background remover
+- **AI subject detection** — rembg's own models (u2netp, Silueta, ISNet) run entirely on the device through
+  onnxruntime-web. Models are downloaded on demand, kept on the device, and never uploaded. A status card says
+  exactly where you are: no model yet, loading, model ready, working, or subject detected.
+- **Magic eraser** — tap the picture and the region under your finger is found by itself: a colour region grow with
+  a tolerance, a grow step for soft edges and a feather. **Every tap adds to the selection**, so picking a second
+  region never brings the first one back. *Magic restore* puts a picked region back instead.
+- **Quick method** — for plain or evenly lit backgrounds: detected edge colours, tolerance, edge softness and
+  edges-only or everywhere.
+- Plus shrink/grow the edge, keep the main subject only, clean the colour fringe, and replace the cut-out with
+  clear, white, black or a colour of your choice.
+
+### Drawing stabilizer
+The draw tool has a **stabilizer** slider. It smooths the stroke with a one-euro style filter: slow movement is
+smoothed hard, so a shaky hand stops trembling, while fast movement follows your finger closely, so the line never
+lags behind. At 0 the drawing is completely untouched.
+
+### Scanning
+The document scanner and the QR & barcode scanner both ask where the picture should come from: **an image you
+already have on the device**, or a **new one from the camera**. The QR scanner scans a chosen picture straight away.
+
 
 **Convert & optimize** — Format changer (incl. AVIF/JXL), Compress (with pre-commit preview), Batch rename,
-**Images to PDF** (multi-page, reorder, camera scanning, live document preview, quality options).
+**Images to PDF** (multi-page, reorder, camera scanning, live document preview, quality options). The preview is a
+scrollable viewport with a floating glass bar at the bottom carrying the page pill, the page details and the zoom
+buttons; the zoom is smooth, fine-grained, and can be pinched with a finger, a mouse or a trackpad.
 
 **Create** — Collage (grid layouts), Image splitter, ASCII art, **ASCII Studio**, QR & barcode generator (SVG export,
 logo support, error correction) and a QR/barcode **scanner**.
@@ -249,12 +274,39 @@ gradle assembleRelease    # -> app/build/outputs/apk/release/ (signed if android
 
 Requirements: JDK 17, Android SDK (platform `android-36`, build-tools `36.0.0`), Gradle 8.9–8.11.
 
-**Tests:** the repo's JS is syntax-checked with `node --check`; behavior is exercised with jsdom harnesses
-(panels build, OCR language buttons, QR SVG generation, theme persistence, tool-session reset, stills menu).
+**Tests:** the repo's JS is syntax-checked with `node --check`; the ASCII Studio and the background remover are
+exercised in a real browser by a headless-Edge harness over the DevTools protocol:
+
+```bash
+cd tools
+node check-app.mjs     # syntax-check every inline script in index.html
+node test-studio.mjs   # the ASCII Studio, end to end in headless Edge
+node test-bg.mjs       # the magic eraser, end to end in headless Edge
+node test-ui.mjs       # crop, source sheet, PDF preview and the stabilizer
+node shot.mjs <name>   # screenshot the app
+```
 
 ---
 
 ## Changelog
+
+- **1.13.0** — Cropping is precise now: the edge magnet is a lot smaller and a new **Snap to the picture edges**
+  switch turns it off entirely, so with it off the frame lands exactly where you put it. The document scanner and
+  the QR & barcode scanner now ask where the picture should come from — one you already have on the device, or a
+  new one from the camera. The PDF preview gained a floating **glass bar** at the bottom of the viewport carrying
+  the page pill, the page details and the zoom buttons; the zoom is smooth and fine-grained, and the preview can
+  be pinched with a finger, a mouse or a trackpad. The Android **status bar is transparent** — the app's own
+  background shows through it and the icons follow the light or dark theme. The draw tool grew a **stabilizer**
+  that smooths out a shaky hand without the stroke lagging behind. A few labels had mangled characters (dashes,
+  quotes and arrows written in the wrong encoding); they are repaired.
+
+- **1.12.0** — The background remover grew a **magic eraser**: tap the picture and the region under your finger is
+  found by itself (a colour region grow with a tolerance, a grow step for soft edges and a feather). **Every tap
+  adds to the selection**, so picking a second region never brings the first one back, and *Magic restore* puts a
+  picked region back instead. The magic eraser also works on its own, with the automatic background removal
+  switched off. The AI method now says where it is — no model on the device yet, loading, model ready, working or
+  subject detected — and offers a **Detect subject** button, instead of quietly falling back to the colour method
+  when no model was downloaded. The ASCII Studio keeps MP4 and WebM export.
 
 - **1.11.4** — The QR / barcode generator no longer replaces the picture you were editing (your image and
   edits are safe now); undo/redo get their own icons and smaller buttons; the background remover's

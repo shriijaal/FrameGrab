@@ -10,7 +10,7 @@
     "studio": "node build-studio.mjs",
     "looks": "node extract-looks.mjs",
     "check": "node check-app.mjs && node check-bundle.mjs",
-    "test": "node test-studio.mjs"
+    "test": "node test-studio.mjs && node test-bg.mjs && node test-ui.mjs"
   },
   "devDependencies": {
     "asciify-engine": "4.29.0",

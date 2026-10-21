@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +33,8 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
@@ -67,9 +70,20 @@ public class MainActivity extends Activity {
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // The status bar is transparent: the page's own background shows through
+        // it, and the page pads itself by the bar's height (pushed in as --sbt).
+        Window win = getWindow();
+        win.setStatusBarColor(Color.TRANSPARENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            win.setDecorFitsSystemWindows(false);
+        } else {
+            win.getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
         web = new WebView(this);
         setContentView(web);
-        web.setBackgroundColor(getColor(R.color.launch_bg));
+        web.setBackgroundColor(Color.TRANSPARENT);
+        pushInsets();
 
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
@@ -96,6 +110,9 @@ public class MainActivity extends Activity {
             }
             @Override public void onReceivedError(WebView v, WebResourceRequest r, WebResourceError e) {
                 if (r.isForMainFrame()) Log.e(TAG, "page error: " + e.getDescription());
+            }
+            @Override public void onPageFinished(WebView v, String url) {
+                pushInsets();
             }
         });
 
@@ -589,7 +606,56 @@ public class MainActivity extends Activity {
         // follows immediately even if the media-query change event is missed.
         if (web != null) {
             web.evaluateJavascript("typeof applyColors==='function'&&applyColors()", null);
+            pushInsets();
         }
+    }
+
+    // How much of the page the system bars cover, so it can pad itself.
+    private int insetTop() {
+        View d = getWindow().getDecorView();
+        if (d.getRootWindowInsets() == null) return 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            android.graphics.Insets i = d.getRootWindowInsets()
+                    .getInsets(android.view.WindowInsets.Type.statusBars());
+            return i == null ? 0 : i.top;
+        }
+        return d.getRootWindowInsets().getSystemWindowInsetTop();
+    }
+
+    private int insetBottom() {
+        View d = getWindow().getDecorView();
+        if (d.getRootWindowInsets() == null) return 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            android.graphics.Insets i = d.getRootWindowInsets()
+                    .getInsets(android.view.WindowInsets.Type.navigationBars());
+            return i == null ? 0 : i.bottom;
+        }
+        return d.getRootWindowInsets().getSystemWindowInsetBottom();
+    }
+
+    private void pushInsets() {
+        if (web == null) return;
+        final int top = insetTop();
+        final int bottom = insetBottom();
+        web.post(new Runnable() {
+            @Override public void run() {
+                web.evaluateJavascript(
+                        "document.documentElement.style.setProperty('--sbt','" + top + "px');"
+                      + "document.documentElement.style.setProperty('--sbb','" + bottom + "px')", null);
+            }
+        });
+    }
+
+    // Dark text on a light status bar, light text on a dark one.
+    @JavascriptInterface public void setBarIcons(boolean dark) {
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+                View d = getWindow().getDecorView();
+                int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+                if (!dark) flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+                d.setSystemUiVisibility(flags);
+            }
+        });
     }
 
     @Override protected void onPause() {

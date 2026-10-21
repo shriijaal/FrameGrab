@@ -281,10 +281,23 @@ try {
   const gif = await run(`(async()=>{
     try{
       const blob=await Asciify.studio.exportStudio({frame:()=>document.querySelector('#tcv')},astSettings(),{format:'gif',width:320,height:200,duration:1,fps:8});
-      return {ok:true,size:blob.size};
+      return {ok:true,size:blob.size,type:blob.type};
     }catch(e){return {ok:false,err:e.message}}
   })()`);
-  check('GIF export works', gif.ok && gif.size > 500, gif.ok ? `${gif.size} bytes` : gif.err);
+  check('GIF export works', gif.ok && gif.size > 500, gif.ok ? `${gif.size} bytes ${gif.type}` : gif.err);
+
+  // 10b. video export
+  for (const fmt of ['mp4', 'webm']) {
+    const v = await run(`(async()=>{
+      try{
+        const blob=await Asciify.studio.exportStudio({frame:()=>document.querySelector('#tcv')},astSettings(),
+          {format:'${fmt}',width:320,height:200,duration:1,fps:10});
+        return {ok:true,size:blob.size,type:blob.type};
+      }catch(e){return {ok:false,err:e.message}}
+    })()`);
+    check(`${fmt.toUpperCase()} export works`, v.ok && v.size > 1000,
+      v.ok ? `${v.size} bytes ${v.type}` : v.err);
+  }
 
   // 11. the toolbox lists the studio
   const listed = await run(`TL.filter(x=>x[0]==='astudio').map(x=>x[1]).join()`);

@@ -15,15 +15,16 @@ function applyColors(){
  const P=t=>K(h+o[0],c[0],t),X=t=>K(h+o[1],c[1],t),T=t=>K(h+o[2],c[2],t),N=t=>K(h,c[3],t),V=t=>K(h,c[4],t);
  const L=dk?{bg:N(6),on:N(90),mut:V(80),pri:P(80),onp:P(20),pric:P(30),onpc:P(90),secc:X(30),onsecc:X(90),pri2:T(80),ont:T(20),ter:T(30),onter:T(90),card:N(12),glass:`color-mix(in srgb,${N(22)} 55%,transparent)`,sh:'rgba(0,0,0,.5)',gb:'rgba(255,255,255,.16)'}:{bg:N(98),on:N(10),mut:V(35),pri:P(40),onp:P(100),pric:P(90),onpc:P(10),secc:X(90),onsecc:X(10),pri2:T(40),ont:T(100),ter:T(90),onter:T(10),card:N(94),glass:`color-mix(in srgb,${N(99)} 58%,transparent)`,sh:'rgba(80,40,160,.22)',gb:'rgba(255,255,255,.9)'};
  for(const k in L)R.style.setProperty('--'+k,L[k]);R.style.colorScheme=dk?'dark':'light';
+ try{if(window.Android&&Android.setBarIcons)Android.setBarIcons(dk)}catch(e){}
 }
 applyColors();</script>
 <title>Framegrab</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f7f2ff;--on:#1d1830;--mut:#6b6385;--pri:#6a38ff;--onp:#fff;--pri2:#ff4d9d;--ter:#b8f035;--card:rgba(255,255,255,.62);--glass:rgba(255,255,255,.58);--gb:rgba(255,255,255,.9);--sh:rgba(80,40,160,.22);--spring:cubic-bezier(.34,1.56,.64,1);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{--bg:#f7f2ff;--on:#1d1830;--mut:#6b6385;--pri:#6a38ff;--onp:#fff;--pri2:#ff4d9d;--ter:#b8f035;--card:rgba(255,255,255,.62);--glass:rgba(255,255,255,.58);--gb:rgba(255,255,255,.9);--sh:rgba(80,40,160,.22);--spring:cubic-bezier(.34,1.56,.64,1);box-sizing:border-box;padding-top:calc(env(safe-area-inset-top,0px) + var(--sbt,0px));padding-bottom:calc(env(safe-area-inset-bottom,0px) + var(--sbb,0px))}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f0b1a;--on:#efe9ff;--mut:#a79fc4;--pri:#a88bff;--onp:#1b0a52;--pri2:#ff79b9;--ter:#c9ff4f;--card:rgba(40,32,66,.55);--glass:rgba(48,40,80,.42);--gb:rgba(255,255,255,.16);--sh:rgba(0,0,0,.5)}}
 :root[data-theme="dark"]{--bg:#0f0b1a;--on:#efe9ff;--mut:#a79fc4;--pri:#a88bff;--onp:#1b0a52;--pri2:#ff79b9;--ter:#c9ff4f;--card:rgba(40,32,66,.55);--glass:rgba(48,40,80,.42);--gb:rgba(255,255,255,.16);--sh:rgba(0,0,0,.5)}
-html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + var(--sbt,0px));height:100%}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;min-height:100%;background:var(--bg);color:var(--on);font:500 16px/1.4 var(--font);overflow-x:hidden}
 #app{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:22px 18px 130px}
@@ -106,7 +107,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scaleX(1.5)}
 .sw::after{content:"";position:absolute;top:6px;left:6px;width:20px;height:20px;border-radius:50%;background:var(--bg);transition:all .45s var(--spring)}
 .sw.on{background:var(--pri)}
 .sw.on::after{left:28px;top:4px;width:24px;height:24px;background:var(--onp)}
-.nav{position:fixed;z-index:5;left:0;right:0;margin:0 auto;width:fit-content;bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;padding:6px;border-radius:36px}
+.nav{position:fixed;z-index:5;left:0;right:0;margin:0 auto;width:fit-content;bottom:calc(14px + calc(env(safe-area-inset-bottom,0px) + var(--sbb,0px)));display:flex;padding:6px;border-radius:36px}
 .nav button{position:relative;z-index:1;width:78px;height:60px;border:0;background:transparent;color:var(--mut);font:600 11px var(--font);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;transition:color .3s,transform .4s var(--spring)}
 .nav button:active{transform:scale(.88)}
 .nav button.on{color:var(--on)}
@@ -117,7 +118,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scaleX(1.5)}
 .badge.show{display:grid}
 .badge.bump{animation:bump .5s var(--spring)}
 @keyframes bump{50%{transform:scale(1.7)}}
-.toast{position:fixed;z-index:6;left:50%;bottom:calc(98px + env(safe-area-inset-bottom,0px));padding:12px 20px;border-radius:22px;font-weight:600;font-size:14px;transform:translate(-50%,30px) scale(.8);opacity:0;pointer-events:none;transition:all .5s var(--spring);white-space:normal;text-align:center;width:max-content;max-width:min(92vw,420px)}
+.toast{position:fixed;z-index:6;left:50%;bottom:calc(98px + calc(env(safe-area-inset-bottom,0px) + var(--sbb,0px)));padding:12px 20px;border-radius:22px;font-weight:600;font-size:14px;transform:translate(-50%,30px) scale(.8);opacity:0;pointer-events:none;transition:all .5s var(--spring);white-space:normal;text-align:center;width:max-content;max-width:min(92vw,420px)}
 .toast.on{transform:translate(-50%,0) scale(1);opacity:1}
 .flash{position:fixed;inset:0;background:#fff;z-index:9;pointer-events:none;opacity:0}
 .flash.go{animation:fl .35s ease-out}
@@ -126,7 +127,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scaleX(1.5)}
 .hint{color:var(--mut);font-size:13px;text-align:center;margin-top:12px}
 .scrim{position:fixed;inset:0;z-index:7;background:rgba(10,5,25,.5);opacity:0;pointer-events:none;transition:opacity .35s}
 .scrim.on{opacity:1;pointer-events:auto}
-.sheet{position:fixed;z-index:8;left:0;right:0;bottom:0;margin:0 auto;max-width:560px;border-radius:36px 36px 0 0;padding:12px 20px calc(22px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg) 74%,transparent);transform:translateY(106%);transition:transform .55s cubic-bezier(.22,1,.36,1);visibility:hidden}
+.sheet{position:fixed;z-index:8;left:0;right:0;bottom:0;margin:0 auto;max-width:560px;border-radius:36px 36px 0 0;padding:12px 20px calc(22px + calc(env(safe-area-inset-bottom,0px) + var(--sbb,0px)));background:color-mix(in srgb,var(--bg) 74%,transparent);transform:translateY(106%);transition:transform .55s cubic-bezier(.22,1,.36,1);visibility:hidden}
 .sheet.on{transform:none;visibility:visible}
 .grip{width:40px;height:5px;border-radius:3px;background:color-mix(in srgb,var(--on) 30%,transparent);margin:0 auto 12px}
 .sheet h3{margin:0;font-size:24px;letter-spacing:-.5px}
@@ -242,7 +243,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scaleX(1.5)}
 #sr button,#pr button{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;flex:1 1 0;min-width:0;padding:8px 2px}
 #sr small,#pr small{color:inherit;margin:0;opacity:.75}
 .dirrow{display:flex;align-items:center;gap:10px;margin-top:10px}.dirrow[hidden]{display:none}.dirrow span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mut);font-size:13px}
-.prog{position:fixed;z-index:9;left:0;right:0;margin:0 auto;bottom:calc(98px + env(safe-area-inset-bottom,0px));width:min(92vw,420px);display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:26px}.prog[hidden]{display:none}
+.prog{position:fixed;z-index:9;left:0;right:0;margin:0 auto;bottom:calc(98px + calc(env(safe-area-inset-bottom,0px) + var(--sbb,0px)));width:min(92vw,420px);display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:26px}.prog[hidden]{display:none}
 .pbar{height:8px;border-radius:99px;background:color-mix(in srgb,var(--on) 14%,transparent);margin-top:8px;overflow:hidden}.pbar i{display:block;height:100%;width:0;background:var(--pri);border-radius:99px;transition:width .2s}.prog .btn{height:40px;padding:0 16px}
 .btn:disabled{opacity:.4;pointer-events:none}
 .sheet .acts .btn{white-space:nowrap}#ss{flex:1.5}#sc{flex:.8}#sh2{flex:.9}
@@ -314,12 +315,23 @@ button,.btn,.tt,.pick,.chip,label.drop{touch-action:manipulation}
 .tsr2{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.tsr2 .btn{height:40px;padding:0 6px;font-size:13px;gap:6px;border-radius:16px}.tsr2 .i{width:18px;height:18px}
 .ptr{margin-top:14px}.ptr-h{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:10px;row-gap:6px;margin-bottom:10px}.ptr-h>b{font-size:15px}.ptr-h em{font-style:normal;display:inline-flex;align-items:center;height:21px;padding:0 9px;border-radius:99px;font-size:11px;font-weight:800;background:var(--secc);color:var(--onsecc);margin-left:8px;vertical-align:middle}
 .ptr-row{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px}.ptt{position:relative;flex:none;width:64px;height:84px;border-radius:12px;overflow:hidden;background:#000}.ptt img{width:100%;height:100%;object-fit:cover}.ptt span{position:absolute;left:4px;bottom:4px;font-size:11px;font-weight:700;background:rgba(0,0,0,.55);color:#fff;border-radius:8px;padding:1px 6px}.ptt button{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:14px;line-height:1;padding:0;cursor:pointer}
-.pvcol{height:min(56vh,430px);overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 8px 10px;--pz:1;background:color-mix(in srgb,var(--on) 5%,transparent);border:1px solid var(--gb);border-radius:16px;margin-bottom:12px}
+@property --pz{syntax:'<number>';inherits:true;initial-value:1}
+.pvwrap{position:relative}
+.pvcol{height:min(56vh,430px);overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 8px 64px;--pz:1;background:color-mix(in srgb,var(--on) 5%,transparent);border:1px solid var(--gb);border-radius:16px;margin-bottom:12px;transition:--pz .3s cubic-bezier(.2,.75,.3,1),scroll-snap-type .2s}
+.pvbar{position:absolute;z-index:3;left:50%;bottom:10px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:5px 6px 5px 5px;border-radius:999px;max-width:calc(100% - 18px);
+ background:color-mix(in srgb,var(--gb) 52%,transparent);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+ border:1px solid color-mix(in srgb,var(--on) 12%,transparent);box-shadow:0 10px 28px var(--sh),inset 0 1px 0 color-mix(in srgb,#fff 38%,transparent)}
+.pvbar .pvind{height:26px;padding:0 11px;font-size:12px;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.pvbar .pvd{font-size:12px;font-weight:600;color:color-mix(in srgb,var(--on) 78%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:34vw}
+.pvbar .pvz{gap:5px}
+.pvbar .pvz button{background:color-mix(in srgb,var(--on) 16%,transparent);color:var(--on);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .pvcol::-webkit-scrollbar{display:none}
 .pvcol .psheet{width:min(calc(88% * var(--pz)),calc((min(56vh,430px) - 36px) * var(--ar) * var(--pz)));aspect-ratio:var(--ar);height:auto;scroll-snap-align:start}
 .pvind{display:inline-flex;align-items:center;height:21px;padding:0 9px;border-radius:99px;font-style:normal;font-size:11px;font-weight:800;background:var(--pric);color:var(--onpc)}
 .ptr-h .cap{grid-column:1;grid-row:2;min-width:0;font-size:12px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pvctl{grid-column:2;grid-row:2;display:flex;align-items:center;gap:8px}
+.pvz button{transition:transform .25s var(--spring),background .25s}
+.pvz button:active:not(:disabled){transform:scale(.9)}
 .pvz{display:inline-flex;gap:4px}
 .pvz button{position:relative;width:32px;height:32px;border-radius:50%;border:0;background:color-mix(in srgb,var(--on) 12%,transparent);color:var(--on);font-size:15px;font-weight:700;line-height:1;cursor:pointer;padding:0}
 .pvz button::after{content:'';position:absolute;inset:-6px}
@@ -510,6 +522,8 @@ button,.btn,.tt,.pick,.chip,label.drop{touch-action:manipulation}
 </div>
 <div class="prog glass" id="prog" hidden><div style="flex:1;min-width:0"><div id="pt" style="font-weight:600;font-size:14px">Extracting frames</div><div class="pbar"><i id="pb"></i></div></div><button class="btn glass" id="pc">Cancel</button></div>
 <div class="scrim" id="scrim2"></div>
+<div class="scrim" id="scrim3"></div>
+<div class="sheet glass" id="srcp" role="dialog" aria-label="Choose a source"><div class="grip"></div><h3 id="srcpt">Scan</h3><p class="hint" id="srcph" style="margin:0 0 14px"></p><div style="display:grid;gap:10px"><button class="btn glass" id="srcdev" style="height:54px">Use an image on this device</button><button class="btn fill" id="srccam" style="height:54px">Use the camera</button></div><button class="btn glass" id="srccancel" style="width:100%;margin-top:12px">Cancel</button></div>
 <div class="sheet glass" id="stp" role="dialog" aria-label="Choose stills"><div class="grip"></div><div class="top" style="align-items:center"><h3 id="stt" style="margin:0">Choose stills</h3><button class="btn glass" id="stcancel" style="height:40px;padding:0 16px">Cancel</button></div><div class="stg" id="stg"></div><button class="btn fill" id="stadd" style="width:100%;margin-top:12px" hidden>Add</button></div>
 <div class="lb" id="lb"><div class="lbs" id="lbs"></div><div class="lbc2 glass"><img id="lbi" alt=""><div class="lbb" id="lbt"></div><div class="lba"><button class="btn glass" id="lbp" aria-label="Previous">‹</button><button class="btn glass" id="lbrm">Remove</button><button class="btn glass" id="lbn" aria-label="Next">›</button><button class="btn fill" id="lbc">Done</button></div></div></div>
 <div class="toast glass" id="toast"></div><div class="flash" id="flash"></div>
@@ -14610,1241 +14624,1241 @@ of new full-width/kern/smush alternatives, but default output is NOT changed.
   \\_/ @@
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 128
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 129
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 130
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 131
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 132
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 133
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 134
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 135
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 136
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 137
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 138
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 139
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 140
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 141
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 142
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 143
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 144
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 145
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 146
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 147
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 148
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 149
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 150
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 151
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 152
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 153
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 154
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 155
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 156
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 157
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 158
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 159
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 160  NO-BREAK SPACE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 161  INVERTED EXCLAMATION MARK
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 162  CENT SIGN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 163  POUND SIGN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 164  CURRENCY SIGN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 165  YEN SIGN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 166  BROKEN BAR
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 167  SECTION SIGN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 168  DIAERESIS
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 169  COPYRIGHT SIGN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 170  FEMININE ORDINAL INDICATOR
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 171  LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 172  NOT SIGN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 173  SOFT HYPHEN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 174  REGISTERED SIGN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 175  MACRON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 176  DEGREE SIGN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 177  PLUS-MINUS SIGN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 178  SUPERSCRIPT TWO
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 179  SUPERSCRIPT THREE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 180  ACUTE ACCENT
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 181  MICRO SIGN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 182  PILCROW SIGN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 183  MIDDLE DOT
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 184  CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 185  SUPERSCRIPT ONE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 186  MASCULINE ORDINAL INDICATOR
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 187  RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 188  VULGAR FRACTION ONE QUARTER
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 189  VULGAR FRACTION ONE HALF
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 190  VULGAR FRACTION THREE QUARTERS
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 191  INVERTED QUESTION MARK
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 192  LATIN CAPITAL LETTER A WITH GRAVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 193  LATIN CAPITAL LETTER A WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 194  LATIN CAPITAL LETTER A WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 195  LATIN CAPITAL LETTER A WITH TILDE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 196  LATIN CAPITAL LETTER A WITH DIAERESIS
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 197  LATIN CAPITAL LETTER A WITH RING ABOVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 198  LATIN CAPITAL LETTER AE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 199  LATIN CAPITAL LETTER C WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 200  LATIN CAPITAL LETTER E WITH GRAVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 201  LATIN CAPITAL LETTER E WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 202  LATIN CAPITAL LETTER E WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 203  LATIN CAPITAL LETTER E WITH DIAERESIS
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 204  LATIN CAPITAL LETTER I WITH GRAVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 205  LATIN CAPITAL LETTER I WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 206  LATIN CAPITAL LETTER I WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 207  LATIN CAPITAL LETTER I WITH DIAERESIS
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 208  LATIN CAPITAL LETTER ETH
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 209  LATIN CAPITAL LETTER N WITH TILDE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 210  LATIN CAPITAL LETTER O WITH GRAVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 211  LATIN CAPITAL LETTER O WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 212  LATIN CAPITAL LETTER O WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 213  LATIN CAPITAL LETTER O WITH TILDE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 214  LATIN CAPITAL LETTER O WITH DIAERESIS
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 215  MULTIPLICATION SIGN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 216  LATIN CAPITAL LETTER O WITH STROKE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 217  LATIN CAPITAL LETTER U WITH GRAVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 218  LATIN CAPITAL LETTER U WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 219  LATIN CAPITAL LETTER U WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 220  LATIN CAPITAL LETTER U WITH DIAERESIS
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 221  LATIN CAPITAL LETTER Y WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 222  LATIN CAPITAL LETTER THORN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 223  LATIN SMALL LETTER SHARP S
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 224  LATIN SMALL LETTER A WITH GRAVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 225  LATIN SMALL LETTER A WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 226  LATIN SMALL LETTER A WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 227  LATIN SMALL LETTER A WITH TILDE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 228  LATIN SMALL LETTER A WITH DIAERESIS
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 229  LATIN SMALL LETTER A WITH RING ABOVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 230  LATIN SMALL LETTER AE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 231  LATIN SMALL LETTER C WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 232  LATIN SMALL LETTER E WITH GRAVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 233  LATIN SMALL LETTER E WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 234  LATIN SMALL LETTER E WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 235  LATIN SMALL LETTER E WITH DIAERESIS
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 236  LATIN SMALL LETTER I WITH GRAVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 237  LATIN SMALL LETTER I WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 238  LATIN SMALL LETTER I WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 239  LATIN SMALL LETTER I WITH DIAERESIS
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 240  LATIN SMALL LETTER ETH
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 241  LATIN SMALL LETTER N WITH TILDE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 242  LATIN SMALL LETTER O WITH GRAVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 243  LATIN SMALL LETTER O WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 244  LATIN SMALL LETTER O WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 245  LATIN SMALL LETTER O WITH TILDE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 246  LATIN SMALL LETTER O WITH DIAERESIS
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 247  DIVISION SIGN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 248  LATIN SMALL LETTER O WITH STROKE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 249  LATIN SMALL LETTER U WITH GRAVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 250  LATIN SMALL LETTER U WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 251  LATIN SMALL LETTER U WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 252  LATIN SMALL LETTER U WITH DIAERESIS
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 253  LATIN SMALL LETTER Y WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 254  LATIN SMALL LETTER THORN
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 255  LATIN SMALL LETTER Y WITH DIAERESIS
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0100  LATIN CAPITAL LETTER A WITH MACRON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0101  LATIN SMALL LETTER A WITH MACRON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0102  LATIN CAPITAL LETTER A WITH BREVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0103  LATIN SMALL LETTER A WITH BREVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0104  LATIN CAPITAL LETTER A WITH OGONEK
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0105  LATIN SMALL LETTER A WITH OGONEK
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0106  LATIN CAPITAL LETTER C WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0107  LATIN SMALL LETTER C WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0108  LATIN CAPITAL LETTER C WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0109  LATIN SMALL LETTER C WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x010A  LATIN CAPITAL LETTER C WITH DOT ABOVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x010B  LATIN SMALL LETTER C WITH DOT ABOVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x010C  LATIN CAPITAL LETTER C WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x010D  LATIN SMALL LETTER C WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x010E  LATIN CAPITAL LETTER D WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x010F  LATIN SMALL LETTER D WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0110  LATIN CAPITAL LETTER D WITH STROKE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0111  LATIN SMALL LETTER D WITH STROKE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0112  LATIN CAPITAL LETTER E WITH MACRON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0113  LATIN SMALL LETTER E WITH MACRON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0116  LATIN CAPITAL LETTER E WITH DOT ABOVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0117  LATIN SMALL LETTER E WITH DOT ABOVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0118  LATIN CAPITAL LETTER E WITH OGONEK
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0119  LATIN SMALL LETTER E WITH OGONEK
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x011A  LATIN CAPITAL LETTER E WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x011B  LATIN SMALL LETTER E WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x011C  LATIN CAPITAL LETTER G WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x011D  LATIN SMALL LETTER G WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x011E  LATIN CAPITAL LETTER G WITH BREVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x011F  LATIN SMALL LETTER G WITH BREVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0120  LATIN CAPITAL LETTER G WITH DOT ABOVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0121  LATIN SMALL LETTER G WITH DOT ABOVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0122  LATIN CAPITAL LETTER G WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0123  LATIN SMALL LETTER G WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0124  LATIN CAPITAL LETTER H WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0125  LATIN SMALL LETTER H WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0126  LATIN CAPITAL LETTER H WITH STROKE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0127  LATIN SMALL LETTER H WITH STROKE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0128  LATIN CAPITAL LETTER I WITH TILDE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0129  LATIN SMALL LETTER I WITH TILDE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x012A  LATIN CAPITAL LETTER I WITH MACRON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x012B  LATIN SMALL LETTER I WITH MACRON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x012E  LATIN CAPITAL LETTER I WITH OGONEK
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x012F  LATIN SMALL LETTER I WITH OGONEK
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0130  LATIN CAPITAL LETTER I WITH DOT ABOVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0131  LATIN SMALL LETTER DOTLESS I
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0134  LATIN CAPITAL LETTER J WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0135  LATIN SMALL LETTER J WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0136  LATIN CAPITAL LETTER K WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0137  LATIN SMALL LETTER K WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0138  LATIN SMALL LETTER KRA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0139  LATIN CAPITAL LETTER L WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x013A  LATIN SMALL LETTER L WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x013B  LATIN CAPITAL LETTER L WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x013C  LATIN SMALL LETTER L WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x013D  LATIN CAPITAL LETTER L WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x013E  LATIN SMALL LETTER L WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0141  LATIN CAPITAL LETTER L WITH STROKE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0142  LATIN SMALL LETTER L WITH STROKE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0143  LATIN CAPITAL LETTER N WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0144  LATIN SMALL LETTER N WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0145  LATIN CAPITAL LETTER N WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0146  LATIN SMALL LETTER N WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0147  LATIN CAPITAL LETTER N WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0148  LATIN SMALL LETTER N WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x014A  LATIN CAPITAL LETTER ENG
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x014B  LATIN SMALL LETTER ENG
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x014C  LATIN CAPITAL LETTER O WITH MACRON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x014D  LATIN SMALL LETTER O WITH MACRON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0150  LATIN CAPITAL LETTER O WITH DOUBLE ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0151  LATIN SMALL LETTER O WITH DOUBLE ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0154  LATIN CAPITAL LETTER R WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0155  LATIN SMALL LETTER R WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0156  LATIN CAPITAL LETTER R WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0157  LATIN SMALL LETTER R WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0158  LATIN CAPITAL LETTER R WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0159  LATIN SMALL LETTER R WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x015A  LATIN CAPITAL LETTER S WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x015B  LATIN SMALL LETTER S WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x015C  LATIN CAPITAL LETTER S WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x015D  LATIN SMALL LETTER S WITH CIRCUMFLEX
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x015E  LATIN CAPITAL LETTER S WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x015F  LATIN SMALL LETTER S WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0160  LATIN CAPITAL LETTER S WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0161  LATIN SMALL LETTER S WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0162  LATIN CAPITAL LETTER T WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0163  LATIN SMALL LETTER T WITH CEDILLA
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0164  LATIN CAPITAL LETTER T WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0165  LATIN SMALL LETTER T WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0166  LATIN CAPITAL LETTER T WITH STROKE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0167  LATIN SMALL LETTER T WITH STROKE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0168  LATIN CAPITAL LETTER U WITH TILDE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0169  LATIN SMALL LETTER U WITH TILDE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x016A  LATIN CAPITAL LETTER U WITH MACRON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x016B  LATIN SMALL LETTER U WITH MACRON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x016C  LATIN CAPITAL LETTER U WITH BREVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x016D  LATIN SMALL LETTER U WITH BREVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x016E  LATIN CAPITAL LETTER U WITH RING ABOVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x016F  LATIN SMALL LETTER U WITH RING ABOVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0170  LATIN CAPITAL LETTER U WITH DOUBLE ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0171  LATIN SMALL LETTER U WITH DOUBLE ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0172  LATIN CAPITAL LETTER U WITH OGONEK
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0173  LATIN SMALL LETTER U WITH OGONEK
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x0179  LATIN CAPITAL LETTER Z WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x017A  LATIN SMALL LETTER Z WITH ACUTE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x017B  LATIN CAPITAL LETTER Z WITH DOT ABOVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x017C  LATIN SMALL LETTER Z WITH DOT ABOVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x017D  LATIN CAPITAL LETTER Z WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x017E  LATIN SMALL LETTER Z WITH CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x02C7  CARON
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x02D8  BREVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x02D9  DOT ABOVE
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x02DB  OGONEK
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 0x02DD  DOUBLE ACUTE ACCENT
    _  @
   / \\ @
- ( � )@
+ (  )@
   \\_/ @@
 `});var WE={};vr(WE,{default:()=>lC});var lC,zE=lt(()=>{lC=`flf2a 3 2 6 1 11 0 16513
 Digital by Glenn Chappell 1/94 -- based on Bubble
@@ -16144,993 +16158,993 @@ of new full-width/kern/smush alternatives, but default output is NOT changed.
  |~|@
  +-+@@
  +-+@
- |�|@
+ ||@
  +-+@@
  +-+@
- |�|@
+ ||@
  +-+@@
  +-+@
- |�|@
+ ||@
  +-+@@
  +-+@
- |�|@
+ ||@
  +-+@@
  +-+@
- |�|@
+ ||@
  +-+@@
  +-+@
- |�|@
+ ||@
  +-+@@
  +-+@
- |�|@
+ ||@
  +-+@@
 128
  +-+@
- |�|@
+ ||@
  +-+@@
 129
  +-+@
- |�|@
+ ||@
  +-+@@
 130
  +-+@
- |�|@
+ ||@
  +-+@@
 131
  +-+@
- |�|@
+ ||@
  +-+@@
 132
  +-+@
- |�|@
+ ||@
  +-+@@
 133
  +-+@
- |�|@
+ ||@
  +-+@@
 134
  +-+@
- |�|@
+ ||@
  +-+@@
 135
  +-+@
- |�|@
+ ||@
  +-+@@
 136
  +-+@
- |�|@
+ ||@
  +-+@@
 137
  +-+@
- |�|@
+ ||@
  +-+@@
 138
  +-+@
- |�|@
+ ||@
  +-+@@
 139
  +-+@
- |�|@
+ ||@
  +-+@@
 140
  +-+@
- |�|@
+ ||@
  +-+@@
 141
  +-+@
- |�|@
+ ||@
  +-+@@
 142
  +-+@
- |�|@
+ ||@
  +-+@@
 143
  +-+@
- |�|@
+ ||@
  +-+@@
 144
  +-+@
- |�|@
+ ||@
  +-+@@
 145
  +-+@
- |�|@
+ ||@
  +-+@@
 146
  +-+@
- |�|@
+ ||@
  +-+@@
 147
  +-+@
- |�|@
+ ||@
  +-+@@
 148
  +-+@
- |�|@
+ ||@
  +-+@@
 149
  +-+@
- |�|@
+ ||@
  +-+@@
 150
  +-+@
- |�|@
+ ||@
  +-+@@
 151
  +-+@
- |�|@
+ ||@
  +-+@@
 152
  +-+@
- |�|@
+ ||@
  +-+@@
 153
  +-+@
- |�|@
+ ||@
  +-+@@
 154
  +-+@
- |�|@
+ ||@
  +-+@@
 155
  +-+@
- |�|@
+ ||@
  +-+@@
 156
  +-+@
- |�|@
+ ||@
  +-+@@
 157
  +-+@
- |�|@
+ ||@
  +-+@@
 158
  +-+@
- |�|@
+ ||@
  +-+@@
 159
  +-+@
- |�|@
+ ||@
  +-+@@
 160  NO-BREAK SPACE
  +-+@
- |�|@
+ ||@
  +-+@@
 161  INVERTED EXCLAMATION MARK
  +-+@
- |�|@
+ ||@
  +-+@@
 162  CENT SIGN
  +-+@
- |�|@
+ ||@
  +-+@@
 163  POUND SIGN
  +-+@
- |�|@
+ ||@
  +-+@@
 164  CURRENCY SIGN
  +-+@
- |�|@
+ ||@
  +-+@@
 165  YEN SIGN
  +-+@
- |�|@
+ ||@
  +-+@@
 166  BROKEN BAR
  +-+@
- |�|@
+ ||@
  +-+@@
 167  SECTION SIGN
  +-+@
- |�|@
+ ||@
  +-+@@
 168  DIAERESIS
  +-+@
- |�|@
+ ||@
  +-+@@
 169  COPYRIGHT SIGN
  +-+@
- |�|@
+ ||@
  +-+@@
 170  FEMININE ORDINAL INDICATOR
  +-+@
- |�|@
+ ||@
  +-+@@
 171  LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
  +-+@
- |�|@
+ ||@
  +-+@@
 172  NOT SIGN
  +-+@
- |�|@
+ ||@
  +-+@@
 173  SOFT HYPHEN
  +-+@
- |�|@
+ ||@
  +-+@@
 174  REGISTERED SIGN
  +-+@
- |�|@
+ ||@
  +-+@@
 175  MACRON
  +-+@
- |�|@
+ ||@
  +-+@@
 176  DEGREE SIGN
  +-+@
- |�|@
+ ||@
  +-+@@
 177  PLUS-MINUS SIGN
  +-+@
- |�|@
+ ||@
  +-+@@
 178  SUPERSCRIPT TWO
  +-+@
- |�|@
+ ||@
  +-+@@
 179  SUPERSCRIPT THREE
  +-+@
- |�|@
+ ||@
  +-+@@
 180  ACUTE ACCENT
  +-+@
- |�|@
+ ||@
  +-+@@
 181  MICRO SIGN
  +-+@
- |�|@
+ ||@
  +-+@@
 182  PILCROW SIGN
  +-+@
- |�|@
+ ||@
  +-+@@
 183  MIDDLE DOT
  +-+@
- |�|@
+ ||@
  +-+@@
 184  CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 185  SUPERSCRIPT ONE
  +-+@
- |�|@
+ ||@
  +-+@@
 186  MASCULINE ORDINAL INDICATOR
  +-+@
- |�|@
+ ||@
  +-+@@
 187  RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
  +-+@
- |�|@
+ ||@
  +-+@@
 188  VULGAR FRACTION ONE QUARTER
  +-+@
- |�|@
+ ||@
  +-+@@
 189  VULGAR FRACTION ONE HALF
  +-+@
- |�|@
+ ||@
  +-+@@
 190  VULGAR FRACTION THREE QUARTERS
  +-+@
- |�|@
+ ||@
  +-+@@
 191  INVERTED QUESTION MARK
  +-+@
- |�|@
+ ||@
  +-+@@
 192  LATIN CAPITAL LETTER A WITH GRAVE
  +-+@
- |�|@
+ ||@
  +-+@@
 193  LATIN CAPITAL LETTER A WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 194  LATIN CAPITAL LETTER A WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 195  LATIN CAPITAL LETTER A WITH TILDE
  +-+@
- |�|@
+ ||@
  +-+@@
 196  LATIN CAPITAL LETTER A WITH DIAERESIS
  +-+@
- |�|@
+ ||@
  +-+@@
 197  LATIN CAPITAL LETTER A WITH RING ABOVE
  +-+@
- |�|@
+ ||@
  +-+@@
 198  LATIN CAPITAL LETTER AE
  +-+@
- |�|@
+ ||@
  +-+@@
 199  LATIN CAPITAL LETTER C WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 200  LATIN CAPITAL LETTER E WITH GRAVE
  +-+@
- |�|@
+ ||@
  +-+@@
 201  LATIN CAPITAL LETTER E WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 202  LATIN CAPITAL LETTER E WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 203  LATIN CAPITAL LETTER E WITH DIAERESIS
  +-+@
- |�|@
+ ||@
  +-+@@
 204  LATIN CAPITAL LETTER I WITH GRAVE
  +-+@
- |�|@
+ ||@
  +-+@@
 205  LATIN CAPITAL LETTER I WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 206  LATIN CAPITAL LETTER I WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 207  LATIN CAPITAL LETTER I WITH DIAERESIS
  +-+@
- |�|@
+ ||@
  +-+@@
 208  LATIN CAPITAL LETTER ETH
  +-+@
- |�|@
+ ||@
  +-+@@
 209  LATIN CAPITAL LETTER N WITH TILDE
  +-+@
- |�|@
+ ||@
  +-+@@
 210  LATIN CAPITAL LETTER O WITH GRAVE
  +-+@
- |�|@
+ ||@
  +-+@@
 211  LATIN CAPITAL LETTER O WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 212  LATIN CAPITAL LETTER O WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 213  LATIN CAPITAL LETTER O WITH TILDE
  +-+@
- |�|@
+ ||@
  +-+@@
 214  LATIN CAPITAL LETTER O WITH DIAERESIS
  +-+@
- |�|@
+ ||@
  +-+@@
 215  MULTIPLICATION SIGN
  +-+@
- |�|@
+ ||@
  +-+@@
 216  LATIN CAPITAL LETTER O WITH STROKE
  +-+@
- |�|@
+ ||@
  +-+@@
 217  LATIN CAPITAL LETTER U WITH GRAVE
  +-+@
- |�|@
+ ||@
  +-+@@
 218  LATIN CAPITAL LETTER U WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 219  LATIN CAPITAL LETTER U WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 220  LATIN CAPITAL LETTER U WITH DIAERESIS
  +-+@
- |�|@
+ ||@
  +-+@@
 221  LATIN CAPITAL LETTER Y WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 222  LATIN CAPITAL LETTER THORN
  +-+@
- |�|@
+ ||@
  +-+@@
 223  LATIN SMALL LETTER SHARP S
  +-+@
- |�|@
+ ||@
  +-+@@
 224  LATIN SMALL LETTER A WITH GRAVE
  +-+@
- |�|@
+ ||@
  +-+@@
 225  LATIN SMALL LETTER A WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 226  LATIN SMALL LETTER A WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 227  LATIN SMALL LETTER A WITH TILDE
  +-+@
- |�|@
+ ||@
  +-+@@
 228  LATIN SMALL LETTER A WITH DIAERESIS
  +-+@
- |�|@
+ ||@
  +-+@@
 229  LATIN SMALL LETTER A WITH RING ABOVE
  +-+@
- |�|@
+ ||@
  +-+@@
 230  LATIN SMALL LETTER AE
  +-+@
- |�|@
+ ||@
  +-+@@
 231  LATIN SMALL LETTER C WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 232  LATIN SMALL LETTER E WITH GRAVE
  +-+@
- |�|@
+ ||@
  +-+@@
 233  LATIN SMALL LETTER E WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 234  LATIN SMALL LETTER E WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 235  LATIN SMALL LETTER E WITH DIAERESIS
  +-+@
- |�|@
+ ||@
  +-+@@
 236  LATIN SMALL LETTER I WITH GRAVE
  +-+@
- |�|@
+ ||@
  +-+@@
 237  LATIN SMALL LETTER I WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 238  LATIN SMALL LETTER I WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 239  LATIN SMALL LETTER I WITH DIAERESIS
  +-+@
- |�|@
+ ||@
  +-+@@
 240  LATIN SMALL LETTER ETH
  +-+@
- |�|@
+ ||@
  +-+@@
 241  LATIN SMALL LETTER N WITH TILDE
  +-+@
- |�|@
+ ||@
  +-+@@
 242  LATIN SMALL LETTER O WITH GRAVE
  +-+@
- |�|@
+ ||@
  +-+@@
 243  LATIN SMALL LETTER O WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 244  LATIN SMALL LETTER O WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 245  LATIN SMALL LETTER O WITH TILDE
  +-+@
- |�|@
+ ||@
  +-+@@
 246  LATIN SMALL LETTER O WITH DIAERESIS
  +-+@
- |�|@
+ ||@
  +-+@@
 247  DIVISION SIGN
  +-+@
- |�|@
+ ||@
  +-+@@
 248  LATIN SMALL LETTER O WITH STROKE
  +-+@
- |�|@
+ ||@
  +-+@@
 249  LATIN SMALL LETTER U WITH GRAVE
  +-+@
- |�|@
+ ||@
  +-+@@
 250  LATIN SMALL LETTER U WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 251  LATIN SMALL LETTER U WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 252  LATIN SMALL LETTER U WITH DIAERESIS
  +-+@
- |�|@
+ ||@
  +-+@@
 253  LATIN SMALL LETTER Y WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 254  LATIN SMALL LETTER THORN
  +-+@
- |�|@
+ ||@
  +-+@@
 255  LATIN SMALL LETTER Y WITH DIAERESIS
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0100  LATIN CAPITAL LETTER A WITH MACRON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0101  LATIN SMALL LETTER A WITH MACRON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0102  LATIN CAPITAL LETTER A WITH BREVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0103  LATIN SMALL LETTER A WITH BREVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0104  LATIN CAPITAL LETTER A WITH OGONEK
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0105  LATIN SMALL LETTER A WITH OGONEK
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0106  LATIN CAPITAL LETTER C WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0107  LATIN SMALL LETTER C WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0108  LATIN CAPITAL LETTER C WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0109  LATIN SMALL LETTER C WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 0x010A  LATIN CAPITAL LETTER C WITH DOT ABOVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x010B  LATIN SMALL LETTER C WITH DOT ABOVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x010C  LATIN CAPITAL LETTER C WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x010D  LATIN SMALL LETTER C WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x010E  LATIN CAPITAL LETTER D WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x010F  LATIN SMALL LETTER D WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0110  LATIN CAPITAL LETTER D WITH STROKE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0111  LATIN SMALL LETTER D WITH STROKE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0112  LATIN CAPITAL LETTER E WITH MACRON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0113  LATIN SMALL LETTER E WITH MACRON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0116  LATIN CAPITAL LETTER E WITH DOT ABOVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0117  LATIN SMALL LETTER E WITH DOT ABOVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0118  LATIN CAPITAL LETTER E WITH OGONEK
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0119  LATIN SMALL LETTER E WITH OGONEK
  +-+@
- |�|@
+ ||@
  +-+@@
 0x011A  LATIN CAPITAL LETTER E WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x011B  LATIN SMALL LETTER E WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x011C  LATIN CAPITAL LETTER G WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 0x011D  LATIN SMALL LETTER G WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 0x011E  LATIN CAPITAL LETTER G WITH BREVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x011F  LATIN SMALL LETTER G WITH BREVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0120  LATIN CAPITAL LETTER G WITH DOT ABOVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0121  LATIN SMALL LETTER G WITH DOT ABOVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0122  LATIN CAPITAL LETTER G WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0123  LATIN SMALL LETTER G WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0124  LATIN CAPITAL LETTER H WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0125  LATIN SMALL LETTER H WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0126  LATIN CAPITAL LETTER H WITH STROKE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0127  LATIN SMALL LETTER H WITH STROKE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0128  LATIN CAPITAL LETTER I WITH TILDE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0129  LATIN SMALL LETTER I WITH TILDE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x012A  LATIN CAPITAL LETTER I WITH MACRON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x012B  LATIN SMALL LETTER I WITH MACRON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x012E  LATIN CAPITAL LETTER I WITH OGONEK
  +-+@
- |�|@
+ ||@
  +-+@@
 0x012F  LATIN SMALL LETTER I WITH OGONEK
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0130  LATIN CAPITAL LETTER I WITH DOT ABOVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0131  LATIN SMALL LETTER DOTLESS I
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0134  LATIN CAPITAL LETTER J WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0135  LATIN SMALL LETTER J WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0136  LATIN CAPITAL LETTER K WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0137  LATIN SMALL LETTER K WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0138  LATIN SMALL LETTER KRA
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0139  LATIN CAPITAL LETTER L WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x013A  LATIN SMALL LETTER L WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x013B  LATIN CAPITAL LETTER L WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 0x013C  LATIN SMALL LETTER L WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 0x013D  LATIN CAPITAL LETTER L WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x013E  LATIN SMALL LETTER L WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0141  LATIN CAPITAL LETTER L WITH STROKE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0142  LATIN SMALL LETTER L WITH STROKE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0143  LATIN CAPITAL LETTER N WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0144  LATIN SMALL LETTER N WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0145  LATIN CAPITAL LETTER N WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0146  LATIN SMALL LETTER N WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0147  LATIN CAPITAL LETTER N WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0148  LATIN SMALL LETTER N WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x014A  LATIN CAPITAL LETTER ENG
  +-+@
- |�|@
+ ||@
  +-+@@
 0x014B  LATIN SMALL LETTER ENG
  +-+@
- |�|@
+ ||@
  +-+@@
 0x014C  LATIN CAPITAL LETTER O WITH MACRON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x014D  LATIN SMALL LETTER O WITH MACRON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0150  LATIN CAPITAL LETTER O WITH DOUBLE ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0151  LATIN SMALL LETTER O WITH DOUBLE ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0154  LATIN CAPITAL LETTER R WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0155  LATIN SMALL LETTER R WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0156  LATIN CAPITAL LETTER R WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0157  LATIN SMALL LETTER R WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0158  LATIN CAPITAL LETTER R WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0159  LATIN SMALL LETTER R WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x015A  LATIN CAPITAL LETTER S WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x015B  LATIN SMALL LETTER S WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x015C  LATIN CAPITAL LETTER S WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 0x015D  LATIN SMALL LETTER S WITH CIRCUMFLEX
  +-+@
- |�|@
+ ||@
  +-+@@
 0x015E  LATIN CAPITAL LETTER S WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 0x015F  LATIN SMALL LETTER S WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0160  LATIN CAPITAL LETTER S WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0161  LATIN SMALL LETTER S WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0162  LATIN CAPITAL LETTER T WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0163  LATIN SMALL LETTER T WITH CEDILLA
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0164  LATIN CAPITAL LETTER T WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0165  LATIN SMALL LETTER T WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0166  LATIN CAPITAL LETTER T WITH STROKE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0167  LATIN SMALL LETTER T WITH STROKE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0168  LATIN CAPITAL LETTER U WITH TILDE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0169  LATIN SMALL LETTER U WITH TILDE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x016A  LATIN CAPITAL LETTER U WITH MACRON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x016B  LATIN SMALL LETTER U WITH MACRON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x016C  LATIN CAPITAL LETTER U WITH BREVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x016D  LATIN SMALL LETTER U WITH BREVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x016E  LATIN CAPITAL LETTER U WITH RING ABOVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x016F  LATIN SMALL LETTER U WITH RING ABOVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0170  LATIN CAPITAL LETTER U WITH DOUBLE ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0171  LATIN SMALL LETTER U WITH DOUBLE ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0172  LATIN CAPITAL LETTER U WITH OGONEK
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0173  LATIN SMALL LETTER U WITH OGONEK
  +-+@
- |�|@
+ ||@
  +-+@@
 0x0179  LATIN CAPITAL LETTER Z WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x017A  LATIN SMALL LETTER Z WITH ACUTE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x017B  LATIN CAPITAL LETTER Z WITH DOT ABOVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x017C  LATIN SMALL LETTER Z WITH DOT ABOVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x017D  LATIN CAPITAL LETTER Z WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x017E  LATIN SMALL LETTER Z WITH CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x02C7  CARON
  +-+@
- |�|@
+ ||@
  +-+@@
 0x02D8  BREVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x02D9  DOT ABOVE
  +-+@
- |�|@
+ ||@
  +-+@@
 0x02DB  OGONEK
  +-+@
- |�|@
+ ||@
  +-+@@
 0x02DD  DOUBLE ACUTE ACCENT
  +-+@
- |�|@
+ ||@
  +-+@@
 `});var VE={};vr(VE,{default:()=>cC});var cC,GE=lt(()=>{cC=`flf2a$ 8 6 14 15 16
 DOOM by Frans P. de Vries <fpv@xymph.iaf.nl>  18 Jun 1996
@@ -30928,7 +30942,7 @@ const TL=[['crop','Crop','crp','edit'],['resize','Resize','ires','edit'],['rotat
 ['clg','Collage','lib','create'],['split','Image splitter','spl','create'],['ascii','ASCII art','asc','create'],['astudio','ASCII Studio','ast','create'],['qrgen','QR & barcode generator','qrg','create'],
 ['ocr','Text recognition','ocr','scan'],['doc','Document scanner','doc','scan'],['qrs','QR & barcode scanner','qrs','scan'],['pick','Color picker','dro','scan'],['pal','Palette','pal','scan'],['cmp','Compare','cmp','scan'],['b64','Base64','b64','scan']];
 const FD={br:100,ct:100,sa:100,hu:0,bl:0,gr:0,se:0,iv:0},FP={none:{},mono:{gr:100},warm:{se:35,sa:120,br:105},cool:{hu:200,sa:90},vivid:{sa:160,ct:115},fade:{ct:80,br:110,sa:80},noir:{gr:100,ct:140,br:90}};
-const defT=()=>Object.assign({l:0,t:0,r:0,b:0,rs:100,rot:0,fh:0,fv:0,wt:'',ws:8,wo:70,wp:'br',wr:0,wa:0,wg:12,bg:0,bm:'c',bt:30,bf:15,bb:'t',bgc:null,bgm:'ai',ds:[],dc:'#ff3b30',dw:8,pn:6,cp:50,cg:3,cl:'g',cb:'w',b6:'d',bx:0,bo:0,bd:0,bk:'pick',bz:24,bs:[],bcc:'#ffffff',cr:'4:3',cx:0,sr:3,sc:3,sq:'f',so:'r',ac:80,ak:'std',ai:0,aco:0,ff:'image/webp',fq:85,cf:'image/jpeg',cq:75,cmode:'q',ck:300,cm:0,rp:'{name}',rn:1,rpad:2,rcase:'k',rf:'',rr:'',dm:'color',oe:1,ps:'a4',pmg:18,pq:85,pm:'color',pa:1,cas:'free',rw:0,rh:0,rl:1,dmode:'free',dop:100,dr:[],rotf:0,cgr:0,cgc:0,ol:0},FD);
+const defT=()=>Object.assign({l:0,t:0,r:0,b:0,rs:100,rot:0,fh:0,fv:0,wt:'',ws:8,wo:70,wp:'br',wr:0,wa:0,wg:12,bg:0,bm:'c',bt:30,bf:15,bb:'t',bgc:null,bgm:'ai',ds:[],dc:'#ff3b30',dw:8,pn:6,cp:50,cg:3,cl:'g',cb:'w',b6:'d',bx:0,bo:0,bd:0,bk:'pick',bz:24,bs:[],bsel:[],btol:16,bgrow:2,bwall:0,bfe:15,bcc:'#ffffff',cr:'4:3',cx:0,sr:3,sc:3,sq:'f',so:'r',ac:80,ak:'std',ai:0,aco:0,ff:'image/webp',fq:85,cf:'image/jpeg',cq:75,cmode:'q',ck:300,cm:0,rp:'{name}',rn:1,rpad:2,rcase:'k',rf:'',rr:'',dm:'color',oe:1,ps:'a4',pmg:18,pq:85,pm:'color',pa:1,cas:'free',rw:0,rh:0,rl:1,dmode:'free',dop:100,dr:[],rotf:0,csnap:1,dstab:0,cgr:0,cgc:0,ol:0},FD);
 let TI=null,T=defT(),TN='image',curTool='',PH='';
 $('#tgrid').innerHTML=TL.map(([id,n,ic,soon])=>`<button class="tt glass${soon?' soon':''}" data-t="${id}"><span class="ic"><svg class="i"><use href="#${ic}"/></svg></span>${n}${soon?'<small>Soon</small>':''}</button>`).join('');
 const CF='filter' in CanvasRenderingContext2D.prototype;
@@ -30966,7 +30980,7 @@ function pipe(c,full){
  const x=c.getContext('2d',{willReadFrequently:true});x.clearRect(0,0,c.width,c.height);
  x.filter=`brightness(${T.br}%) contrast(${T.ct}%) saturate(${T.sa}%) hue-rotate(${T.hu}deg) blur(${T.bl*f}px) grayscale(${T.gr}%) sepia(${T.se}%) invert(${T.iv}%)`;
  if(!full)c.style.filter=CF?'none':x.filter;x.save();x.translate(c.width/2,c.height/2);x.rotate((T.rot+(+T.rotf||0))*Math.PI/180);x.scale(T.fh?-1:1,T.fv?-1:1);x.scale(kk*f,kk*f);x.drawImage(im,cx,cy,cw,ch,-cw/2,-ch/2,cw,ch);x.restore();x.filter='none';
- if(T.bg)bgRemove(c,x);
+ if(T.bg||(T.bk==='magic'||T.bk==='mrst')&&(T.bsel||[]).length)bgRemove(c,x);
  if(T.wt||T.wimg){x.save();x.globalAlpha=Math.max(.05,T.wo/100);const rad=T.wa*Math.PI/180;let tw,th,put;
   if(T.wimg){const hh=Math.max(8,c.height*T.ws/100),ww=hh*(T.wimg.width/Math.max(1,T.wimg.height));tw=ww;th=hh;put=(px,py)=>x.drawImage(T.wimg,px-ww/2,py-hh/2,ww,hh)}
   else{const fs=Math.max(8,Math.round(c.height*T.ws/100));x.font='700 '+fs+'px '+getComputedStyle(document.body).fontFamily;x.textBaseline='middle';x.textAlign='center';x.lineWidth=fs/12;x.lineJoin='round';x.strokeStyle='rgba(0,0,0,.5)';x.fillStyle='#fff';
@@ -30980,7 +30994,7 @@ function pipe(c,full){
 const sl=(k,l,mn,mx,u,num)=>`<div class="lbl">${l}<span style="display:flex;gap:6px;align-items:center">${num?`<input class="tin numin" type="number" data-k="${k}" min="${mn}" max="${mx}" value="${T[k]}" aria-label="${l}">`:''}<span id="v-${k}">${T[k]}${u}</span></span></div><input type="range" data-k="${k}" data-u="${u}" min="${mn}" max="${mx}" value="${T[k]}" style="--p:${(T[k]-mn)/(mx-mn)*100}%">`;
 function panel(){
  const P={
-  crop:()=>sl('l','Left',0,45,'%')+sl('t','Top',0,45,'%')+sl('r','Right',0,45,'%')+sl('b','Bottom',0,45,'%')+'<div class="lbl">Aspect</div>'+fseg('cas','cas',T.cas,[['free','Free'],['1:1','1:1'],['4:3','4:3'],['3:4','3:4'],['16:9','16:9']])+'<div class="info" id="cinfo"></div><div class="btns" style="margin-top:10px"><button class="btn glass" data-x="crst">Reset crop</button></div><div class="hint">Drag the handles on the picture \u2014 with a fixed aspect the frame keeps its shape, and the edges snap to the picture. Double-tap to reset.</div>',
+  crop:()=>sl('l','Left',0,45,'%')+sl('t','Top',0,45,'%')+sl('r','Right',0,45,'%')+sl('b','Bottom',0,45,'%')+'<div class="lbl">Aspect</div>'+fseg('cas','cas',T.cas,[['free','Free'],['1:1','1:1'],['4:3','4:3'],['3:4','3:4'],['16:9','16:9']])+'<div class="info" id="cinfo"></div><div class="row" style="padding:12px 0 0"><div>Snap to the picture edges<small>Off means the frame lands exactly where you put it</small></div><button class="sw'+(T.csnap?' on':'')+'" data-x="csnap" aria-label="Snap to the picture edges"></button></div><div class="btns" style="margin-top:10px"><button class="btn glass" data-x="crst">Reset crop</button></div><div class="hint">Drag the handles on the picture \u2014 with a fixed aspect the frame keeps its shape. Double-tap to reset.</div>',
   resize:()=>{const im=TI,sw=im.naturalWidth||im.width,sh=im.naturalHeight||im.height,rw=Math.max(1,Math.round(sw*T.rs/100)),rh=Math.max(1,Math.round(sh*T.rs/100));
   return sl('rs','Scale',10,300,'%')+`<div class="seg pre">${[25,50,75,100,200].map(v=>`<button data-rs="${v}">${v}%</button>`).join('')}</div>`
   +'<div class="lbl">Exact size<span>'+(T.rl?'Linked':'Independent')+'</span></div><div class="btns"><input class="tin numin" type="number" inputmode="numeric" min="1" data-k="rw" value="'+rw+'" aria-label="Width in pixels"><input class="tin numin" type="number" inputmode="numeric" min="1" data-k="rh" value="'+rh+'" aria-label="Height in pixels"></div>'
@@ -30998,7 +31012,8 @@ function panel(){
 }
 function setTool(id){curTool=id;loupeHide();$('#tname').textContent=TL.find(x=>x[0]===id)[1];$('#ttabs').innerHTML=TL.filter(x=>!x[3]).map(x=>`<button class="${x[0]===id?'on':''}" data-t="${x[0]}">${x[1]}</button>`).join('');if(id==='bg'&&!T.bgi){T.bgi=1;T.bg=1}panel();draw();$('#tcv').style.cursor=id==='pick'||id==='bg'||id==='draw'?'crosshair':'default';$('#tcv').style.touchAction=id==='draw'?'none':'auto'}
 function showTW(){if(!curTool)curTool='resize';$('#tl-home').hidden=true;$('#tw').hidden=false;setTool(curTool);window.scrollTo({top:0})}
-function loadTI(src,nm){const im=new Image();im.onload=()=>{TI=im;TN=nm;T=defT();PH='';showTW()};im.src=src}
+function loadTI(src,nm){const im=new Image();im.onload=()=>{TI=im;TN=nm;T=defT();PH='';showTW();
+  if(curTool==='qrs')setTimeout(scanImage,260)};im.src=src}
 function resetTools(){
  if(TI){if(/^blob:/.test(TI.src||''))URL.revokeObjectURL(TI.src);TI=null}TN='image';T=defT();HIST=[];RHIST=[];upTUndo();PH='';curTool='';
  FL.forEach(x=>{if(x.url)URL.revokeObjectURL(x.url)});FL=[];
@@ -31284,8 +31299,8 @@ const segB=(a,cur,list)=>'<div class="seg">'+list.map(([v,n])=>`<button data-x="
 const PX={
  draw:()=>'<div class="lbl">Mode</div>'+fseg('dm2','dmode',T.dmode,[['free','Draw'],['line','Line'],['arrow','Arrow'],['rect','Box'],['ellipse','Ellipse'],['erase','Eraser']])
   +'<div class="lbl">Color</div><div class="dcs">'+['#ff3b30','#ffcc00','#34c759','#0a84ff','#ffffff','#111111'].map(c=>`<button class="dc${T.dc===c?' on':''}" data-x="dc" data-v="${c}" style="background:${c}" aria-label="Color"></button>`).join('')+'</div><label class="colr" style="margin-top:8px">Custom<input type="color" data-k="dc" value="'+T.dc+'"></label>'
-  +sl('dw','Brush size',1,40,'px')+sl('dop','Opacity',5,100,'%')
-  +'<div class="btns" style="margin-top:12px"><button class="btn glass" data-x="dundo">Undo</button><button class="btn glass" data-x="dredo">Redo</button><button class="btn glass" data-x="dclr">Clear</button></div><div class="hint">Draw freehand or drag to place lines, arrows, boxes and ellipses. Eraser removes marks only, never the photo.</div>',
+  +sl('dw','Brush size',1,40,'px')+sl('dop','Opacity',5,100,'%')+sl('dstab','Stabilizer',0,100,'%')
+  +'<div class="btns" style="margin-top:12px"><button class="btn glass" data-x="dundo">Undo</button><button class="btn glass" data-x="dredo">Redo</button><button class="btn glass" data-x="dclr">Clear</button></div><div class="hint">Draw freehand or drag to place lines, arrows, boxes and ellipses. Eraser removes marks only, never the photo. The stabilizer smooths out shaky hands \u2014 raise it until the line stops trembling.</div>',
  pal:()=>sl('pn','Colors',3,10,'')+'<div class="pals" id="pals"></div><div id="paldet" style="margin-top:10px"></div><div class="btns" style="margin-top:12px"><button class="btn glass" data-x="cpall">Copy all</button><button class="btn glass" data-x="ccss">Copy as CSS</button></div>',
  cmp:()=>CMPPANEL(),
  b64:()=>segB('b6m',T.b6,[['d','Data URL'],['b','Base64 only']])+'<textarea class="tin" id="b6o" rows="5" readonly placeholder="Tap Generate to encode the current image" style="margin-top:12px;resize:none"></textarea><div class="info" id="b6i" style="margin-top:12px">Uses your export format and quality</div><div class="btns" style="margin-top:12px"><button class="btn glass" data-x="b6g">Generate</button><button class="btn glass" data-x="b6c">Copy</button></div>'
@@ -31315,11 +31330,25 @@ $('#tcv').addEventListener('click',e=>{if(curTool!=='bg'||!TI||T.bk!=='pick')ret
  pipeAs(t,false,Object.assign({},T,{bg:0,wt:'',ds:[]}));
  const d=t.getContext('2d').getImageData(Math.min(t.width-1,Math.floor((e.clientX-r.left)/r.width*t.width)),Math.min(t.height-1,Math.floor((e.clientY-r.top)/r.height*t.height)),1,1).data;
  T.bgc=[d[0],d[1],d[2]];panel();draw()});
+/* A one-euro style filter: slow movement is smoothed hard, fast movement
+   follows the finger closely, so a shaky hand stops trembling without the
+   stroke lagging behind. */
+const STB={on:0,x:0,y:0,t:0};
+function stabNext(p,t){
+ const L=Math.max(0,Math.min(100,+T.dstab||0));
+ if(L<=0){STB.on=0;return p}
+ if(!STB.on){STB.on=1;STB.x=p[0];STB.y=p[1];STB.t=t;return p}
+ const dt=Math.max(1,Math.min(160,(t||0)-STB.t));STB.t=t;
+ const dx=p[0]-STB.x,dy=p[1]-STB.y,sp=Math.hypot(dx,dy)*1000/dt;
+ const rc=24-18*(L/100),a=1/(1+rc/Math.max(1,sp));
+ STB.x+=dx*a;STB.y+=dy*a;
+ return [STB.x,STB.y];
+}
 let stk=null,skq=0;const npt=e=>{const r=$('#tcv').getBoundingClientRect();return[Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),Math.min(1,Math.max(0,(e.clientY-r.top)/r.height))]};
 $('#tcv').addEventListener('pointerdown',e=>{if(curTool!=='draw'||!TI)return;e.preventDefault();const cv=$('#tcv');cv.setPointerCapture(e.pointerId);
  pushHistory();
  if(T.dmode!=='free'&&T.dmode!=='erase'){stk={sh:T.dmode,c:T.dc,w:T.dw/400,p:[npt(e),npt(e)]};return}
- stk={c:T.dc,w:T.dw/400,p:[npt(e)],m:T.dmode==='erase'?'e':null};T.ds.push(stk);T.dr=[];draw()});
+ STB.on=0;stk={c:T.dc,w:T.dw/400,p:[npt(e)],m:T.dmode==='erase'?'e':null};T.ds.push(stk);T.dr=[];draw()});
 $('#tcv').addEventListener('pointermove',e=>{if(!stk)return;const cv=$('#tcv'),b=npt(e);
  if(stk.sh){stk.p[1]=b;draw();const x=cv.getContext('2d');x.save();x.strokeStyle=stk.c;x.lineWidth=Math.max(1,stk.w*cv.height);x.lineCap='round';
   const[a1,b1]=stk.p[0],x0=Math.min(a1,b[0])*cv.width,y0=Math.min(b1,b[1])*cv.height,w2=Math.abs(b[0]-a1)*cv.width,h2=Math.abs(b[1]-b1)*cv.height;
@@ -31332,7 +31361,7 @@ $('#tcv').addEventListener('pointermove',e=>{if(!stk)return;const cv=$('#tcv'),b
   x.restore();return}
  /* freehand: redraw the frame so the live stroke is the same smooth stroke
     that gets committed (and the eraser really erases while you drag) */
- stk.p.push(b);
+ stk.p.push(stabNext(b,e.timeStamp||performance.now()));
  if(!skq)skq=requestAnimationFrame(()=>{skq=0;draw()})});
 const skEnd=()=>{if(!stk)return;if(stk.sh){const d=Math.hypot(stk.p[1][0]-stk.p[0][0],stk.p[1][1]-stk.p[0][1]);if(d>.004){T.ds.push(stk);T.dr=[]}}stk=null;draw()};$('#tcv').addEventListener('pointerup',skEnd);$('#tcv').addEventListener('pointercancel',skEnd);
 /* ---- fonts ---- */
@@ -31353,8 +31382,8 @@ $('#fontfile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if
 Promise.all([idb('get','fsel'),idb('get','fbuf'),idb('get','fname')]).then(async([sel,buf,nm])=>{try{if(buf)await loadFont(buf.slice(0),nm||'Custom')}catch(e){}if(sel&&FONTS[sel]&&(sel!=='custom'||FS.name))FS.sel=sel;applyFont()});
 applyFont();
 /* ---- about ---- */
-const APP={v:'1.11.4',build:'2026-10-21'};
-const CHG=[['1.11.4','21 Oct 2026',['Fixed a nasty one: the QR / barcode generator replaced the picture you were editing \u2014 your image and all its edits disappeared and only the code was left. The generator now draws on its own canvas, so your picture is never touched','Undo and redo got their own icons and smaller buttons in the tool header \u2014 the curved arrow is now only used for \u201creset\u201d','The background remover\u2019s \u201cIn use\u201d pill is gone \u2014 the active model is now marked with a highlighted row instead']],['1.11.3','21 Oct 2026',['Undo and redo now work in every tool, with a redo button next to undo (Ctrl+Z / Ctrl+Shift+Z). The history covers the collage, the document scanner, the PDF pages, the colour palette, the comparison pair and the generator, not just the sliders','Undo was off by one: the newest change could never be undone, because the snapshot was taken after the edit instead of before','The crop tool now previews the whole picture with the crop frame on it (it used to show the already-cropped image, so the handles floated away from the real edges)','Cropping is easier: the frame keeps its aspect ratio while you drag, snaps to the picture edges, and a double-tap or the new Reset crop button clears it','Drawing is smoother (curved strokes instead of straight segments) and the eraser really erases while you drag \u2014 what you see is now exactly what gets exported','The background remover\u2019s \u201cIn use\u201d badge now sits next to the model name instead of floating in the button column']],['1.11.2','21 Oct 2026',['Fixed the background remover engine \u2014 onnxruntime splits its WASM backend into a separate module, and that file was missing, so every model failed with \u201cno available backend found\u201d','Downloaded models now persist: they are stored in the device database instead of the browser cache, which Android is free to purge \u2014 so your models are still there after you close the app','Model downloads can be cancelled, the app checks free space before starting, and the panel shows how much space the models use','The Android back gesture now goes back inside the app \u2014 it closes overlays, leaves the tool, returns Home \u2014 instead of closing the app']],['1.11.1','20 Oct 2026',['Background remover is live \u2014 it now runs rembg\u2019s own segmentation models (u2netp, Silueta, ISNet) on your device, so any subject is cut out cleanly, not just plain backgrounds','Three models, your call: u2netp (4 MB, seconds on a phone), Silueta (42 MB, sharper edges) and ISNet (170 MB, rembg\u2019s default quality)','Models are downloaded when you want them and kept on the device \u2014 nothing is ever uploaded, and only the 2.8 MB engine ships with the app, so it stays small','Model downloads live in the background remover panel and in Settings \u2192 Background removal, with a live progress bar, delete buttons and a Ready / In use badge','The engine runs in a background worker, so the picture never freezes while it works, and the WebView is now cross-origin isolated so the model can use several threads','The instant Quick mode (best on plain or evenly lit backgrounds) is still there, one tap away, and needs no download at all','The brush (erase / restore), shrink / grow edge, keep main subject only and clean colour fringe all work on the AI mask too','The result is a real cut-out with soft edges \u2014 and PNG export keeps the transparency']],['1.11.0','20 Oct 2026',['ASCII Studio \u2014 the full ASCII engine is built into the app now and works offline: 25 render styles, 8 character sets and any custom ramp, 19 dither algorithms, nine stacking source warps, crop and zoom, per-channel tone curves, masks and a movable light, ten still motions and nineteen pointer effects','A brand-new toolbox tool: open ASCII Studio from the Toolbox grid and drop in a source \u2014 everything renders on your device, nothing is uploaded and nothing is fetched at runtime','All 61 asciify.org looks are in the Studio, one tap each \u2014 projects, composed, finished, characters, dither, print and tiles','Layered compositions: up to eight layers, each with its own style, opacity, blend and placement','Four sources \u2014 your image, the video in the editor, a file (GIF included), or a text banner in 23 fonts','Export to PNG, JPEG, GIF, MP4 and WebM at wallpaper, poster or square sizes, plus plain text and ANSI text','The engine is vendored from npm and bundled into the single-file app, so it keeps working with no connection at all','Credits: asciify-engine, figlet, gifenc, gifuct-js and mediabunny (MIT) \u2014 the licence texts ship in vendor/']],['1.10.2','20 Oct 2026',['New app icon \u2014 the neon gallery-scan artwork is now the launcher icon on your phone (adaptive icon, round icon and legacy icons for every density), and the web app uses it as its favicon']],['1.10.1','20 Oct 2026',['Compare preview fixed: it now starts on its own \u2014 as soon as two images are in the list the first two are compared straight away, the empty state explains what to do instead of showing a blank box, and a single picked image fills the whole preview instead of half a picture next to a black block','Compare: tapping the image that is already A swaps the pair instead of showing the same picture on both sides, and the A / B buttons are now proper touch targets','Toolbox icons now share one theme \u2014 the four categories no longer use four different colours, so the grid reads as a single system']],['1.10.0','20 Oct 2026',['Compare now compares two pictures: tap A and B on any image in the list to pick the pair, then slide the divider (or drag it on the picture) to reveal one over the other \u2014 with a Swap button and A / B markers on the picture itself','Collage: tap any photo right on the collage to select it \u2014 and press-and-drag grabs it in one gesture, no thumbnail hunting','Collage drags now follow your finger at full speed (they crawled at 1/2 to 1/3 speed before) and stop exactly at the crop edge instead of exposing empty background','Collage: pinch the collage to crop the selected photo (the slider stays in sync); double-tap a photo or use the new Reset crop button to put it back','The selection frame now lands exactly on the photo it belongs to (it was mis-scaled on large collages), unselected photos dim so the selection is obvious, and crop/position changes are undoable']],['1.9.9','20 Oct 2026',['Collage: tap any photo right on the collage to select it \u2014 and press-and-drag grabs it in one gesture, no thumbnail hunting','Collage drags now follow your finger at full speed (they crawled at 1/2 to 1/3 speed before) and stop exactly at the crop edge instead of exposing empty background','Collage: pinch the collage to crop the selected photo (the slider stays in sync); double-tap a photo or use the new Reset crop button to put it back','The selection frame now lands exactly on the photo it belongs to (it was mis-scaled on large collages), unselected photos dim so the selection is obvious, and crop/position changes are undoable']],['1.9.8','20 Oct 2026',['Collage spacing fixed on every front: every cell is now clipped (rounded corners or not), so zoomed or dragged photos can never spill over the gaps between them','Setting Rows no longer cuts photos off \u2014 the grid always grows to fit your images, and setting only Rows derives the column count from it','A partly empty last row is centered under the grid instead of leaving a big empty block in the corner','Grid size number fields now match the width and height of every other control instead of sitting small and cramped']],['1.9.7','20 Oct 2026',['Launch theme delay fixed: the Android launch window and WebView surface now follow day/night immediately (no light flash on dark devices), and the full theme — palette plus system dark — is applied by the head script before the first paint, so opening the app never shows a theme switch']],['1.9.6','20 Oct 2026',['The live document viewer is now framed: a tinted surface, hairline border and rounded corners set the preview apart from the page list and tool controls below it']],['1.9.5','20 Oct 2026',['Document preview header rebuilt: the page-count pill and the page-position pill now share one exact size (the position counter no longer inherits the title font size), and the title, page-size caption and counter + zoom controls sit in a fixed two-row grid so the pills keep the same position on every screen width']],['1.9.4','20 Oct 2026',['PDF preview zoom: pinch the preview or use the + and - buttons (50% to 300%); the page counter shows the zoom level, and page snapping releases when a sheet becomes taller than the viewport','Click anywhere on the preview to open the full-screen document viewer at the page you are on','Sheets now keep their true shape at every screen size — landscape pages no longer get squeezed into portrait']],['1.9.3','20 Oct 2026',['The PDF document preview is now a one-page viewport: it shows a single sheet at a time, you scroll to move through the document, and a live page counter follows along']],['1.9.2','20 Oct 2026',['The PDF document preview moved to the top of the Images to PDF panel and stacks the page sheets vertically, one under another']],['1.9.1','20 Oct 2026',['Toolbox cards rebuilt: every category keeps its own icon colour at any screen width, cards hold a steady shape thanks to two-line labels, the coming-soon card wears a proper badge and press feedback got calmer','Settings rows are now separated by hairline dividers and section labels line up with card text']],['1.9.0','20 Oct 2026',['Images to PDF now shows a live document preview: every page rendered as a real sheet in the page size and margin you picked — tap a sheet to inspect it full screen, and the preview updates as you change the settings']],['1.8.1','19 Oct 2026',['Stills three-dot menu fixed: it now opens only when you tap the dots instead of showing on every card at once','Auto theme fixed in the Android app: the app now reads the system day/night setting directly, so light/dark follows the device instantly when auto is selected']],['1.8.0','19 Oct 2026',['Toolbox tools are separate workflows: going back to the toolbox clears the uploaded image and every tool input, so the next tool starts with a fresh upload (pills still switch tools within a session)','Background remover is locked as a Coming soon card until it is properly polished','Stills show their resolution in the top left and keep share, download and delete behind a three-dot menu','Sharing fixed on Android: files open in the system share sheet; on the web nothing changes','Custom save location works on Android: pick a folder once (Folder mode) or choose a place for every save (Ask mode)']],['1.7.2','19 Oct 2026',['Theme now behaves: your Auto/Light/Dark choice and Material palette persist and apply before the first paint, and Auto re-applies live when the system switches between light and dark — including inside the Android app, where platform force-dark is now turned off in favour of the app\u2019s own colors']],['1.7.1','19 Oct 2026',['Android app: installs as a native APK with camera access, system file picker and saving straight to Downloads (web version unchanged)']],['1.7.0','19 Oct 2026',['Nine OCR languages bundled offline: English, Spanish, French, German, Portuguese, Italian, Dutch, Polish and Nepali — with a language picker in the OCR panel','Keep layout option restores line breaks using Tesseract page-layout analysis, and recognition now reports line count, words, confidence and language','Crop, resize, rotate, filters, watermark and draw panels rebuilt with numeric inputs, straighten slider, shape tools and per-stroke undo','Undo history (30 steps) for every edit — toolbar button or Ctrl/Cmd+Z','Document scanner: multi-page scanning, auto-detect scoring with a clear failure hint and easier corner grabbing','Color picker magnifier with HEX, RGB and HSL details, recent colors and palette swatch details with CSS variable export','QR and barcode generator can save vector SVG and place a logo (error correction switches to High)','Compression panel can preview the result on the first image before committing, and failed files are reported','Memory cleanup: object URLs revoked and bitmaps closed when items are removed']],['1.6.0','18 Oct 2026',['Upload from photos, files, stills or the camera on every tool page, plus drag and drop','Previews of everything bundled into your PDF on tool pages, with add, remove and full-size view','Pick several stills at once, and tap any thumbnail to preview it']],['1.5.0','18 Oct 2026',['Images to PDF: select many images or scan pages with your camera and bundle them into one PDF','Arrows, drag and mouse-wheel scrolling for the tool pills','Swipe left and right to move between tabs and tools, and swipe from the left edge to go back','Smoother tool-to-tool transitions']],['1.4.0','18 Oct 2026',['Toolbox is now grouped into Edit, Convert & optimize, Create and Scan & analyze','New tools: Format changer, Compress, Batch rename, Image splitter, ASCII art, QR and barcode generator and scanner, Text recognition and a Document scanner','Smarter background remover with touch-up brushes, subject-only mode and edge controls','Collage maker asks you to pick images and adds cell shapes and rounded corners','More space around the selected option in pickers']],['1.3.0','18 Oct 2026',['Background remover, Draw, Palette, Compare, Collage and Base64 tools','AVIF export, plus a repeat and angle option for watermarks','Custom fonts and this About page','Cleaner single-line option pickers']],
+const APP={v:'1.13.0',build:'2026-10-21'};
+const CHG=[['1.13.0','21 Oct 2026',['Cropping is precise now: the edge magnet is a lot smaller, and a new "Snap to the picture edges" switch turns it off entirely \u2014 with it off the frame lands exactly where you put it','The document scanner and the QR & barcode scanner now ask where the picture should come from: one you already have on the device, or a new one from the camera','The PDF preview has a floating glass bar at the bottom of the viewport, with the page pill, the page details and the zoom buttons','PDF zoom is smooth and fine-grained, and the preview can be pinched with a mouse or a trackpad as well as a finger','The Android status bar is transparent \u2014 the app\u2019s own background shows through it, and the icons follow the light or dark theme','The draw tool has a stabilizer: it smooths out a shaky hand without the stroke lagging behind','Repaired mangled characters in a few labels (dashes, quotes and arrows had been written in the wrong encoding)']],['1.12.0','21 Oct 2026',['The background remover grew a magic eraser: tap the picture and the region under your finger is found by itself \u2014 a colour region grow with a tolerance, a grow step for soft edges and a feather','Every tap adds to the selection, so picking a second region never brings the first one back; Magic restore puts a picked region back instead','The magic eraser also works on its own, with the automatic background removal switched off','The AI method now says where it is \u2014 no model on the device yet, loading, model ready, working or subject detected \u2014 and offers a Detect subject button, instead of quietly falling back to the colour method when no model was downloaded']],['1.11.4','21 Oct 2026',['Fixed a nasty one: the QR / barcode generator replaced the picture you were editing \u2014 your image and all its edits disappeared and only the code was left. The generator now draws on its own canvas, so your picture is never touched','Undo and redo got their own icons and smaller buttons in the tool header \u2014 the curved arrow is now only used for \u201creset\u201d','The background remover\u2019s \u201cIn use\u201d pill is gone \u2014 the active model is now marked with a highlighted row instead']],['1.11.3','21 Oct 2026',['Undo and redo now work in every tool, with a redo button next to undo (Ctrl+Z / Ctrl+Shift+Z). The history covers the collage, the document scanner, the PDF pages, the colour palette, the comparison pair and the generator, not just the sliders','Undo was off by one: the newest change could never be undone, because the snapshot was taken after the edit instead of before','The crop tool now previews the whole picture with the crop frame on it (it used to show the already-cropped image, so the handles floated away from the real edges)','Cropping is easier: the frame keeps its aspect ratio while you drag, snaps to the picture edges, and a double-tap or the new Reset crop button clears it','Drawing is smoother (curved strokes instead of straight segments) and the eraser really erases while you drag \u2014 what you see is now exactly what gets exported','The background remover\u2019s \u201cIn use\u201d badge now sits next to the model name instead of floating in the button column']],['1.11.2','21 Oct 2026',['Fixed the background remover engine \u2014 onnxruntime splits its WASM backend into a separate module, and that file was missing, so every model failed with \u201cno available backend found\u201d','Downloaded models now persist: they are stored in the device database instead of the browser cache, which Android is free to purge \u2014 so your models are still there after you close the app','Model downloads can be cancelled, the app checks free space before starting, and the panel shows how much space the models use','The Android back gesture now goes back inside the app \u2014 it closes overlays, leaves the tool, returns Home \u2014 instead of closing the app']],['1.11.1','20 Oct 2026',['Background remover is live \u2014 it now runs rembg\u2019s own segmentation models (u2netp, Silueta, ISNet) on your device, so any subject is cut out cleanly, not just plain backgrounds','Three models, your call: u2netp (4 MB, seconds on a phone), Silueta (42 MB, sharper edges) and ISNet (170 MB, rembg\u2019s default quality)','Models are downloaded when you want them and kept on the device \u2014 nothing is ever uploaded, and only the 2.8 MB engine ships with the app, so it stays small','Model downloads live in the background remover panel and in Settings \u2192 Background removal, with a live progress bar, delete buttons and a Ready / In use badge','The engine runs in a background worker, so the picture never freezes while it works, and the WebView is now cross-origin isolated so the model can use several threads','The instant Quick mode (best on plain or evenly lit backgrounds) is still there, one tap away, and needs no download at all','The brush (erase / restore), shrink / grow edge, keep main subject only and clean colour fringe all work on the AI mask too','The result is a real cut-out with soft edges \u2014 and PNG export keeps the transparency']],['1.11.0','20 Oct 2026',['ASCII Studio \u2014 the full ASCII engine is built into the app now and works offline: 25 render styles, 8 character sets and any custom ramp, 19 dither algorithms, nine stacking source warps, crop and zoom, per-channel tone curves, masks and a movable light, ten still motions and nineteen pointer effects','A brand-new toolbox tool: open ASCII Studio from the Toolbox grid and drop in a source \u2014 everything renders on your device, nothing is uploaded and nothing is fetched at runtime','All 61 asciify.org looks are in the Studio, one tap each \u2014 projects, composed, finished, characters, dither, print and tiles','Layered compositions: up to eight layers, each with its own style, opacity, blend and placement','Four sources \u2014 your image, the video in the editor, a file (GIF included), or a text banner in 23 fonts','Export to PNG, JPEG, GIF, MP4 and WebM at wallpaper, poster or square sizes, plus plain text and ANSI text','The engine is vendored from npm and bundled into the single-file app, so it keeps working with no connection at all','Credits: asciify-engine, figlet, gifenc, gifuct-js and mediabunny (MIT) \u2014 the licence texts ship in vendor/']],['1.10.2','20 Oct 2026',['New app icon \u2014 the neon gallery-scan artwork is now the launcher icon on your phone (adaptive icon, round icon and legacy icons for every density), and the web app uses it as its favicon']],['1.10.1','20 Oct 2026',['Compare preview fixed: it now starts on its own \u2014 as soon as two images are in the list the first two are compared straight away, the empty state explains what to do instead of showing a blank box, and a single picked image fills the whole preview instead of half a picture next to a black block','Compare: tapping the image that is already A swaps the pair instead of showing the same picture on both sides, and the A / B buttons are now proper touch targets','Toolbox icons now share one theme \u2014 the four categories no longer use four different colours, so the grid reads as a single system']],['1.10.0','20 Oct 2026',['Compare now compares two pictures: tap A and B on any image in the list to pick the pair, then slide the divider (or drag it on the picture) to reveal one over the other \u2014 with a Swap button and A / B markers on the picture itself','Collage: tap any photo right on the collage to select it \u2014 and press-and-drag grabs it in one gesture, no thumbnail hunting','Collage drags now follow your finger at full speed (they crawled at 1/2 to 1/3 speed before) and stop exactly at the crop edge instead of exposing empty background','Collage: pinch the collage to crop the selected photo (the slider stays in sync); double-tap a photo or use the new Reset crop button to put it back','The selection frame now lands exactly on the photo it belongs to (it was mis-scaled on large collages), unselected photos dim so the selection is obvious, and crop/position changes are undoable']],['1.9.9','20 Oct 2026',['Collage: tap any photo right on the collage to select it \u2014 and press-and-drag grabs it in one gesture, no thumbnail hunting','Collage drags now follow your finger at full speed (they crawled at 1/2 to 1/3 speed before) and stop exactly at the crop edge instead of exposing empty background','Collage: pinch the collage to crop the selected photo (the slider stays in sync); double-tap a photo or use the new Reset crop button to put it back','The selection frame now lands exactly on the photo it belongs to (it was mis-scaled on large collages), unselected photos dim so the selection is obvious, and crop/position changes are undoable']],['1.9.8','20 Oct 2026',['Collage spacing fixed on every front: every cell is now clipped (rounded corners or not), so zoomed or dragged photos can never spill over the gaps between them','Setting Rows no longer cuts photos off \u2014 the grid always grows to fit your images, and setting only Rows derives the column count from it','A partly empty last row is centered under the grid instead of leaving a big empty block in the corner','Grid size number fields now match the width and height of every other control instead of sitting small and cramped']],['1.9.7','20 Oct 2026',['Launch theme delay fixed: the Android launch window and WebView surface now follow day/night immediately (no light flash on dark devices), and the full theme — palette plus system dark — is applied by the head script before the first paint, so opening the app never shows a theme switch']],['1.9.6','20 Oct 2026',['The live document viewer is now framed: a tinted surface, hairline border and rounded corners set the preview apart from the page list and tool controls below it']],['1.9.5','20 Oct 2026',['Document preview header rebuilt: the page-count pill and the page-position pill now share one exact size (the position counter no longer inherits the title font size), and the title, page-size caption and counter + zoom controls sit in a fixed two-row grid so the pills keep the same position on every screen width']],['1.9.4','20 Oct 2026',['PDF preview zoom: pinch the preview or use the + and - buttons (50% to 300%); the page counter shows the zoom level, and page snapping releases when a sheet becomes taller than the viewport','Click anywhere on the preview to open the full-screen document viewer at the page you are on','Sheets now keep their true shape at every screen size — landscape pages no longer get squeezed into portrait']],['1.9.3','20 Oct 2026',['The PDF document preview is now a one-page viewport: it shows a single sheet at a time, you scroll to move through the document, and a live page counter follows along']],['1.9.2','20 Oct 2026',['The PDF document preview moved to the top of the Images to PDF panel and stacks the page sheets vertically, one under another']],['1.9.1','20 Oct 2026',['Toolbox cards rebuilt: every category keeps its own icon colour at any screen width, cards hold a steady shape thanks to two-line labels, the coming-soon card wears a proper badge and press feedback got calmer','Settings rows are now separated by hairline dividers and section labels line up with card text']],['1.9.0','20 Oct 2026',['Images to PDF now shows a live document preview: every page rendered as a real sheet in the page size and margin you picked — tap a sheet to inspect it full screen, and the preview updates as you change the settings']],['1.8.1','19 Oct 2026',['Stills three-dot menu fixed: it now opens only when you tap the dots instead of showing on every card at once','Auto theme fixed in the Android app: the app now reads the system day/night setting directly, so light/dark follows the device instantly when auto is selected']],['1.8.0','19 Oct 2026',['Toolbox tools are separate workflows: going back to the toolbox clears the uploaded image and every tool input, so the next tool starts with a fresh upload (pills still switch tools within a session)','Background remover is locked as a Coming soon card until it is properly polished','Stills show their resolution in the top left and keep share, download and delete behind a three-dot menu','Sharing fixed on Android: files open in the system share sheet; on the web nothing changes','Custom save location works on Android: pick a folder once (Folder mode) or choose a place for every save (Ask mode)']],['1.7.2','19 Oct 2026',['Theme now behaves: your Auto/Light/Dark choice and Material palette persist and apply before the first paint, and Auto re-applies live when the system switches between light and dark — including inside the Android app, where platform force-dark is now turned off in favour of the app\u2019s own colors']],['1.7.1','19 Oct 2026',['Android app: installs as a native APK with camera access, system file picker and saving straight to Downloads (web version unchanged)']],['1.7.0','19 Oct 2026',['Nine OCR languages bundled offline: English, Spanish, French, German, Portuguese, Italian, Dutch, Polish and Nepali — with a language picker in the OCR panel','Keep layout option restores line breaks using Tesseract page-layout analysis, and recognition now reports line count, words, confidence and language','Crop, resize, rotate, filters, watermark and draw panels rebuilt with numeric inputs, straighten slider, shape tools and per-stroke undo','Undo history (30 steps) for every edit — toolbar button or Ctrl/Cmd+Z','Document scanner: multi-page scanning, auto-detect scoring with a clear failure hint and easier corner grabbing','Color picker magnifier with HEX, RGB and HSL details, recent colors and palette swatch details with CSS variable export','QR and barcode generator can save vector SVG and place a logo (error correction switches to High)','Compression panel can preview the result on the first image before committing, and failed files are reported','Memory cleanup: object URLs revoked and bitmaps closed when items are removed']],['1.6.0','18 Oct 2026',['Upload from photos, files, stills or the camera on every tool page, plus drag and drop','Previews of everything bundled into your PDF on tool pages, with add, remove and full-size view','Pick several stills at once, and tap any thumbnail to preview it']],['1.5.0','18 Oct 2026',['Images to PDF: select many images or scan pages with your camera and bundle them into one PDF','Arrows, drag and mouse-wheel scrolling for the tool pills','Swipe left and right to move between tabs and tools, and swipe from the left edge to go back','Smoother tool-to-tool transitions']],['1.4.0','18 Oct 2026',['Toolbox is now grouped into Edit, Convert & optimize, Create and Scan & analyze','New tools: Format changer, Compress, Batch rename, Image splitter, ASCII art, QR and barcode generator and scanner, Text recognition and a Document scanner','Smarter background remover with touch-up brushes, subject-only mode and edge controls','Collage maker asks you to pick images and adds cell shapes and rounded corners','More space around the selected option in pickers']],['1.3.0','18 Oct 2026',['Background remover, Draw, Palette, Compare, Collage and Base64 tools','AVIF export, plus a repeat and angle option for watermarks','Custom fonts and this About page','Cleaner single-line option pickers']],
  ['1.2.0','17 Oct 2026',['Extract all frames from a video as a ZIP or into a folder','Save location setting, haptic feedback and JXL export','Metadata embedding for PNG, JPG, WebP and JXL']],
  ['1.1.0','17 Oct 2026',['Toolbox with crop, resize, rotate, filters, watermark and color picker','Frame counter, thumbnail strip and live frame rate detection','Layouts for phones, tablets and desktops']],
  ['1.0.0','17 Oct 2026',['First release: pick a video, grab full-resolution stills and export them','Material 3 color styles with a liquid glass look']]];
@@ -31491,7 +31520,24 @@ function bgMaskColor(d,W,H){
 }
 function bgRemove(c,x){
  const W=c.width,H=c.height,im=x.getImageData(0,0,W,H),d=im.data,N=W*H;
- const m=(T.bgm==='ai'&&BGMASK.al)?bgMaskAI(W,H):bgMaskColor(d,W,H),rm=m.rm;
+ const magic=(T.bk==='magic'||T.bk==='mrst')&&(T.bsel||[]).length>0;
+ /* In AI mode without a model there is no cut-out to make: the picture is left
+    alone rather than quietly falling back to the colour method. */
+ let m;
+ const flat={rm:new Uint8Array(N),al:new Float32Array(N).fill(1),ai:1,bc:T.bgc||null};
+ if(!T.bg)m=flat;
+ else if(T.bgm==='ai'&&BGMASK.al)m=bgMaskAI(W,H);
+ else if(T.bgm==='ai')m=flat;
+ else m=bgMaskColor(d,W,H);
+ const rm=m.rm,al=m.al;
+ /* A picked region decides on its own: it is removed, or put back, whatever
+    the model or the colour said. */
+ if(magic){
+  const sel=bgSelectMask(d,W,H),keep=T.bk==='mrst';
+  for(let i=0;i<N;i++)if(sel[i]){rm[i]=keep?0:1;al[i]=keep?1:0}
+  if(!keep&&T.bfe>0){const soft=Math.max(.05,Math.min(.9,T.bfe/100*.6));
+   for(let i=0;i<N;i++){if(sel[i])continue;const px=i%W;
+    if((px>0&&sel[i-1])||(px<W-1&&sel[i+1])||(i>=W&&sel[i-W])||(i<N-W&&sel[i+W])){rm[i]=0;al[i]=soft}}}}
  /* keep only the largest subject */
  if(T.bo){const lb=new Int32Array(N),sz=[0];let nl=0;const q=new Int32Array(N);
   for(let s=0;s<N;s++){if(rm[s]||lb[s])continue;nl++;let h=0,t=0,n=0;q[t++]=s;lb[s]=nl;while(h<t){const i=q[h++],px=i%W;n++;const nb=[px>0?i-1:-1,px<W-1?i+1:-1,i>=W?i-W:-1,i<N-W?i+W:-1];for(const k of nb)if(k>=0&&!rm[k]&&!lb[k]){lb[k]=nl;q[t++]=k}}sz.push(n)}
@@ -31629,6 +31675,58 @@ function bgMaskAI(W,H){
    const i=y*W+xx;al[i]=a;rm[i]=a<0.5?1:0;}}
  return {rm:rm,al:al,ai:1,bc:T.bgc||null};
 }
+/* ================= magic eraser: a wand selection that adds up ================= */
+let BGSEL={key:'',w:0,h:0,mask:null};
+/* A region grow from one seed: every pixel close enough to the seed colour, in
+   the connected region (or everywhere when `all`). `grow` widens the edge so
+   anti-aliased pixels come with it. */
+function bgWand(d,W,H,sx,sy,tol,grow,all){
+ const N=W*H,rm=new Uint8Array(N);
+ const i0=Math.min(N-1,Math.max(0,sy*W+sx)),j0=i0*4;
+ const r0=d[j0],g0=d[j0+1],b0=d[j0+2],md=Math.max(.5,tol*4),md2=md*md;
+ const near=i=>{const j=i*4,dr=d[j]-r0,dg=d[j+1]-g0,db=d[j+2]-b0,rmn=(r0+d[j])/2;
+  return (2+rmn/256)*dr*dr+4*dg*dg+(2+(255-rmn)/256)*db*db<=md2};
+ if(all){for(let i=0;i<N;i++)if(near(i))rm[i]=1}
+ else{const q=new Int32Array(N);let h=0,t=0;q[t++]=i0;rm[i0]=1;
+  while(h<t){const i=q[h++],px=i%W;
+   if(px>0&&!rm[i-1]&&near(i-1)){rm[i-1]=1;q[t++]=i-1}
+   if(px<W-1&&!rm[i+1]&&near(i+1)){rm[i+1]=1;q[t++]=i+1}
+   if(i>=W&&!rm[i-W]&&near(i-W)){rm[i-W]=1;q[t++]=i-W}
+   if(i<N-W&&!rm[i+W]&&near(i+W)){rm[i+W]=1;q[t++]=i+W}}}
+ for(let g=0;g<grow;g++){const src=rm.slice();
+  for(let i=0;i<N;i++){if(src[i])continue;const px=i%W;
+   if((px>0&&src[i-1])||(px<W-1&&src[i+1])||(i>=W&&src[i-W])||(i<N-W&&src[i+W]))rm[i]=1}}
+ return rm;
+}
+/* Every region the user picked, merged into one mask. Selections add up, so
+   picking a second region never brings the first one back. */
+function bgSelectMask(d,W,H){
+ const sel=T.bsel||[];
+ const key=W+'x'+H+'|'+JSON.stringify(sel);
+ if(BGSEL.key===key&&BGSEL.mask)return BGSEL.mask;
+ const m=new Uint8Array(W*H);
+ for(const s of sel){
+  const one=bgWand(d,W,H,Math.min(W-1,Math.max(0,Math.round(s.x*(W-1)))),Math.min(H-1,Math.max(0,Math.round(s.y*(H-1)))),s.tol,s.grow,s.all);
+  for(let i=0;i<m.length;i++)if(one[i])m[i]=1;
+ }
+ BGSEL={key:key,w:W,h:H,mask:m};
+ return m;
+}
+function bgAddSel(p){
+ T.bsel=T.bsel||[];
+ T.bsel.push({x:p[0],y:p[1],tol:+T.btol,grow:+T.bgrow,all:T.bwall?1:0});
+}
+const bgSelCount=()=>(T.bsel||[]).length;
+function bgStatusHTML(){
+ if(BGST.busy)return '<b>Working\u2026</b> The model is looking for the subject.';
+ if(BGST.err)return '<b style="color:#c0392b">'+esc(BGST.err)+'</b>';
+ if(BGMASK.al)return '<b>Subject detected.</b> The picture is cut out around the subject.';
+ const m=BGMODELS.find(x=>x.id===BGST.model)||BGMODELS[0];
+ if(!BGST.have[BGST.model])return '<b>No model on this device yet.</b> Get '+esc(m.name)+' ('+(Math.round(m.size/1048576*10)/10)+' MB) from the list to find the subject in any scene. It stays on this device \u2014 nothing is uploaded.';
+ if(BGENG.err)return '<b style="color:#c0392b">'+esc(BGENG.err)+'</b>';
+ if(BGENG.loading)return '<b>Loading the model\u2026</b>';
+ return '<b>Model ready.</b> Tap \u201cDetect subject\u201d to find the subject in this picture.';
+}
 function bgModelsHTML(){
  const rows=BGMODELS.map(m=>{
   const have=BGST.have[m.id],dl=BGST.dl[m.id],on=BGST.model===m.id;
@@ -31643,7 +31741,7 @@ function bgRenderModels(){
  if(a)a.innerHTML=bgModelsHTML();
  if(b)b.innerHTML=bgModelsHTML();
  const s=$('#bgstatus');
- if(s)s.textContent=BGST.err||(BGST.busy?'Working\u2026':(BGENG.loading?'Loading the model\u2026':(BGST.have[BGST.model]?'Model ready \u00b7 tap the picture to see the result':'Download a model to remove backgrounds with AI')));
+ if(s)s.innerHTML=bgStatusHTML();
 }
 /* ---- splitter ---- */
 function splitRect(W,H){if(T.sq==='f')return[0,0,W,H];const [a,b]=T.sq.split(':').map(Number),tg=(T.sc*a/b)/T.sr;if(W/H>tg){const w=Math.round(H*tg);return[Math.round((W-w)/2),0,w,H]}const h=Math.round(W/tg);return[0,Math.round((H-h)/2),W,h]}
@@ -32497,15 +32595,21 @@ const PY={
   bg:()=>{const ai=T.bgm!=='q';
    return '<div class="row" style="padding:0 0 12px"><div>Remove background<small>'+(ai?'AI model finds the subject in any scene':'Best on plain or evenly lit backgrounds')+'</small></div><button class="sw'+(T.bg?' on':'')+'" data-x="bg" aria-label="Remove background"></button></div>'
    +'<div class="lbl">Method</div><div class="seg pre"><button data-x="bgmode" data-v="ai" class="'+(ai?'on':'')+'">AI model</button><button data-x="bgmode" data-v="q" class="'+(ai?'':'on')+'">Quick</button></div>'
-   +(ai?'<div class="lbl">Model</div><div class="bgmodels">'+bgModelsHTML()+'</div><div class="info" id="bgstatus"></div>'
+   +(ai?'<div class="lbl">Model</div><div class="bgmodels">'+bgModelsHTML()+'</div><div class="info" id="bgstatus">'+bgStatusHTML()+'</div><div class="btns" style="margin-top:10px"><button class="btn fill" data-x="bgdetect">Detect subject</button></div>'
      :sl('bt','Tolerance',0,100,'%')+sl('bf','Edge softness',0,100,'%')+'<div class="lbl">Where</div>'+fseg('bm','bm',T.bm,[['c','Edges only'],['g','Everywhere']])
       +'<div class="row" style="padding:12px 0 0"><div>Background colour<small>'+(T.bgc?'Picked':'Detected from the edges')+'</small></div><button class="btn glass" data-x="bauto" style="height:40px;padding:0 14px">Auto</button></div>')
    +sl('bx','Shrink / grow edge',-6,6,'px')
    +'<div class="row" style="padding:12px 0 0"><div>Keep main subject only<small>Removes leftover specks</small></div><button class="sw'+(T.bo?' on':'')+'" data-x="bo" aria-label="Keep main subject"></button></div>'
    +'<div class="row" style="padding:12px 0 0"><div>Clean color fringe<small>Removes the old background tint on edges</small></div><button class="sw'+(T.bd?' on':'')+'" data-x="bd" aria-label="Clean fringe"></button></div>'
    +'<div class="lbl">Replace with</div>'+fseg('bb','bb',T.bb,[['t','Clear'],['w','White'],['k','Black'],['c','Color']])+(T.bb==='c'?'<input type="color" class="tin" data-k="bcc" value="'+T.bcc+'" style="height:46px;padding:4px;margin-top:10px">':'')
-   +'<div class="lbl">Touch up</div>'+fseg('bk','bk',T.bk,[['pick','Pick color'],['erase','Erase'],['restore','Restore']])+(T.bk==='pick'?'':sl('bz','Brush size',4,80,'px')+'<div class="btns" style="margin-top:10px"><button class="btn glass" data-x="bundo">Undo stroke</button><button class="btn glass" data-x="bclr">Clear strokes</button></div>')
-   +'<div class="hint">Paint over the picture to erase or restore parts. The brush works on the AI mask too.</div>'},
+   +'<div class="lbl">Touch up</div>'+fseg('bk','bk',T.bk,[['pick','Pick colour'],['magic','Magic eraser'],['mrst','Magic restore'],['erase','Brush erase'],['restore','Brush restore']])
+  +(T.bk==='magic'||T.bk==='mrst'
+    ?sl('btol','Tolerance',1,60,'')+sl('bgrow','Grow edge',0,12,' px')+sl('bfe','Edge feather',0,100,'%')
+     +'<div class="row" style="padding:12px 0 0"><div>Pick every matching area<small>Not only the one under your finger</small></div><button class="sw'+(T.bwall?' on':'')+'" data-x="bwall" aria-label="Pick every matching area"></button></div>'
+     +'<div class="info" style="margin-top:12px">'+(bgSelCount()?bgSelCount()+' region'+(bgSelCount()===1?'':'s')+' picked \u2014 tap the picture to add another':'Tap the picture to pick a region. Every tap adds to the selection; it never replaces it.')+'</div>'
+     +'<div class="btns" style="margin-top:10px"><button class="btn glass" data-x="bkundo">Undo pick</button><button class="btn glass" data-x="bksel">Clear picks</button></div>'
+    :(T.bk==='pick'?'':sl('bz','Brush size',4,80,'px')+'<div class="btns" style="margin-top:10px"><button class="btn glass" data-x="bundo">Undo stroke</button><button class="btn glass" data-x="bclr">Clear strokes</button></div>'))
+   +'<div class="hint">The magic eraser finds the region under your finger by itself. The brush paints by hand and works on the AI cut-out too.</div>'},
  clg:()=>'<div class="fthumbs">'+CI.map((im,i)=>`<div class="ft${CISEL===i?' on':''}" data-x="csel" data-v="${i}"><canvas data-th="${i}" data-lb="ci" data-v="${i}" width="64" height="64"></canvas><button data-x="crm" data-v="${i}" aria-label="Remove">\u00d7</button></div>`).join('')+'</div><div class="btns"><button class="btn glass" data-x="cadd">Add images</button><button class="btn glass" data-x="cst">Add stills</button></div>'
   +(CISEL>=0&&CI[CISEL]?'<div class="info">Image '+(CISEL+1)+' selected — drag to reposition, pinch to crop, double-tap to reset</div><div class="lbl">Zoom<span>'+(CM[CISEL]?Math.round(CM[CISEL].zoom*100):100)+'%</span></div><input type="range" data-zoom="1" min="100" max="300" value="'+(CM[CISEL]?Math.round(CM[CISEL].zoom*100):100)+'" style="--p:'+((CM[CISEL]?CM[CISEL].zoom:1)-1)/2*100+'%"><div class="btns" style="margin-top:12px"><button class="btn glass" data-x="crot90">Rotate 90°</button><button class="btn glass" data-x="cres">Reset crop</button><button class="btn glass" data-x="crm2">Remove</button><button class="btn glass" data-x="csel0">Deselect</button></div>':'')
   +'<div class="lbl">Layout</div>'+fseg('cl','cl',T.cl,[['g','Grid'],['r','Row'],['c','Column']])+'<div class="lbl">Cell shape</div>'+fseg('cr','cr',T.cr,[['1:1','Square'],['4:3','4:3'],['3:4','3:4'],['16:9','16:9']])+'<div class="lbl">Grid size<span>0 = automatic</span></div><div class="btns"><input class="tin numin" type="number" min="0" max="12" data-k="cgr" value="'+T.cgr+'" placeholder="Columns" aria-label="Grid columns"><input class="tin numin" type="number" min="0" max="12" data-k="cgc" value="'+T.cgc+'" placeholder="Rows" aria-label="Grid rows"></div>'+sl('cg','Spacing',0,10,'%')+sl('cx','Corner radius',0,25,'%')+'<div class="lbl">Background</div>'+fseg('cb','cb',T.cb,[['w','White'],['k','Black'],['t','Clear']])+'<div class="btns" style="margin-top:12px"><button class="btn glass" data-x="cclr">Clear all</button></div>',
@@ -32524,8 +32628,28 @@ const PY={
    +'<div class="lbl">Colors</div><div class="btns"><label class="colr">Code<input type="color" data-g="fg" value="'+GEN.fg+'"></label><label class="colr">Background<input type="color" data-g="bg" value="'+GEN.bg+'"></label></div><div class="hint" id="gerr" style="color:var(--pri2)">'+esc(GEN.err)+'</div>'+(GEN.type==='qr'?'<div class="lbl">Logo (optional)<span>error correction forced to H</span></div><div class="btns"><button class="btn glass" data-x="glp">'+(GEN.lg?'Replace logo':'Add logo')+'</button>'+(GEN.lg?'<button class="btn glass" data-x="glx">Remove</button>':'')+'</div>':'')+'<div class="btns" style="margin-top:10px"><button class="btn glass" data-x="gsv">Save as SVG</button></div><div class="hint">Use Add to stills or Download below to save it. The Edit tools work on the result too.</div>',
  ocr:()=>'<div class="lbl">Language</div>'+fseg('olang','olang',OSL,OCR_LANGS)+'<div class="row" style="padding:10px 0"><div>Enhance for text<small>Boosts contrast and removes color</small></div><button class="sw'+(T.oe?' on':'')+'" data-x="oe" aria-label="Enhance"></button></div><div class="row" style="padding:0 0 10px"><div>Keep layout<small>Restore line breaks (page layout analysis)</small></div><button class="sw'+(T.ol?' on':'')+'" data-x="ol" aria-label="Keep layout"></button></div><button class="btn fill" data-x="runocr" style="width:100%">Recognize text</button><textarea class="tin" id="oto" rows="9" placeholder="Recognized text appears here" style="margin-top:12px;resize:vertical"></textarea><div class="info" id="oti" style="margin-top:12px">'+(OCR_LANGS.find(l=>l[0]===OSL)||OCR_LANGS[0])[1]+' text, recognized on your device</div><div class="btns" style="margin-top:12px"><button class="btn glass" data-x="otc">Copy</button><button class="btn glass" data-x="ots">Save .txt</button></div>',
  doc:()=>(DOC.fail?'<div class="info" style="border-color:#c9a227">Auto-detect couldn’t find a page — drag the four corners onto the page edges.</div>':'<div class="hint" style="margin:0 0 8px">Drag the four corners onto the page edges, then flatten it.</div>')+'<div class="btns"><button class="btn glass" data-x="ddet">Auto-detect</button><button class="btn glass" data-x="dcam">Take a photo</button></div><div class="lbl">Finish</div>'+fseg('dm','dm',T.dm,[['color','Enhanced'],['gray','Gray'],['bw','Black & white'],['orig','Original']])+'<button class="btn fill" data-x="dscan" style="width:100%;margin-top:14px">Flatten and clean up</button>'+(DSC.length?'<div class="info">'+DSC.length+' page'+(DSC.length===1?'':'s')+' scanned so far</div><div class="btns"><button class="btn glass" data-x="dfin">Finish → PDF maker</button><button class="btn glass" data-x="dsclear">Discard pages</button></div>':'')+'<div class="btns" style="margin-top:10px"><button class="btn glass" data-x="dpdf">Save as PDF</button><button class="btn glass" data-x="dsundo">Undo scan</button></div><button class="btn glass" data-x="dtopdf" style="width:100%;margin-top:10px">Add page to PDF maker</button>',
- qrs:()=>'<div class="btns"><button class="btn fill" data-x="qscan">Scan this image</button><button class="btn glass" data-x="qcam">Use camera</button></div><video id="qv" class="qv" playsinline muted hidden></video><div id="qres" style="margin-top:12px"></div><div class="hint">Reads QR codes and common barcodes (EAN, UPC, Code 128, and more).</div>'
+ qrs:()=>'<div class="btns"><button class="btn fill" data-x="qscan">Scan this image</button><button class="btn glass" data-x="qcam">Use a picture or the camera</button></div><video id="qv" class="qv" playsinline muted hidden></video><div id="qres" style="margin-top:12px"></div><div class="hint">Reads QR codes and common barcodes (EAN, UPC, Code 128, and more).</div>'
 };
+/* ---- source sheet: device picture or camera ---- */
+let SRCFN=null;
+function openSrcSheet(title,note,onDev,onCam){
+ const t=$('#srcpt'),n=$('#srcph');
+ if(t)t.textContent=title;
+ if(n)n.textContent=note||'';
+ SRCFN={onDev:onDev,onCam:onCam};
+ const sc=$('#scrim3');if(sc)sc.classList.add('on');
+ $('#srcp').classList.add('on');
+}
+function closeSrcSheet(){
+ const sc=$('#scrim3');if(sc)sc.classList.remove('on');
+ $('#srcp').classList.remove('on');SRCFN=null;
+}
+$('#srcdev').onclick=()=>{const f=SRCFN;closeSrcSheet();if(f&&f.onDev)f.onDev()};
+$('#srccam').onclick=()=>{const f=SRCFN;closeSrcSheet();if(f&&f.onCam)f.onCam()};
+$('#srccancel').onclick=closeSrcSheet;
+$('#scrim3').onclick=closeSrcSheet;
+function srcPickDoc(){openSrcSheet('Document scanner','Scan a page you already photographed, or take a new one.',()=>{$('#tf').click()},()=>{$('#tfcam').click()})}
+function srcPickQR(){openSrcSheet('QR & barcode scanner','Scan a code from a picture you already have, or point the camera at one.',()=>{$('#tf').click()},()=>{startCam()})}
 /* ---- actions ---- */
 function setBk(){const cv=$('#tcv');cv.style.touchAction=(curTool==='bg'&&T.bk!=='pick')||curTool==='draw'||curTool==='doc'||curTool==='crop'||curTool==='cmp'||(curTool==='clg')?'none':'auto'}
 async function stillsToFiles(){const out=[];for(const s of stills.slice(0,30)){try{out.push(new File([await (await fetch(s.url)).blob()],s.name))}catch(e){}}return out}
@@ -32572,7 +32696,7 @@ $('#tp').addEventListener('click',async e=>{
    case 'cml':case 'cmr':{const i=+v,j=a==='cml'?i-1:i+1;if(j>=0&&j<CI.length){[CI[i],CI[j]]=[CI[j],CI[i]];[CM[i],CM[j]]=[CM[j],CM[i]];if(CISEL===i)CISEL=j;else if(CISEL===j)CISEL=i;buildCollage()}break}
 case 'e_pick':{const kd=kindOf(curTool);if(kd==='file'){$('#tff').accept=curTool==='rename'?'':'image/*';$('#tff').click()}else if(curTool==='clg')$('#tfm').click();else $('#tf').click();break}
   case 'e_stills':openStillsFor();break;
-  case 'e_cam':(curTool==='pdf'?$('#tfpcam'):$('#tfcam')).click();break;
+  case 'e_cam':if(curTool==='doc')srcPickDoc();else if(curTool==='qrs')srcPickQR();else (curTool==='pdf'?$('#tfpcam'):$('#tfcam')).click();break;
   case 'fadd':$('#tff').accept=curTool==='rename'?'':'image/*';$('#tff').click();break;
   case 'cmpa':cmpSet('a',+v);break;
   case 'cmpb':cmpSet('b',+v);break;
@@ -32598,7 +32722,15 @@ case 'e_pick':{const kd=kindOf(curTool);if(kd==='file'){$('#tff').accept=curTool
   case 'bd':T.bd^=1;re(1);break;
   case 'bk':T.bk=v;setBk();re();break;
   case 'bundo':T.bs.pop();draw();break;
+  case 'bkundo':T.bsel=(T.bsel||[]).slice(0,-1);draw();break;
+  case 'bksel':T.bsel=[];draw();break;
+  case 'bwall':T.bwall^=1;re(1);break;
+  case 'bgdetect':{
+   if(!BGST.have[BGST.model]){const m=BGMODELS.find(x=>x.id===BGST.model)||BGMODELS[0];
+    toast('Get the '+m.name+' model first \u2014 it is in the list above');return}
+   bgCompute(true);break}
   case 'bclr':T.bs=[];draw();break;
+  case 'csnap':T.csnap^=1;re(1);break;
   case 'cr':T.cr=v;buildCollage();break;
   case 'crm':CI.splice(+v,1);CM.splice(+v,1);if(CISEL===+v)CISEL=-1;else if(CISEL>+v)CISEL--;buildCollage();break;
   case 'spre':{const [r,c]=v.split('x').map(Number);T.sr=r;T.sc=c;re(1);break}
@@ -32627,7 +32759,7 @@ case 'e_pick':{const kd=kindOf(curTool);if(kd==='file'){$('#tff').accept=curTool
   case 'otc':if(OCRT)copyText(OCRT);else toast('Recognize some text first');break;
   case 'ots':if(OCRT)deliver([{name:TN+'_text.txt',blob:new Blob([OCRT],{type:'text/plain'})}]);else toast('Recognize some text first');break;
   case 'ddet':docDetect();draw();break;
-  case 'dcam':$('#tfcam').click();break;
+  case 'dcam':srcPickDoc();break;
   case 'dm':T.dm=v;re();break;
   case 'dscan':docScan();break;
   case 'dsundo':if(DOC.orig){TI=DOC.orig;DOC.for=null;DOC.orig=null;DSC.pop();docDetect();draw();toast('Scan undone')}else toast('Nothing to undo');break;
@@ -32635,7 +32767,7 @@ case 'e_pick':{const kd=kindOf(curTool);if(kd==='file'){$('#tff').accept=curTool
    case 'dsclear':DSC=[];toast('Scanned pages cleared');re();break;
   case 'dpdf':{const c=document.createElement('canvas');pipe(c,true);deliver([{name:TN+'.pdf',blob:await pdfBlob(c)}]);break}
   case 'qscan':scanImage();break;
-  case 'qcam':startCam();break;
+  case 'qcam':srcPickQR();break;
   case 'qcp':copyText(SCN[+v][1]);break;
  }
 });
@@ -32672,8 +32804,12 @@ function buildCollage(rp=true){
 const _panel=panel;panel=function(){_panel();$$('#tp canvas[data-th]').forEach(cv=>{const im=CI[+cv.dataset.th];if(!im)return;const x2=cv.getContext('2d'),s=Math.max(64/im.width,64/im.height);x2.drawImage(im,(64-im.width*s)/2,(64-im.height*s)/2,im.width*s,im.height*s)});if(curTool==='rename')rnPreview();if(curTool==='ascii'&&ASC){const o=$('#ato');if(o)o.value=ASC}if(curTool==='ocr'&&OCRT){const o=$('#oto');if(o)o.value=OCRT}if(curTool==='pick')renderPk();upTUndo();bgRenderModels()};
 /* ---- bg brush pointer ---- */
 let bstk=null;
-$('#tcv').addEventListener('pointerdown',e=>{if(curTool!=='bg'||T.bk==='pick'||!TI)return;e.preventDefault();const cv=$('#tcv');cv.setPointerCapture(e.pointerId);pushHistory();bstk={m:T.bk==='erase'?'e':'r',w:T.bz/400,p:[npt(e)]};T.bs.push(bstk);const x=cv.getContext('2d');x.fillStyle=bstk.m==='e'?'rgba(255,0,0,.5)':'rgba(0,200,0,.5)';x.beginPath();x.arc(bstk.p[0][0]*cv.width,bstk.p[0][1]*cv.height,Math.max(1,bstk.w*cv.height)/2,0,6.3);x.fill()});
-$('#tcv').addEventListener('pointermove',e=>{if(!bstk)return;const cv=$('#tcv'),x=cv.getContext('2d'),a=bstk.p[bstk.p.length-1],b=npt(e);bstk.p.push(b);x.strokeStyle=bstk.m==='e'?'rgba(255,0,0,.5)':'rgba(0,200,0,.5)';x.lineWidth=Math.max(1,bstk.w*cv.height);x.lineCap='round';x.beginPath();x.moveTo(a[0]*cv.width,a[1]*cv.height);x.lineTo(b[0]*cv.width,b[1]*cv.height);x.stroke()});
+$('#tcv').addEventListener('pointerdown',e=>{if(curTool!=='bg'||!TI)return;const mg=T.bk==='magic'||T.bk==='mrst';if(!mg&&T.bk==='pick')return;e.preventDefault();const cv=$('#tcv');cv.setPointerCapture(e.pointerId);pushHistory();
+ if(mg){const p=npt(e);bstk={m:'s',w:0,p:[p],last:p};bgAddSel(p);draw();return}
+ bstk={m:T.bk==='erase'?'e':'r',w:T.bz/400,p:[npt(e)]};T.bs.push(bstk);const x=cv.getContext('2d');x.fillStyle=bstk.m==='e'?'rgba(255,0,0,.5)':'rgba(0,200,0,.5)';x.beginPath();x.arc(bstk.p[0][0]*cv.width,bstk.p[0][1]*cv.height,Math.max(1,bstk.w*cv.height)/2,0,6.3);x.fill()});
+$('#tcv').addEventListener('pointermove',e=>{if(!bstk)return;const cv=$('#tcv'),x=cv.getContext('2d');
+ if(bstk.m==='s'){const p=npt(e),a=bstk.last;if(Math.hypot(p[0]-a[0],p[1]-a[1])*cv.width>10){bgAddSel(p);bstk.last=p;draw()}return}
+ const a=bstk.p[bstk.p.length-1],b=npt(e);bstk.p.push(b);x.strokeStyle=bstk.m==='e'?'rgba(255,0,0,.5)':'rgba(0,200,0,.5)';x.lineWidth=Math.max(1,bstk.w*cv.height);x.lineCap='round';x.beginPath();x.moveTo(a[0]*cv.width,a[1]*cv.height);x.lineTo(b[0]*cv.width,b[1]*cv.height);x.stroke()});
 const bEnd=()=>{if(bstk){bstk=null;draw()}};$('#tcv').addEventListener('pointerup',bEnd);$('#tcv').addEventListener('pointercancel',bEnd);
 /* ---- document corner dragging ---- */
 let dragC=-1;
@@ -32779,8 +32915,8 @@ $('#tcv').addEventListener('pointermove',e=>{if(!cd||!cd0)return;const cv=$('#tc
   }
   l=Math.max(0,Math.min(W-MIN,l));rr=Math.max(l+MIN,Math.min(W,rr));
   tp=Math.max(0,Math.min(H-MIN,tp));bb=Math.max(tp+MIN,Math.min(H,bb));
-  const SN=Math.max(4,Math.round(Math.min(W,H)*0.012));
-  if(Math.abs(l)<SN)l=0;if(Math.abs(rr-W)<SN)rr=W;if(Math.abs(tp)<SN)tp=0;if(Math.abs(bb-H)<SN)bb=H;
+  if(T.csnap){const SN=8; /* a small magnet, not a jump */
+   if(Math.abs(l)<SN)l=0;if(Math.abs(rr-W)<SN)rr=W;if(Math.abs(tp)<SN)tp=0;if(Math.abs(bb-H)<SN)bb=H;}
   x=l;y=tp;w=rr-l;h=bb-tp;
  }
  cropApply(cv,x,y,w,h);draw()});
@@ -32859,7 +32995,7 @@ const cmpEnd=()=>{if(cmpd){cmpd=false;cmpMoved=0}};$('#tcv').addEventListener('p
 /* ---- undo / redo history (every tool) ---- */
 let HIST=[],RHIST=[],sliding=0;
 const cloneS=o=>{const c={...o};if(o.p)c.p=c.p.map(q=>[q[0],q[1]]);return c};
-function snapT(){const s={...T};s.ds=T.ds.map(cloneS);s.bs=(T.bs||[]).map(cloneS);s.dr=(T.dr||[]).map(cloneS);
+function snapT(){const s={...T};s.ds=T.ds.map(cloneS);s.bs=(T.bs||[]).map(cloneS);s.dr=(T.dr||[]).map(cloneS);s.bsel=(T.bsel||[]).map(b=>({...b}));s.bsel=(T.bsel||[]).map(b=>({...b}));
  s._cm=CM.map(m=>({...m}));s._dsc=DSC.slice();s._pg=PG.map(p=>({...p}));s._pal=PAL.slice();
  s._cmp={a:CMPST.a.i,b:CMPST.b.i,model:BGST.model};s._gen={...GEN};s._ocr=OCRT;return s}
 function restoreT(st){T={...st};
@@ -32869,7 +33005,7 @@ function restoreT(st){T={...st};
  if(st._pg)PG=st._pg.map(p=>({...p}));
  if(st._pal)PAL=st._pal.slice();
  if(st._cmp){CMPST.a.i=st._cmp.a;CMPST.b.i=st._cmp.b;BGST.model=st._cmp.model||BGST.model}
- if(st._gen)Object.assign(GEN,st._gen);
+ if(st._gen)Object.assign(GEN,st._gen);if(st.bsel)T.bsel=st.bsel.map(b=>({...b}));else T.bsel=[];
  if(typeof st._ocr==='string')OCRT=st._ocr}
 function pushHistory(){try{HIST.push(snapT());if(HIST.length>40)HIST.shift();RHIST.length=0}catch(e){}upTUndo()}
 function upTUndo(){const b=$('#tundo'),r=$('#tredo');if(b)b.disabled=!HIST.length;if(r)r.disabled=!RHIST.length}
@@ -32894,7 +33030,7 @@ function pgGeom(p){const m=+T.pmg;
  return{pw,ph,x:(pw-p.w*s)/2,y:(ph-p.h*s)/2,iw:p.w*s,ih:p.h*s}}
 let PVZ=1;
 function pdfPrevHTML(){const nm=(PGSZ.find(s=>s[0]===T.ps)||['',''])[1],mg=(PGM.find(m=>m[0]===+T.pmg)||['',''])[1];
- return'<div class="ptr"><div class="ptr-h"><b>Document preview<em>'+PG.length+' page'+(PG.length===1?'':'s')+'</em></b><span class="cap">'+nm+(+T.pmg?' \u00b7 '+mg+' margin':'')+'</span><span class="pvctl"><b class="pvind" id="pvind">1 / '+PG.length+(PVZ!==1?' \u00b7 '+Math.round(PVZ*100)+'%':'')+'</b><i class="pvz"><button data-x="pvzd" aria-label="Zoom out"'+(PVZ<=.5?' disabled':'')+'>\u2212</button><button data-x="pvzi" aria-label="Zoom in"'+(PVZ>=3?' disabled':'')+'>+</button></i></span></div><div class="pvcol" data-lb="pgpv">'+PG.map((p,i)=>{const g=pgGeom(p);return'<div class="psheet" style="--ar:'+(g.pw/g.ph).toFixed(4)+'" data-lb="pg" data-v="'+i+'"><img src="'+pgUrl(p)+'" alt="Page '+(i+1)+' preview" style="left:'+(g.x/g.pw*100).toFixed(2)+'%;top:'+(g.y/g.ph*100).toFixed(2)+'%;width:'+(g.iw/g.pw*100).toFixed(2)+'%;height:'+(g.ih/g.ph*100).toFixed(2)+'%"><span>'+(i+1)+'</span></div>'}).join('')+'</div></div>'}
+ return'<div class="ptr"><div class="ptr-h"><b>Document preview<em>'+PG.length+' page'+(PG.length===1?'':'s')+'</em></b><span class="cap">'+nm+(+T.pmg?' \u00b7 '+mg+' margin':'')+'</span></div><div class="pvwrap"><div class="pvcol" data-lb="pgpv">'+PG.map((p,i)=>{const g=pgGeom(p);return'<div class="psheet" style="--ar:'+(g.pw/g.ph).toFixed(4)+'" data-lb="pg" data-v="'+i+'"><img src="'+pgUrl(p)+'" alt="Page '+(i+1)+' preview" style="left:'+(g.x/g.pw*100).toFixed(2)+'%;top:'+(g.y/g.ph*100).toFixed(2)+'%;width:'+(g.iw/g.pw*100).toFixed(2)+'%;height:'+(g.ih/g.ph*100).toFixed(2)+'%"><span>'+(i+1)+'</span></div>'}).join('')+'</div><div class="pvbar"><b class="pvind" id="pvind">1 / '+PG.length+(PVZ!==1?' \u00b7 '+Math.round(PVZ*100)+'%':'')+'</b><span class="pvd">'+(+T.pmg?mg+' margin':nm)+'</span><i class="pvz"><button data-x="pvzd" aria-label="Zoom out"'+(PVZ<=.5?' disabled':'')+'>\u2212</button><button data-x="pvzi" aria-label="Zoom in"'+(PVZ>=3?' disabled':'')+'>+</button></i></div></div></div>'}
 async function addPage(src,nm){
  const k=Math.min(1,2600/Math.max(src.width,src.height)),w=Math.max(1,Math.round(src.width*k)),h=Math.max(1,Math.round(src.height*k)),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(src,0,0,w,h);
  const blob=await new Promise(r=>c.toBlob(r,'image/jpeg',.9)),t=document.createElement('canvas'),tk=Math.min(1,120/Math.max(w,h));t.width=Math.max(1,Math.round(w*tk));t.height=Math.max(1,Math.round(h*tk));t.getContext('2d').drawImage(c,0,0,t.width,t.height);
@@ -32940,11 +33076,21 @@ PY.pdf=()=>(PG.length?pdfPrevHTML():'')+'<div class="flist">'+PG.map((p,i)=>`<di
  +'<div class="lbl">Camera scans</div><div class="row" style="padding:0 0 10px"><div>Auto-crop and straighten<small>Finds the page edges in each photo</small></div><button class="sw'+(T.pa?' on':'')+'" data-x="pa" aria-label="Auto-crop"></button></div>'+fseg('pfm','pm',T.pm,[['color','Enhanced'],['gray','Gray'],['bw','Black & white'],['orig','Original']])
  +'<button class="btn fill" data-x="runpdf" style="width:100%;margin-top:14px">Create PDF \u00b7 '+PG.length+' page'+(PG.length===1?'':'s')+'</button><button class="btn glass" data-x="sharepdf" style="width:100%;margin-top:10px">Share PDF</button>';
 function pvScroll(c){const n=c.children&&c.children.length;if(!n)return;const step=Math.max(1,(c.scrollHeight-c.clientHeight)/(n>1?n-1:1)),p=Math.min(n,Math.max(1,Math.round((c.scrollTop||0)/step)+1)),ind=$('#pvind');if(ind)ind.textContent=p+' / '+n+(PVZ!==1?' \u00b7 '+Math.round(PVZ*100)+'%':'')}
-function setPvZ(c){c=c||$('#tp .pvcol');if(!c)return;c.style.setProperty('--pz',PVZ);const d=$('#tp [data-x=pvzd]'),i=$('#tp [data-x=pvzi]');if(d)d.disabled=PVZ<=.5;if(i)i.disabled=PVZ>=3;const s=c.firstElementChild;if(s&&c.clientHeight)c.style.scrollSnapType=s.getBoundingClientRect().height>c.clientHeight-4?'none':'';pvScroll(c)}
+function setPvZ(c,instant){c=c||$('#tp .pvcol');if(!c)return;
+ if(instant){c.style.transition='none';c.style.setProperty('--pz',PVZ);void c.offsetWidth;c.style.transition=''}
+ else c.style.setProperty('--pz',PVZ);const d=$('#tp [data-x=pvzd]'),i=$('#tp [data-x=pvzi]');if(d)d.disabled=PVZ<=.5;if(i)i.disabled=PVZ>=3;const s=c.firstElementChild;if(s&&c.clientHeight)c.style.scrollSnapType=s.getBoundingClientRect().height>c.clientHeight-4?'none':'';pvScroll(c)}
 $('#tp').addEventListener('scroll',e=>{const c=e.target;if(c&&c.classList&&c.classList.contains('pvcol'))pvScroll(c)},{capture:true});
-let pzT=null;const pzd=t=>Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);
+let pzT=null,pzP=null;const pzd=t=>Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);
+$('#tp').addEventListener('pointerdown',e=>{const c=e.target.closest?e.target.closest('.pvcol'):null;if(!c||e.pointerType==='touch')return;
+ const pts=[...$('#tp .pvcol').children].map(el=>el.getBoundingClientRect());
+ const cx=(e.clientX-c.getBoundingClientRect().left)/Math.max(1,c.clientWidth);
+ if(cx<0||cx>1)return;pzP={x:e.clientX,y:e.clientY,z:PVZ}},{passive:true});
+$('#tp').addEventListener('pointermove',e=>{if(!pzP)return;const c=$('#tp .pvcol');if(!c)return;
+ const d=Math.hypot(e.clientX-pzP.x,e.clientY-pzP.y);if(d<8)return;
+ PVZ=Math.min(3,Math.max(.5,Math.round(pzP.z*(d/60)*200)/200));pzP.x=e.clientX;pzP.y=e.clientY;setPvZ(c,true)},{passive:true});
+$('#tp').addEventListener('pointerup',()=>{pzP=null},{passive:true});
 $('#tp').addEventListener('touchstart',e=>{const c=e.target.closest?e.target.closest('.pvcol'):null;if(c&&e.touches.length===2)pzT={z:PVZ,d:pzd(e.touches)}},{passive:true});
-$('#tp').addEventListener('touchmove',e=>{if(!pzT)return;const c=$('#tp .pvcol');if(!c||e.touches.length!==2)return;e.preventDefault();PVZ=Math.min(3,Math.max(.5,Math.round(pzT.z*(pzd(e.touches)/Math.max(1,pzT.d))*100)/100));setPvZ(c)},{passive:false});
+$('#tp').addEventListener('touchmove',e=>{if(!pzT)return;const c=$('#tp .pvcol');if(!c||e.touches.length!==2)return;e.preventDefault();PVZ=Math.min(3,Math.max(.5,Math.round(pzT.z*(pzd(e.touches)/Math.max(1,pzT.d))*200)/200));setPvZ(c,true)},{passive:false});
 $('#tp').addEventListener('touchend',e=>{if(e.touches.length<2)pzT=null},{passive:true});
 $('#tp').addEventListener('click',async e=>{
  const b=e.target.closest('[data-x]');if(!b)return;const a=b.dataset.x,v=b.dataset.v;
@@ -32962,7 +33108,7 @@ $('#tp').addEventListener('click',async e=>{
   case 'pa':T.pa^=1;panel();break;
   case 'runpdf':runPdf(false);break;
   case 'sharepdf':runPdf(true);break;
-  case 'pvzi':case 'pvzd':{PVZ=Math.min(3,Math.max(.5,Math.round(PVZ*(a==='pvzi'?1.25:.8)*100)/100));setPvZ();break}
+  case 'pvzi':case 'pvzd':{const f=a==='pvzi'?1.2:1/1.2;PVZ=Math.min(3,Math.max(.5,Math.round(PVZ*f*20)/20));setPvZ();break}
   case 'dtopdf':{const c=document.createElement('canvas');pipe(c,true);await addPage(c,'Scan '+(PG.length+1));toast('Added as PDF page '+PG.length);afterPg();break}
  }
 });
