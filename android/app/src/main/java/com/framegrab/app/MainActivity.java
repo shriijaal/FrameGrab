@@ -635,8 +635,12 @@ public class MainActivity extends Activity {
 
     private void pushInsets() {
         if (web == null) return;
-        final int top = insetTop();
-        final int bottom = insetBottom();
+        // The insets come back in physical pixels, but the page pads itself in
+        // CSS pixels — convert, or the padding is as many times too big as the
+        // screen density (a big empty gap under the status bar).
+        final float den = Math.max(0.01f, getResources().getDisplayMetrics().density);
+        final String top = String.format(Locale.US, "%.1f", insetTop() / den);
+        final String bottom = String.format(Locale.US, "%.1f", insetBottom() / den);
         web.post(new Runnable() {
             @Override public void run() {
                 web.evaluateJavascript(

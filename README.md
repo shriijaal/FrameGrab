@@ -290,6 +290,10 @@ node shot.mjs <name>   # screenshot the app
 
 ## Changelog
 
+- **1.13.1** — The background remover preview is zoomable (pinch or scroll to magnify up to 8×) for
+  precise erasing and restoring; the navigation bar can shrink to icons while scrolling, with a switch in
+  Settings; the big gap under the status bar is fixed; new app icon.
+
 - **1.13.0** — Cropping is precise now: the edge magnet is a lot smaller and a new **Snap to the picture edges**
   switch turns it off entirely, so with it off the frame lands exactly where you put it. The document scanner and
   the QR & barcode scanner now ask where the picture should come from — one you already have on the device, or a
