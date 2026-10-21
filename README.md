@@ -256,6 +256,10 @@ Requirements: JDK 17, Android SDK (platform `android-36`, build-tools `36.0.0`),
 
 ## Changelog
 
+- **1.11.4** — The QR / barcode generator no longer replaces the picture you were editing (your image and
+  edits are safe now); undo/redo get their own icons and smaller buttons; the background remover's
+  "In use" pill is replaced by a highlighted row.
+
 - **1.11.3** — Undo/redo for every tool (with a redo button and Ctrl+Shift+Z), the off-by-one that
   made the newest change un-undoable, a crop tool that previews the whole picture with an aspect-locked,
   edge-snapping frame, smoother drawing with a true live eraser, and the background remover's "In use"
