@@ -256,6 +256,11 @@ Requirements: JDK 17, Android SDK (platform `android-36`, build-tools `36.0.0`),
 
 ## Changelog
 
+- **1.11.2** — Fixes: the background remover engine now loads (the missing onnxruntime WASM module is
+  bundled and served correctly), downloaded models persist in the device database instead of the
+  purgeable browser cache, downloads can be cancelled, and the Android back gesture navigates inside
+  the app instead of closing it.
+
 - **1.11.1** — The background remover is live: it runs **rembg's own models** (u2netp / Silueta / ISNet)
   on-device. Models are downloaded on demand (also from Settings → Background removal) and cached on the
   device, so the app stays small. The instant Quick mode and the brush/edge tools still work.

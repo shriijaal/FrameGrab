@@ -202,6 +202,7 @@ public class MainActivity extends Activity {
         switch (ext) {
             case "html": return "text/html";
             case "js": return "text/javascript";
+            case "mjs": return "text/javascript";
             case "css": return "text/css";
             case "svg": return "image/svg+xml";
             case "png": return "image/png";
@@ -607,8 +608,15 @@ public class MainActivity extends Activity {
     }
 
     @Override public void onBackPressed() {
-        if (web != null && web.canGoBack()) web.goBack();
-        else super.onBackPressed();
+        // The app is a single page, so the WebView has no history: let the page
+        // handle the back gesture first (close overlays, leave the tool, go home).
+        if (web != null) {
+            web.evaluateJavascript("(function(){try{return !!(window.appBack&&window.appBack())}catch(e){return false}})()", value -> {
+                if (!"true".equals(value)) MainActivity.super.onBackPressed();
+            });
+            return;
+        }
+        super.onBackPressed();
     }
 
     @Override protected void onDestroy() {
