@@ -82,12 +82,14 @@ try {
     document.querySelector('#tp [data-x="dcam"]').click();
     const open=document.querySelector('#srcp').classList.contains('on');
     const title=document.querySelector('#srcpt').textContent;
-    const dev=!!document.querySelector('#srcdev'),cam=!!document.querySelector('#srccam');
+    const opts=[...document.querySelectorAll('#srcops [data-srcop]')].map(x=>x.textContent);
     document.querySelector('#srccancel').click();
-    return {open,title,dev,cam,closed:!document.querySelector('#srcp').classList.contains('on')};
+    return {open,title,opts,closed:!document.querySelector('#srcp').classList.contains('on')};
   })()`);
   check('the document scanner offers a picture or the camera',
-    docSheet.open && docSheet.dev && docSheet.cam && docSheet.closed, JSON.stringify(docSheet));
+    docSheet.open && docSheet.closed && docSheet.opts.length === 2 &&
+    /image/i.test(docSheet.opts.join(' ')) && /camera/i.test(docSheet.opts.join(' ')),
+    JSON.stringify(docSheet));
 
   await page.run(`setTool('qrs');true`);
   await page.sleep(400);
@@ -95,11 +97,13 @@ try {
     document.querySelector('#tp [data-x="qcam"]').click();
     const open=document.querySelector('#srcp').classList.contains('on');
     const title=document.querySelector('#srcpt').textContent;
+    const opts=[...document.querySelectorAll('#srcops [data-srcop]')].map(x=>x.textContent);
     document.querySelector('#srccancel').click();
-    return {open,title};
+    return {open,title,opts};
   })()`);
   check('the QR scanner offers a picture or the camera',
-    qrSheet.open && /QR/i.test(qrSheet.title), JSON.stringify(qrSheet));
+    qrSheet.open && /QR/i.test(qrSheet.title) && qrSheet.opts.length === 2,
+    JSON.stringify(qrSheet));
 
   /* ── the PDF preview bar ──────────────────────────────────────────── */
   await page.run(`(async()=>{

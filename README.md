@@ -103,7 +103,15 @@ already have on the device**, or a **new one from the camera**. The QR scanner s
 ### Background remover preview
 The preview sits in a **frame viewport**: the picture fits the frame, and when you zoom in only the frame scrolls —
 the page never grows. The **zoom buttons live in the viewport** as a small glass pill (−, the percentage, +), with
-pinch and the mouse wheel also working. The panel keeps a single *Fit the picture* button.
+pinch and the mouse wheel also working.
+
+**100% is the picture's own pixel size** — not a scaled-down fit — so you can work on the real detail, and you can
+zoom out below 100% to see the whole picture. The panel states the picture's real dimensions and a *Fit the picture*
+button puts it back in the frame.
+
+### The ASCII Studio
+Clicking the ASCII Studio card asks **what to draw**: an image, a video, or text. A video picked here becomes the
+Studio's source directly, so the Studio can draw a moving picture in characters.
 
 
 **Convert & optimize** — Format changer (incl. AVIF/JXL), Compress (with pre-commit preview), Batch rename,
@@ -295,6 +303,13 @@ node shot.mjs <name>   # screenshot the app
 ---
 
 ## Changelog
+
+- **1.13.3** — The background preview now shows the picture at its **own pixel size**: 100% is the real size, not a
+  scaled-down fit, so you can work on the real detail, and you can zoom out below 100% to see the whole picture. The
+  panel states the picture's real dimensions and *Fit the picture* puts it back in the frame. The **ASCII Studio card
+  now asks what to draw** — an image, a video or text — instead of opening an image-only picker that could not
+  pick a video, and a picked video becomes the Studio's source directly. The **compact navigation centres its
+  icons** exactly when it shrinks.
 
 - **1.13.2** — The background remover preview now sits in a **frame viewport**: the picture fits the frame and
   only the frame scrolls when you zoom in, so the page never grows. The **zoom buttons are inline in the preview** —

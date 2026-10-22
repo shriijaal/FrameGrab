@@ -69,24 +69,64 @@ try {
     return {isBounded:c.classList.contains('bgz'),h:Math.round(c.clientHeight),
       overflow:cs.overflowY,zoomVisible:!!z&&getComputedStyle(z).display!=='none',
       zoomIn:!!(z&&z.querySelector('[data-x=bgzin]')),out:!!(z&&z.querySelector('[data-x=bgzout]')),
-      readout:document.querySelector('#bgzoomv')?document.querySelector('#bgzoomv').textContent:null};
+      readout:document.querySelector('#bgzoomv')?document.querySelector('#bgzoomv').textContent:null,
+      zoom:parseFloat(getComputedStyle(c).getPropertyValue('--bz'))};
   })()`);
   check('the background preview is a bounded viewport',
     vp.isBounded && vp.h > 100 && vp.h < 600 && vp.overflow === 'auto',
     `height ${vp.h}px, overflow ${vp.overflow}`);
   check('the zoom buttons sit inside the viewport',
-    vp.zoomVisible && vp.zoomIn && vp.out && vp.readout === '100%', JSON.stringify(vp));
+    vp.zoomVisible && vp.zoomIn && vp.out && vp.readout === Math.round(vp.zoom * 100) + '%',
+    JSON.stringify(vp));
 
   const zoom = await page.run(`(()=>{
     const c=document.querySelector('.cvw'),cv=document.querySelector('#tcv');
-    const before=cv.getBoundingClientRect().width;
+    const before=cv.getBoundingClientRect().width, z0=parseFloat(getComputedStyle(c).getPropertyValue('--bz'));
     document.querySelector('.bgzoom [data-x=bgzin]').click();
-    const after=cv.getBoundingClientRect().width;
-    const z=parseFloat(getComputedStyle(c).getPropertyValue('--bz'));
-    return {before:Math.round(before),after:Math.round(after),z,grows:after>before+5};
+    const after=cv.getBoundingClientRect().width, z1=parseFloat(getComputedStyle(c).getPropertyValue('--bz'));
+    return {before:Math.round(before),after:Math.round(after),z0,z1,grows:after>before+5};
   })()`);
   check('zooming in magnifies inside the viewport',
-    zoom.grows && zoom.z > 1, `${zoom.before}px -> ${zoom.after}px at ${zoom.z}x`);
+    zoom.grows && zoom.z1 > zoom.z0, `${zoom.before}px -> ${zoom.after}px at ${zoom.z0}x -> ${zoom.z1}x`);
+
+  // 100% must be the picture's own size, and you must be able to zoom out.
+  const actual = await page.run(`(()=>{
+    const cv=document.querySelector('#tcv');
+    bgSetZoom(1);
+    const cssW=parseFloat(getComputedStyle(cv).width);
+    const natural=cv.width;
+    return {cssW:Math.round(cssW),natural};
+  })()`);
+  check('100% shows the picture at its own pixel size',
+    Math.abs(actual.cssW - actual.natural) <= 1,
+    `shown ${actual.cssW}px, picture is ${actual.natural}px`);
+
+  const out = await page.run(`(()=>{
+    const b=document.querySelector('.bgzoom [data-x=bgzout]');
+    for(let i=0;i<4;i++)b.click();
+    const c=document.querySelector('.cvw');
+    return {z:parseFloat(getComputedStyle(c).getPropertyValue('--bz')),
+      w:Math.round(document.querySelector('#tcv').getBoundingClientRect().width)};
+  })()`);
+  check('zooming out below 100% works', out.z < 1 && out.z >= 0.1,
+    `${out.z}x (${out.w}px wide)`);
+
+  const fit = await page.run(`(()=>{
+    const c=document.querySelector('.cvw');
+    document.querySelector('#tp [data-x="bgzfit"]').click();
+    const cv=document.querySelector('#tcv');
+    return {w:Math.round(cv.getBoundingClientRect().width),
+      frame:Math.round(c.clientWidth-20)};
+  })()`);
+  check('Fit the picture fits it in the frame', fit.w <= fit.frame + 2,
+    `${fit.w}px in a ${fit.frame}px frame`);
+
+  const sizeInfo = await page.run(`(()=>{
+    const i=document.querySelector('#bgzinfo');
+    return i?i.textContent:'';
+  })()`);
+  check('the panel states the picture\'s real size',
+    /\d+\s*×\s*\d+\s*px/.test(sizeInfo), sizeInfo);
 
   const contained = await page.run(`(()=>{
     const c=document.querySelector('.cvw');
@@ -114,6 +154,27 @@ try {
     nav.compact && nav.bw === nav.pw && nav.bh === nav.ph && nav.aligned, JSON.stringify(nav));
   await page.run(`navCompact(false);navMin=0;true`);
 
+  const icons = await page.run(`(()=>{
+    navCompact(true);
+    return true;
+  })()`);
+  await page.sleep(600);
+  const centred = await page.run(`(()=>{
+    const n=document.querySelector('#nav');
+    const out=[];
+    for(const b of n.querySelectorAll('button')){
+      const i=b.querySelector('.i');
+      const br=b.getBoundingClientRect(), ir=i.getBoundingClientRect();
+      out.push(Math.round((ir.left+ir.width/2)-(br.left+br.width/2)));
+      out.push(Math.round((ir.top+ir.height/2)-(br.top+br.height/2)));
+    }
+    return out;
+  })()`);
+  await page.run(`navCompact(false);navMin=0;true`);
+  const worst = Math.max(...centred.map(Math.abs));
+  check('the compact navigation centres its icons',
+    worst <= 1, `worst offset ${worst}px (${centred.join(',')})`);
+
   /* ── the ASCII Studio picker takes a video ───────────────────────── */
   const pick = await page.run(`(()=>{
     go('tools');showTW();setTool('astudio');
@@ -140,6 +201,42 @@ try {
     return {accept:document.querySelector('#tf').accept};
   })()`);
   check('other tools keep the image-only picker', !/video/.test(other.accept || ''), other.accept);
+
+  // the toolbox card asks what to draw
+  const card = await page.run(`(()=>{
+    go('tools');
+    const b=document.querySelector('#tgrid [data-t="astudio"]');
+    if(!b)return {ok:false,why:'no card'};
+    b.click();
+    const open=document.querySelector('#srcp').classList.contains('on');
+    const title=document.querySelector('#srcpt').textContent;
+    const opts=[...document.querySelectorAll('#srcops [data-srcop]')].map(x=>x.textContent);
+    document.querySelector('#srccancel').click();
+    return {ok:true,open,title,opts,closed:!document.querySelector('#srcp').classList.contains('on')};
+  })()`);
+  check('the ASCII Studio card asks what to draw',
+    card.ok && card.open && card.closed && card.opts.length >= 3 &&
+    /image/i.test(card.opts.join(' ')) && /video/i.test(card.opts.join(' ')) && /text/i.test(card.opts.join(' ')),
+    JSON.stringify(card));
+
+  // a picture picked for the studio opens the studio
+  const opened = await page.run(`(async()=>{
+    go('tools');
+    const c=document.createElement('canvas');c.width=300;c.height=200;const x=c.getContext('2d');
+    x.fillStyle='#2a6ad4';x.fillRect(0,0,300,200);
+    const blob=await (await fetch(c.toDataURL('image/png'))).blob();
+    const f=new File([blob],'pic.png',{type:'image/png'});
+    const dt=new DataTransfer();dt.items.add(f);
+    const inp=document.querySelector('#tf');inp.files=dt.files;
+    curTool='astudio';
+    inp.dispatchEvent(new Event('change'));
+    await new Promise(r=>setTimeout(r,1500));
+    return {tool:curTool,src:AST.src,file:AST.file?AST.file.name:null,
+      shown:!document.querySelector('#tw').hidden,mounted:!!ASRT,err:AST.err};
+  })()`);
+  check('a picture picked for the studio opens the studio',
+    opened.tool === 'astudio' && opened.src === 'file' && opened.shown && opened.mounted,
+    JSON.stringify(opened));
 
   const errors = page.logs.filter((l) => /^\[(exception|error)\]/.test(l) && !/navigator\.vibrate/.test(l));
   check('no console errors', errors.length === 0, errors.slice(0, 3).join(' | '));
