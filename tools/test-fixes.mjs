@@ -121,6 +121,24 @@ try {
   check('Fit the picture fits it in the frame', fit.w <= fit.frame + 2,
     `${fit.w}px in a ${fit.frame}px frame`);
 
+  // the picture stays in the middle of the frame, in and out
+  const zoomCentre = await page.run(`(()=>{
+    const c=document.querySelector('.cvw'),cv=document.querySelector('#tcv');
+    const mid=()=>{
+      const cr=c.getBoundingClientRect(),vr=cv.getBoundingClientRect();
+      return {dx:Math.round((vr.left+vr.width/2)-(cr.left+cr.clientWidth/2)),
+              dy:Math.round((vr.top+vr.height/2)-(cr.top+cr.clientHeight/2))};
+    };
+    const out=[];
+    bgSetZoom(2.2); out.push(mid());
+    bgSetZoom(0.45); out.push(mid());
+    bgSetZoom(1.6); out.push(mid());
+    return out;
+  })()`);
+  const worstCentre = Math.max(...zoomCentre.map((p) => Math.max(Math.abs(p.dx), Math.abs(p.dy))));
+  check('the picture stays centred while zooming in and out',
+    worstCentre <= 2, `worst offset ${worstCentre}px (${zoomCentre.map((p) => p.dx + ',' + p.dy).join(' / ')})`);
+
   const sizeInfo = await page.run(`(()=>{
     const i=document.querySelector('#bgzinfo');
     return i?i.textContent:'';
@@ -237,6 +255,87 @@ try {
   check('a picture picked for the studio opens the studio',
     opened.tool === 'astudio' && opened.src === 'file' && opened.shown && opened.mounted,
     JSON.stringify(opened));
+
+  /* ── the scanners offer the camera alongside the upload ───────────── */
+  const cam = await page.run(`(()=>{
+    go('tools');showTW();setTool('ocr');
+    document.querySelector('#tsup').click();
+    const open=document.querySelector('#srcp').classList.contains('on');
+    const opts=[...document.querySelectorAll('#srcops [data-srcop]')].map(x=>x.textContent);
+    document.querySelector('#srccancel').click();
+    return {open,opts};
+  })()`);
+  check('the OCR upload also offers the camera',
+    cam.open && cam.opts.length === 2 && /image/i.test(cam.opts.join(' ')) && /camera/i.test(cam.opts.join(' ')),
+    JSON.stringify(cam));
+
+  /* ── the Studio: undo, reset and a visible change ────────────────── */
+  const studio = await page.run(`(async()=>{
+    go('tools');showTW();setTool('astudio');
+    await new Promise(r=>setTimeout(r,900));
+    AST.sec='style';panel();
+    await new Promise(r=>setTimeout(r,200));
+    const inp=document.querySelector('#tp input[data-sk="cellSize"]');
+    if(!inp)return {err:'no cell size slider'};
+    const before=AST_RAW.cellSize;
+    inp.value=String(before+5);
+    inp.dispatchEvent(new Event('input',{bubbles:true}));
+    await new Promise(r=>setTimeout(r,250));
+    const changed=AST_RAW.cellSize;
+    const hasReset=!!document.querySelector('#tp [data-x="astreset"]');
+    undo();
+    await new Promise(r=>setTimeout(r,300));
+    const undone=AST_RAW.cellSize;
+    // change again and reset
+    inp.value=String(before+9);
+    inp.dispatchEvent(new Event('input',{bubbles:true}));
+    await new Promise(r=>setTimeout(r,200));
+    document.querySelector('#tp [data-x="astreset"]').click();
+    await new Promise(r=>setTimeout(r,300));
+    const reset=AST_RAW.cellSize;
+    return {before,changed,undone,reset,hasReset};
+  })()`);
+  check('the Studio has a reset button', studio.hasReset === true, JSON.stringify(studio));
+  check('undo takes a Studio change back',
+    studio.changed === studio.before + 5 && studio.undone === studio.before,
+    `${studio.before} -> ${studio.changed} -> ${studio.undone}`);
+  check('Reset the Studio restores the defaults',
+    studio.reset === 6, `cell size now ${studio.reset}`);
+
+  /* ── the removal animation while the model works ──────────────────── */
+  const anim = await page.run(`(()=>{
+    go('tools');showTW();T.bgm='q';T.bgi=1;setTool('bg');
+    BGST.busy=1;bgRenderModels();
+    const c=document.querySelector('.cvw');
+    const busy=c.classList.contains('bgbusy');
+    const scan=document.querySelector('.bgscan');
+    const shown=scan?getComputedStyle(scan).display!=='none':false;
+    BGST.busy=0;bgRenderModels();
+    return {busy,shown,off:!c.classList.contains('bgbusy')};
+  })()`);
+  check('the preview animates while the background is removed',
+    anim.busy && anim.shown && anim.off, JSON.stringify(anim));
+
+  /* ── sound effects ───────────────────────────────────────────────── */
+  const sound = await page.run(`(()=>{
+    const sw=document.querySelector('[data-t="sound"]');
+    let played=0,tones=0;
+    const old=window.AudioContext;
+    window.AudioContext=function(){played++;
+      return {state:'running',currentTime:0,resume:()=>{},
+        createOscillator:()=>{tones++;return {type:'',frequency:{setValueAtTime:()=>{}},connect:()=>{},start:()=>{},stop:()=>{}}},
+        createGain:()=>({gain:{setValueAtTime:()=>{},exponentialRampToValueAtTime:()=>{}},connect:()=>{}}),destination:{}};
+    };
+    ACX=null;
+    S.sound=true;
+    haptic('success');haptic('fail');haptic('tap');
+    window.AudioContext=old;ACX=null;
+    return {hasSwitch:!!sw,on:sw?sw.classList.contains('on'):false,played,tones,
+      setting:S.sound!==false};
+  })()`);
+  check('sound effects are a setting and play for success and failure',
+    sound.hasSwitch && sound.on && sound.setting && sound.tones >= 5,
+    JSON.stringify(sound));
 
   const errors = page.logs.filter((l) => /^\[(exception|error)\]/.test(l) && !/navigator\.vibrate/.test(l));
   check('no console errors', errors.length === 0, errors.slice(0, 3).join(' | '));

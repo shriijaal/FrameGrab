@@ -84,26 +84,32 @@ export async function launch({ width = 900, height = 1400, scale = 2 } = {}) {
   const port = server.address().port;
 
   const profile = mkdtempSync(join(tmpdir(), 'fg-cdp-'));
-  const dport = 9000 + (process.pid % 900);
-  const child = spawn(browser, [
-    '--headless=new',
-    `--remote-debugging-port=${dport}`,
-    `--user-data-dir=${profile}`,
-    '--no-first-run', '--no-default-browser-check', '--disable-extensions',
-    '--allow-file-access-from-files',
-    `--window-size=${width},${height}`,
-    '--force-device-scale-factor=' + scale,
-    'about:blank',
-  ], { stdio: 'ignore' });
-
+  const basePort = 9000 + (process.pid % 900);
+  let dport = basePort;
+  let child = null;
   let wsUrl = null;
-  for (let i = 0; i < 80; i++) {
-    try {
-      const r = await fetch(`http://127.0.0.1:${dport}/json/version`);
-      const j = await r.json();
-      if (j.webSocketDebuggerUrl) { wsUrl = j.webSocketDebuggerUrl; break; }
-    } catch { /* not up yet */ }
-    await sleep(250);
+  // A previous browser may still hold the port, so walk to the next free one.
+  for (let attempt = 0; attempt < 6 && !wsUrl; attempt++) {
+    dport = basePort + attempt * 7;
+    child = spawn(browser, [
+      '--headless=new',
+      `--remote-debugging-port=${dport}`,
+      `--user-data-dir=${profile}`,
+      '--no-first-run', '--no-default-browser-check', '--disable-extensions',
+      '--allow-file-access-from-files',
+      `--window-size=${width},${height}`,
+      '--force-device-scale-factor=' + scale,
+      'about:blank',
+    ], { stdio: 'ignore' });
+    for (let i = 0; i < 40; i++) {
+      try {
+        const r = await fetch(`http://127.0.0.1:${dport}/json/version`);
+        const j = await r.json();
+        if (j.webSocketDebuggerUrl) { wsUrl = j.webSocketDebuggerUrl; break; }
+      } catch { /* not up yet */ }
+      await sleep(250);
+    }
+    if (!wsUrl) { child.kill(); child = null; await sleep(400); }
   }
   if (!wsUrl) throw new Error('browser did not start');
 

@@ -113,6 +113,13 @@ button puts it back in the frame.
 Clicking the ASCII Studio card asks **what to draw**: an image, a video, or text. A video picked here becomes the
 Studio's source directly, so the Studio can draw a moving picture in characters.
 
+The Studio joins the app's **undo and redo**, has a **Reset the Studio** button that puts every setting back, and
+shows a brief sheen over the preview whenever a setting changes, so a change is never silent.
+
+### Sound
+A short chime when something works, a low tone when it does not — synthesised in the app, so there is nothing to
+download. Switch it off in Settings.
+
 
 **Convert & optimize** — Format changer (incl. AVIF/JXL), Compress (with pre-commit preview), Batch rename,
 **Images to PDF** (multi-page, reorder, camera scanning, live document preview, quality options). The preview is a
@@ -296,13 +303,19 @@ node check-app.mjs     # syntax-check every inline script in index.html
 node test-studio.mjs   # the ASCII Studio, end to end in headless Edge
 node test-bg.mjs       # the magic eraser, end to end in headless Edge
 node test-ui.mjs       # crop, source sheet, PDF preview and the stabilizer
-node test-fixes.mjs     # stills menu, background viewport, compact nav, video picker
+node test-fixes.mjs     # stills menu, background viewport, compact nav, video picker, sound
 node shot.mjs <name>   # screenshot the app
 ```
 
 ---
 
 ## Changelog
+
+- **1.13.4** — **Sound effects**: a short chime when something works and a low tone when it does not, with a
+  switch in Settings. The **ASCII Studio** now takes part in undo and redo, has a **Reset the Studio** button, and
+  shows a brief sheen over the preview whenever a setting changes. The **background preview** animates while the
+  model is removing the background, and the picture stays **centred** when you zoom in and out. The **document
+  scanner, the text recognition and the QR scanner** all offer the camera alongside the upload.
 
 - **1.13.3** — The background preview now shows the picture at its **own pixel size**: 100% is the real size, not a
   scaled-down fit, so you can work on the real detail, and you can zoom out below 100% to see the whole picture. The

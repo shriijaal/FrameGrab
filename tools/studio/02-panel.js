@@ -171,5 +171,6 @@ function astPanel(){
   +(AST.src==='text'?'<input class="tin" data-skt="__txt" value="'+astEsc(AST.text||'')+'" placeholder="Type a word" style="margin-top:12px;text-transform:none">'
    +'<div class="lbl">Banner font</div><div class="chips">'+AST_FONTS.map(f=>'<button class="chip '+(AST.font===f?'c1':'')+'" data-x="astfont" data-v="'+astEsc(f)+'">'+astEsc(f)+'</button>').join('')+'</div>':'')
   +(AST.src==='video'&&!vid.videoWidth?'<div class="hint">Load a video in the editor first, then come back.</div>':'');
- return'<div class="seg pre" style="margin-bottom:16px">'+AST_SECTIONS.map(([v,n])=>'<button data-x="astsec" data-v="'+v+'" class="'+(AST.sec===v?'on':'')+'">'+n+'</button>').join('')+'</div>'+srcs+body;
+ return'<div class="seg pre" style="margin-bottom:16px">'+AST_SECTIONS.map(([v,n])=>'<button data-x="astsec" data-v="'+v+'" class="'+(AST.sec===v?'on':'')+'">'+n+'</button>').join('')+'</div>'+srcs+body
+  +'<div class="btns" style="margin-top:20px"><button class="btn glass" data-x="astreset" style="width:100%">Reset the Studio</button></div>';
 }

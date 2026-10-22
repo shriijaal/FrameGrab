@@ -35,6 +35,7 @@ function astToggle(p){
 }
 function astAction(a,b,v){
  switch(a){
+  case 'astreset':Object.assign(AST_RAW,AE.studio.normalizeStudioSettings({}));AST.look='';astApply();astSheen();panel();toast('Studio reset');break;
   case 'astsec':AST.sec=v;panel();break;
   case 'astcat':AST.lookCat=v;panel();break;
   case 'astset':astSet(b.dataset.sk,v);panel();break;
@@ -60,9 +61,10 @@ function astAction(a,b,v){
 }
 /* --- events ---------------------------------------------------------- */
 function astBind(){
+ let astHist=0;
  $('#tp').addEventListener('input',e=>{
   const t=e.target;
-  if(t.dataset.skt){astSet(t.dataset.skt,t.value);return}
+  if(t.dataset.skt){if(!astHist){astHist=1;pushHistory()}astSet(t.dataset.skt,t.value);return}
   if(t.dataset.lk){const i=+t.dataset.lv;astLayerSet(i,t.dataset.lk,+t.value);
    const lbl=document.getElementById('av-l'+i+'-'+t.dataset.lk.replace(/\./g,'-'));
    if(lbl)lbl.textContent=t.value+(t.dataset.u||'');
@@ -75,7 +77,9 @@ function astBind(){
    const lbl=document.getElementById('av-'+p.replace(/\./g,'-'));if(lbl)lbl.textContent=v+(t.dataset.u||'');
    t.style.setProperty('--p',((v-t.min)/(t.max-t.min)*100)+'%');
   }
+  if(!astHist){astHist=1;pushHistory()}
   astSet(p,v);
+  astHist=0;
  });
  $('#tp').addEventListener('change',e=>{
   const t=e.target;

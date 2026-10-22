@@ -20,11 +20,13 @@ let ASRT=null,ASMEDIA=null,ASSIG=0;
 const AST_RAW=AE?AE.studio.normalizeStudioSettings({}):null;
 
 const astGet=(o,p)=>p.split('.').reduce((a,k)=>a==null?a:a[k],o);
-function astSet(p,v){
- const ks=p.split('.'),last=ks.pop();let o=AST_RAW;
- for(const k of ks){if(o[k]==null||typeof o[k]!=='object')o[k]={};o=o[k]}
- o[last]=v;
- astApply();
+/* a quick sheen over the preview, so a change is never silent */
+let astSheenT=0;
+function astSheen(){
+ const c=document.querySelector('.cvw');if(!c)return;
+ c.classList.add('sheen');
+ clearTimeout(astSheenT);
+ astSheenT=setTimeout(()=>c.classList.remove('sheen'),480);
 }
 const astEsc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const astLabel=id=>String(id).replace(/^./,c=>c.toUpperCase());
