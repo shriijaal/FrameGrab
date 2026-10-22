@@ -117,6 +117,12 @@ input[type=range]:active::-webkit-slider-thumb{transform:scaleX(1.5)}
 @keyframes bsheen{0%{transform:translateY(-110%)}100%{transform:translateY(280%)}}
 .bgscan{position:absolute;inset:0;z-index:3;display:none;align-items:center;justify-content:center;pointer-events:none;overflow:hidden}
 .cvw.bgbusy .bgscan{display:flex}
+.cvw.scanbusy .scanov{display:flex}
+.scanov{position:absolute;inset:0;z-index:3;display:none;align-items:center;justify-content:center;pointer-events:none;overflow:hidden}
+.scanov i{position:absolute;left:0;right:0;top:0;height:42%;background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--pri) 28%,transparent),transparent);animation:bgsweep 1.4s ease-in-out infinite}
+.scanov b{position:relative;z-index:2;padding:11px 20px;border-radius:99px;font-weight:700;font-size:14px;color:var(--on);
+ background:color-mix(in srgb,var(--bg) 80%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+ border:1px solid color-mix(in srgb,var(--on) 14%,transparent);box-shadow:0 10px 30px var(--sh)}
 .bgscan i{position:absolute;left:0;right:0;top:0;height:42%;background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--pri) 32%,transparent),transparent);animation:bgsweep 1.5s ease-in-out infinite}
 .bgscan b{position:relative;z-index:2;padding:11px 20px;border-radius:99px;font-weight:700;font-size:14px;color:var(--on);
  background:color-mix(in srgb,var(--bg) 80%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
