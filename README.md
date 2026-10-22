@@ -100,6 +100,11 @@ lags behind. At 0 the drawing is completely untouched.
 The document scanner and the QR & barcode scanner both ask where the picture should come from: **an image you
 already have on the device**, or a **new one from the camera**. The QR scanner scans a chosen picture straight away.
 
+### Background remover preview
+The preview sits in a **frame viewport**: the picture fits the frame, and when you zoom in only the frame scrolls —
+the page never grows. The **zoom buttons live in the viewport** as a small glass pill (−, the percentage, +), with
+pinch and the mouse wheel also working. The panel keeps a single *Fit the picture* button.
+
 
 **Convert & optimize** — Format changer (incl. AVIF/JXL), Compress (with pre-commit preview), Batch rename,
 **Images to PDF** (multi-page, reorder, camera scanning, live document preview, quality options). The preview is a
@@ -283,12 +288,21 @@ node check-app.mjs     # syntax-check every inline script in index.html
 node test-studio.mjs   # the ASCII Studio, end to end in headless Edge
 node test-bg.mjs       # the magic eraser, end to end in headless Edge
 node test-ui.mjs       # crop, source sheet, PDF preview and the stabilizer
+node test-fixes.mjs     # stills menu, background viewport, compact nav, video picker
 node shot.mjs <name>   # screenshot the app
 ```
 
 ---
 
 ## Changelog
+
+- **1.13.2** — The background remover preview now sits in a **frame viewport**: the picture fits the frame and
+  only the frame scrolls when you zoom in, so the page never grows. The **zoom buttons are inline in the preview** —
+  a small glass pill with −, the percentage and + — instead of a slider in the panel. The stills **three-dot menu is
+  no longer clipped by its own card** and no longer hides behind the next still. The **compact navigation**'s
+  sliding pill now matches the compact buttons, so the indicator sits exactly on the active tab. The **ASCII Studio
+  can pick a video**: its file picker accepts video and GIF as well as images, and a picked file becomes the
+  studio's source directly.
 
 - **1.13.1** — The background remover preview is zoomable (pinch or scroll to magnify up to 8×) for
   precise erasing and restoring; the navigation bar can shrink to icons while scrolling, with a switch in
