@@ -22,6 +22,19 @@ applyColors();</script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f7f2ff;--on:#1d1830;--mut:#6b6385;--pri:#6a38ff;--onp:#fff;--pri2:#ff4d9d;--ter:#b8f035;--card:rgba(255,255,255,.62);--glass:rgba(255,255,255,.58);--gb:rgba(255,255,255,.9);--sh:rgba(80,40,160,.22);--spring:cubic-bezier(.34,1.56,.64,1);box-sizing:border-box;padding-top:max(env(safe-area-inset-top,0px), var(--sbt,0px));padding-bottom:max(env(safe-area-inset-bottom,0px), var(--sbb,0px))}
+.app-launch{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--pri) 22%,transparent),transparent 70%),var(--bg);animation:launchOut .9s ease 1.2s forwards}
+.app-launch .logo{display:flex;align-items:center;gap:10px;font-size:38px;font-weight:800;letter-spacing:-1.2px;animation:launchIn .7s var(--spring) both}
+.app-launch .logo b{color:var(--pri)}
+.app-launch .logo .dot{width:10px;height:10px;border-radius:50%;background:var(--pri2);margin-left:4px;animation:pulse 1s ease-in-out infinite}
+@keyframes launchIn{from{opacity:0;transform:scale(.8) translateY(10px)}}
+@keyframes launchOut{to{opacity:0;pointer-events:none;visibility:hidden}}
+@keyframes pulse{50%{transform:scale(1.4)}}
+.vidloading{position:absolute;inset:0;z-index:4;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.5);backdrop-filter:blur(6px)}
+.stagewrap.vload .vidloading{display:flex}
+.vidloading .spin{width:48px;height:48px;border-radius:50%;border:4px solid rgba(255,255,255,.25);border-top-color:#fff;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.mute-btn{position:absolute;z-index:4;left:12px;bottom:12px;height:38px;padding:0 14px;border-radius:19px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.4);color:#fff;font:600 13px var(--font);display:flex;align-items:center;gap:8px;cursor:pointer;backdrop-filter:blur(12px)}
+.mute-btn[hidden]{display:none}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f0b1a;--on:#efe9ff;--mut:#a79fc4;--pri:#a88bff;--onp:#1b0a52;--pri2:#ff79b9;--ter:#c9ff4f;--card:rgba(40,32,66,.55);--glass:rgba(48,40,80,.42);--gb:rgba(255,255,255,.16);--sh:rgba(0,0,0,.5)}}
 :root[data-theme="dark"]{--bg:#0f0b1a;--on:#efe9ff;--mut:#a79fc4;--pri:#a88bff;--onp:#1b0a52;--pri2:#ff79b9;--ter:#c9ff4f;--card:rgba(40,32,66,.55);--glass:rgba(48,40,80,.42);--gb:rgba(255,255,255,.16);--sh:rgba(0,0,0,.5)}
 html{scroll-padding-top:max(env(safe-area-inset-top,0px), var(--sbt,0px));height:100%}
@@ -378,7 +391,9 @@ button,.btn,.tt,.pick,.chip,label.drop{touch-action:manipulation}
 </style>
 </head>
 <body>
+<div class="app-launch" id="launch"><div class="logo">Frame<b>grab</b><span class="dot"></span></div></div>
 <svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="mute" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M23 9 17 15M17 9l6 6"/></symbol>
 <symbol id="lib" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2.5"/><rect x="14" y="3" width="7" height="7" rx="2.5"/><rect x="3" y="14" width="7" height="7" rx="2.5"/><rect x="14" y="14" width="7" height="7" rx="2.5"/></symbol>
 <symbol id="frm" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="5"/><path d="M10 9.5v5l4-2.5z"/></symbol>
 <symbol id="img" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="6"/><circle cx="9" cy="9" r="1.8"/><path d="m21 15-4-4-9 9"/></symbol>
@@ -30836,9 +30851,16 @@ function go(id){
  window.scrollTo({top:0,behavior:'smooth'});
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;let t=b.dataset.go;if(t==='home'&&b.closest('#nav')&&cur!=='editor'&&vid.videoWidth&&lastLib==='editor')t='editor';go(t)});
+document.addEventListener('click',e=>{const vmb=e.target.closest('#vmute');if(vmb){if(vid.muted){vid.muted=false;try{vid.volume=1;}catch(er){}vmb.classList.add('on');const vt=vmb.querySelector('#vmutet');if(vt)vt.textContent='Mute';}else{vid.muted=true;vmb.classList.remove('on');const vt=vmb.querySelector('#vmutet');if(vt)vt.textContent='Unmute';}return;}});
+document.addEventListener('click',e=>{const rt=e.target.closest('#rrow .rt,#grid .g,#tsr .rt');if(rt){const i=+rt.dataset.i;const s=stills[i];if(s){if(typeof showSt==='function'){showSt(s.url,s.name);}else{const im=new Image();im.src=s.url;const w=window.open('','_blank');if(w){w.document.write('<img src="'+s.url.replace(/"/g,'&quot;')+'" style="max-width:100vw;max-height:100vh">');w.document.close();}else window.location.href=s.url;}}}});
 document.addEventListener('pointermove',e=>{const g=e.target.closest('.glass');if(!g)return;const r=g.getBoundingClientRect();g.style.setProperty('--mx',(e.clientX-r.left)+'px');g.style.setProperty('--my',(e.clientY-r.top)+'px')});
 function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),2200)}
 const vid=$('#vid'),fmt=t=>{const m=Math.floor(t/60),s=t-m*60;return String(m).padStart(2,'0')+':'+s.toFixed(3).padStart(6,'0')};
+const vwrap=$('.stagewrap'),vmute=$('#vmute'),vmutet=$('#vmutet');
+vmute.addEventListener('click',()=>{
+  if(vid.muted){vid.muted=false;try{vid.volume=1}catch(e){}vmute.classList.add('on');vmutet.textContent='Mute';}
+  else{vid.muted=true;vmute.classList.remove('on');vmutet.textContent='Unmute';}
+});
 function load(f){
  if(!f)return;
  if(f.type&&!f.type.startsWith('video/')&&!/\.(mp4|mov|m4v|webm|mkv|avi|3gp|ogv)$/i.test(f.name)){toast('Please choose a video file');return}
@@ -30889,7 +30911,7 @@ function fly(url){
 function dl(s){return saveFile(s)}
 function render(){renderRecent();
  $('#none').hidden=!!stills.length;const g=$('#badge');g.textContent=stills.length;g.classList.toggle('show',!!stills.length);
- $('#grid').innerHTML=stills.map((s,i)=>`<div class="tile"><img src="${s.url}" alt=""><span class="tag glass tres">${s.w}×${s.h}</span><button class="btn glass tmore" data-more="${i}" aria-label="Options for still ${i+1}">⋮</button><div class="tmenu" data-menu="${i}" hidden><button data-sh="${i}"><svg class="i" style="width:17px;height:17px"><use href="#shr"/></svg>Share</button><button data-dl="${i}"><svg class="i" style="width:17px;height:17px"><use href="#dl"/></svg>Download</button><button class="dgr" data-rm2="${i}"><svg class="i" style="width:17px;height:17px"><use href="#rmv"/></svg>Delete</button></div></div>`).join('');
+ $('#grid').innerHTML=stills.map((s,i)=>`<div class="tile g" data-i="${i}"><img src="${s.url}" alt=""><span class="tag glass tres">${s.w}×${s.h}</span><button class="btn glass tmore" data-more="${i}" aria-label="Options for still ${i+1}">⋮</button><div class="tmenu" data-menu="${i}" hidden><button data-sh="${i}"><svg class="i" style="width:17px;height:17px"><use href="#shr"/></svg>Share</button><button data-dl="${i}"><svg class="i" style="width:17px;height:17px"><use href="#dl"/></svg>Download</button><button class="dgr" data-rm2="${i}"><svg class="i" style="width:17px;height:17px"><use href="#rmv"/></svg>Delete</button></div></div>`).join('');
 }
 $('#grid').onclick=e=>{const m=e.target.closest('[data-more]');if(m){const menu=$('.tmenu[data-menu="'+m.dataset.more+'"]'),wasOpen=!menu.hidden;closeTMenus();menu.hidden=wasOpen;if(!wasOpen){const t=menu.closest('.tile');if(t)t.classList.add('open')}return}
  closeTMenus();
@@ -31070,8 +31092,8 @@ $('#tpick').onclick=()=>openPick();
 $('#tf').onchange=e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
  if(curTool==='astudio'){AST.file=f;AST.src='file';showTW();panel();return}
  loadTI(URL.createObjectURL(f),f.name.replace(/\.[^.]+$/,''))};
-$('#tsr').onclick=e=>{const b=e.target.closest('.rt');if(b){const s=stills[b.dataset.i];loadTI(s.url,s.name.replace(/\.[^.]+$/,''))}};
-$('#rrow').onclick=e=>{if(e.target.closest('.rt'))go('stills')};
+$('#tsr').onclick=e=>{const b=e.target.closest('.rt');if(b){const s=stills[b.dataset.i];if(s&&s.url){try{window.open(s.url,'_blank');return;}catch(er){}}if(s){try{loadTI(s.url,s.name.replace(/\.[^.]+$/,''));return;}catch(er){}}};
+$('#rrow').onclick=e=>{const b=e.target.closest('.rt');if(b){const s=stills[b.dataset.i];if(s&&s.url){try{window.open(s.url,'_blank');e.stopPropagation();return;}catch(er){}if(typeof showSt==='function'){showSt(s.url,s.name);e.stopPropagation();return;}}go('stills');};
 $('#ttabs').onclick=e=>{const b=e.target.closest('button');if(b)setTool(b.dataset.t)};
 $('#tback').onclick=()=>{$('#tw').hidden=true;$('#tl-home').hidden=false;resetTools()};
 $('#trs').onclick=()=>{pushHistory();T=defT();panel();draw();setBk();toast('Reset')};
@@ -33382,6 +33404,7 @@ function pickStills(multi,cb){
  if(!stills.length)return toast('You have no stills yet. Grab a frame first.');
  STP={multi,cb,sel:new Set()};
  $('#stg').innerHTML=stills.map((s,i)=>`<button class="sti" data-i="${i}" aria-label="Still ${i+1}"><img src="${s.url}" alt=""><span class="chk"></span></button>`).join('');
+const rrow=$('#rrow');if(rrow){rrow.innerHTML=stills.slice(0,8).map((s,i)=>`<div class="rt" data-i="${i}"><img src="${s.url}" alt=""><span>${s.w}×${s.h}</span></div>`).join('');}
  $('#stt').textContent=multi?'Choose stills':'Choose a still';$('#stadd').hidden=!multi;$('#stadd').textContent='Add';
  $('#scrim2').classList.add('on');$('#stp').classList.add('on');
 }
