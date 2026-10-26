@@ -151,7 +151,7 @@ export async function launch({ width = 900, height = 1400, scale = 2 } = {}) {
 
   /** Waits until the app has booted. */
   for (let i = 0; i < 120; i++) {
-    const r = await run(`typeof Asciify!=="undefined" && typeof setTool==='function' && typeof loadTI==='function' && document.querySelectorAll('#tgrid button').length>0`);
+    const r = await run(`typeof Asciify!=="undefined" && typeof setTool==='function' && typeof loadTI==='function' && document.querySelectorAll('#tgrid button').length>0 && !document.getElementById('splash')`);
     if (r) break;
     await sleep(250);
   }

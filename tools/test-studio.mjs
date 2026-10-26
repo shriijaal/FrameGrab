@@ -142,7 +142,7 @@ try {
   let ready = false;
   for (let i = 0; i < 80; i++) {
     const r = await cdp.send('Runtime.evaluate', {
-      expression: `typeof Asciify!=="undefined" && typeof setTool==='function' && typeof loadTI==='function' && document.querySelectorAll('#tgrid button').length>0`,
+      expression: `typeof Asciify!=="undefined" && typeof setTool==='function' && typeof loadTI==='function' && document.querySelectorAll('#tgrid button').length>0 && !document.getElementById('splash')`,
       returnByValue: true,
     }, sessionId).catch(() => ({ result: { value: false } }));
     if (r.result?.value) { ready = true; break; }
