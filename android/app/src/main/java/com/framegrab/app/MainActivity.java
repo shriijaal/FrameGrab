@@ -60,6 +60,7 @@ public class MainActivity extends Activity {
     private static final int FILE_CHOOSER = 101;
     private static final int PERM_CAMERA = 102;
     private static final int PERM_STORAGE = 103;
+    private static final int PERM_NOTIF = 106;
     private static final int RQ_SAVE = 104;
     private static final int RQ_FOLDER = 105;
 
@@ -178,6 +179,8 @@ public class MainActivity extends Activity {
                 && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERM_STORAGE);
         }
+        // Camera and notification permissions are requested by the page (onboarding
+        // and Settings) so the in-app permission UI stays accurate.
 
         String url = "https://" + HOST + "/index.html";
         if (savedInstanceState != null) {
@@ -260,6 +263,9 @@ public class MainActivity extends Activity {
             }
         } else if (code == PERM_STORAGE && !ok) {
             toast("Allow storage access so files can be saved to Downloads");
+        }
+        if (web != null) {
+            web.evaluateJavascript("typeof onPermResult==='function'&&onPermResult()", null);
         }
     }
 
@@ -585,6 +591,47 @@ public class MainActivity extends Activity {
             } catch (Exception e) {
                 Log.e(TAG, "share failed", e);
                 toast("Share failed: " + e.getMessage());
+            }
+        }
+
+        /* ---------------- permission state ---------------- */
+
+        @JavascriptInterface public int sdkInt() {
+            return Build.VERSION.SDK_INT;
+        }
+
+        @JavascriptInterface public boolean hasStorage() {
+            // Android 10+ saves through MediaStore / SAF, so no runtime permission exists.
+            if (Build.VERSION.SDK_INT >= 29) return true;
+            return checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        }
+
+        @JavascriptInterface public void requestStorage() {
+            if (Build.VERSION.SDK_INT < 29
+                    && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERM_STORAGE);
+            }
+        }
+
+        @JavascriptInterface public boolean hasCamera() {
+            return checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+        }
+
+        @JavascriptInterface public void requestCamera() {
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.CAMERA}, PERM_CAMERA);
+            }
+        }
+
+        @JavascriptInterface public boolean hasNotification() {
+            if (Build.VERSION.SDK_INT < 33) return true;
+            return checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
+        }
+
+        @JavascriptInterface public void requestNotification() {
+            if (Build.VERSION.SDK_INT >= 33
+                    && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERM_NOTIF);
             }
         }
     }
