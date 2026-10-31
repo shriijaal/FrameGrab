@@ -61,7 +61,6 @@ public class MainActivity extends Activity {
     private static final int PERM_CAMERA = 102;
     private static final int PERM_STORAGE = 103;
     private static final int PERM_NOTIF = 106;
-    private static final int PERM_STARTUP = 107;
     private static final int RQ_SAVE = 104;
     private static final int RQ_FOLDER = 105;
 
@@ -176,12 +175,12 @@ public class MainActivity extends Activity {
             WebView.setWebContentsDebuggingEnabled(true);
         }
 
-        // Permissions come from the system: camera and notifications as normal
-        // runtime dialogs, storage as the "All files access" Settings screen
-        // (Android has no runtime dialog for MANAGE_EXTERNAL_STORAGE).
-        web.postDelayed(new Runnable() {
-            @Override public void run() { requestStartupPermissions(); }
-        }, 700);
+        if (Build.VERSION.SDK_INT < 29
+                && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERM_STORAGE);
+        }
+        // Camera and notification permissions are requested by the page (onboarding
+        // and Settings) so the in-app permission UI stays accurate.
 
         String url = "https://" + HOST + "/index.html";
         if (savedInstanceState != null) {
@@ -190,60 +189,6 @@ public class MainActivity extends Activity {
         if (web.getUrl() == null) {
             web.loadUrl(url);
         }
-    }
-
-    /* ---------------- permissions ---------------- */
-
-    private boolean storageGranted() {
-        if (Build.VERSION.SDK_INT >= 30) return Environment.isExternalStorageManager();
-        return checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestStartupPermissions() {
-        if (isFinishing() || isDestroyed()) return;
-        if (Build.VERSION.SDK_INT >= 33) {
-            requestPermissions(new String[]{
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.POST_NOTIFICATIONS
-            }, PERM_STARTUP);
-        } else {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, PERM_STARTUP);
-        }
-    }
-
-    /** All files access is a Settings toggle, not a dialog. */
-    private Intent allFilesIntent() {
-        Intent i = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
-                Uri.parse("package:" + getPackageName()));
-        if (i.resolveActivity(getPackageManager()) == null) {
-            i = new Intent(android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-        }
-        return i;
-    }
-
-    private void openAllFiles() {
-        try {
-            startActivity(allFilesIntent());
-        } catch (Exception e) {
-            Log.w(TAG, "all files settings unavailable", e);
-            openAppSettings();
-        }
-    }
-
-    /** Ask once per install, never nag. */
-    private void askAllFilesOnce() {
-        if (Build.VERSION.SDK_INT < 30 || storageGranted()) return;
-        if (prefs().getBoolean("askedAllFiles", false)) return;
-        prefs().edit().putBoolean("askedAllFiles", true).apply();
-        openAllFiles();
-    }
-
-    private void openAppSettings() {
-        try {
-            startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.parse("package:" + getPackageName())));
-        } catch (Exception ignored) {}
     }
 
     /* ---------------- asset serving (fake https origin) ---------------- */
@@ -316,9 +261,11 @@ public class MainActivity extends Activity {
                 pendingCamReq.deny();
                 pendingCamReq = null;
             }
+        } else if (code == PERM_STORAGE && !ok) {
+            toast("Allow storage access so files can be saved to Downloads");
         }
-        if (code == PERM_STARTUP || code == PERM_STORAGE) {
-            askAllFilesOnce();
+        if (web != null) {
+            web.evaluateJavascript("typeof onPermResult==='function'&&onPermResult()", null);
         }
     }
 
@@ -520,23 +467,7 @@ public class MainActivity extends Activity {
                 if (sc >= 0) mime = mime.substring(0, sc);
                 byte[] bytes = Base64.decode(dataUrl.substring(comma + 1), Base64.DEFAULT);
                 final String safe = sanitize(name == null || name.isEmpty() ? "download.bin" : name);
-                if (storageGranted()) {
-                    // All files access (or pre-scoped storage): write the real file.
-                    File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                    if (!dir.exists() && !dir.mkdirs()) throw new IllegalStateException("could not create Downloads");
-                    File f = new File(dir, safe);
-                    int i = 1;
-                    while (f.exists()) {
-                        f = new File(dir, base(safe) + " (" + (i++) + ")" + ext(safe));
-                    }
-                    final File out = f;
-                    FileOutputStream fo = new FileOutputStream(out);
-                    fo.write(bytes);
-                    fo.close();
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() { toast("Saved to Downloads/" + out.getName()); }
-                    });
-                } else if (Build.VERSION.SDK_INT >= 29) {
+                if (Build.VERSION.SDK_INT >= 29) {
                     ContentValues cv = new ContentValues();
                     cv.put(MediaStore.Downloads.DISPLAY_NAME, safe);
                     cv.put(MediaStore.Downloads.MIME_TYPE, mime.isEmpty() ? guessMime(safe) : mime);
@@ -555,7 +486,24 @@ public class MainActivity extends Activity {
                         @Override public void run() { toast("Saved to Downloads/" + safe); }
                     });
                 } else {
-                    throw new IllegalStateException("storage permission denied");
+                    if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        throw new IllegalStateException("storage permission denied");
+                    }
+                    File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    if (!dir.exists() && !dir.mkdirs()) throw new IllegalStateException("could not create Downloads");
+                    File f = new File(dir, safe);
+                    int i = 1;
+                    while (f.exists()) {
+                        f = new File(dir, base(safe) + " (" + (i++) + ")" + ext(safe));
+                    }
+                    final File out = f;
+                    FileOutputStream fo = new FileOutputStream(out);
+                    fo.write(bytes);
+                    fo.close();
+                    runOnUiThread(new Runnable() {
+                        @Override public void run() { toast("Saved to Downloads/" + out.getName()); }
+                    });
                 }
             } catch (final Exception e) {
                 Log.e(TAG, "saveFile failed", e);
@@ -653,27 +601,16 @@ public class MainActivity extends Activity {
         }
 
         @JavascriptInterface public boolean hasStorage() {
-            return storageGranted();
+            // Android 10+ saves through MediaStore / SAF, so no runtime permission exists.
+            if (Build.VERSION.SDK_INT >= 29) return true;
+            return checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         }
 
         @JavascriptInterface public void requestStorage() {
-            runOnUiThread(new Runnable() {
-                @Override public void run() {
-                    if (storageGranted()) return;
-                    if (Build.VERSION.SDK_INT >= 30) {
-                        openAllFiles();
-                    } else if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERM_STORAGE);
-                    }
-                }
-            });
-        }
-
-        @JavascriptInterface public void openSettings() {
-            runOnUiThread(new Runnable() {
-                @Override public void run() { openAppSettings(); }
-            });
+            if (Build.VERSION.SDK_INT < 29
+                    && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERM_STORAGE);
+            }
         }
 
         @JavascriptInterface public boolean hasCamera() {
