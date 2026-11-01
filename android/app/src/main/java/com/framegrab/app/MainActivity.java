@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
 import android.webkit.ConsoleMessage;
@@ -621,6 +622,22 @@ public class MainActivity extends Activity {
             if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.CAMERA}, PERM_CAMERA);
             }
+        }
+
+        @JavascriptInterface public void openSettings() {
+            runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    try {
+                        Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        i.setData(Uri.parse("package:" + getPackageName()));
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(i);
+                    } catch (Exception e) {
+                        Log.e(TAG, "settings: " + e.getMessage());
+                        toast("Open Settings > Apps > Framegrab");
+                    }
+                }
+            });
         }
 
         @JavascriptInterface public boolean hasNotification() {
