@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
@@ -40,6 +41,7 @@ import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -64,11 +66,14 @@ public class MainActivity extends Activity {
     private static final int PERM_NOTIF = 106;
     private static final int RQ_SAVE = 104;
     private static final int RQ_FOLDER = 105;
+    private static final int RQ_CAPTURE = 107;
 
     private WebView web;
     private ValueCallback<Uri[]> filePathCallback;
     private PermissionRequest pendingCamReq;
     private String pendName, pendMime, pendData;
+    private Uri captureUri;
+    private boolean captureForChooser;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +142,28 @@ public class MainActivity extends Activity {
                     filePathCallback = null;
                 }
                 filePathCallback = cb;
+                // A file input with capture="environment" means "take a photo".
+                // Launch the system camera straight away instead of a gallery.
+                if (params.isCaptureEnabled()) {
+                    Intent c = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (c.resolveActivity(getPackageManager()) != null) {
+                        Uri out = newCaptureUri();
+                        captureUri = out;
+                        captureForChooser = true;
+                        grantPhoto(out);
+                        c.putExtra(MediaStore.EXTRA_OUTPUT, out);
+                        c.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                                | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        try {
+                            startActivityForResult(c, RQ_CAPTURE);
+                            return true;
+                        } catch (Exception e) {
+                            captureUri = null;
+                            captureForChooser = false;
+                            Log.w(TAG, "capture chooser failed", e);
+                        }
+                    }
+                }
                 Intent i = new Intent(Intent.ACTION_GET_CONTENT);
                 i.addCategory(Intent.CATEGORY_OPENABLE);
                 String type = "*/*";
@@ -200,6 +227,18 @@ public class MainActivity extends Activity {
         }
         String p = u.getPath();
         if (p == null || p.isEmpty() || p.equals("/")) p = "/index.html";
+        // Photos taken with the system camera live in cache/photo; the page loads
+        // them through this origin because a WebView cannot read content:// URIs.
+        if (p.startsWith("/@photo/")) {
+            File f = new File(new File(getCacheDir(), "photo"), p.substring(8));
+            try {
+                InputStream in = new FileInputStream(f);
+                return new WebResourceResponse("image/jpeg", null, 200, "OK", null, in);
+            } catch (Exception e) {
+                return new WebResourceResponse("text/plain", "UTF-8", 404, "Not found", null,
+                        new ByteArrayInputStream(new byte[0]));
+            }
+        }
         String asset = p.startsWith("/") ? p.substring(1) : p;
         try {
             InputStream in = getAssets().open(asset);
@@ -266,7 +305,11 @@ public class MainActivity extends Activity {
             toast("Allow storage access so files can be saved to Downloads");
         }
         if (web != null) {
-            web.evaluateJavascript("typeof onPermResult==='function'&&onPermResult()", null);
+            // The page waits for a boolean so it can tell a refusal apart from a
+            // prompt that was never answered. Non-camera results pass null, which
+            // makes the page fall back to hasCamera().
+            web.evaluateJavascript("typeof onPermResult==='function'&&onPermResult("
+                    + (code == PERM_CAMERA ? String.valueOf(ok) : "null") + ")", null);
         }
     }
 
@@ -323,8 +366,96 @@ public class MainActivity extends Activity {
                 }
             }
             pendData = null;
+        } else if (requestCode == RQ_CAPTURE) {
+            Uri out = captureUri;
+            captureUri = null;
+            boolean forChooser = captureForChooser;
+            captureForChooser = false;
+            File photo = photoFile(out);
+            boolean ok = resultCode == RESULT_OK && photo != null && photo.length() > 0;
+            if (forChooser) {
+                if (filePathCallback != null) {
+                    filePathCallback.onReceiveValue(ok ? new Uri[]{out} : null);
+                    filePathCallback = null;
+                }
+            } else if (web != null) {
+                String url = ok
+                        ? "https://appassets.framegrab.local/@photo/" + out.getLastPathSegment() : "";
+                web.evaluateJavascript("typeof onNativePhoto==='function'&&onNativePhoto("
+                        + jsq(url) + ")", null);
+            }
+            prunePhotos();
         } else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    /* ---------------- system camera fallback ---------------- */
+
+    private File photoDir() {
+        File d = new File(getCacheDir(), "photo");
+        if (!d.exists() && !d.mkdirs()) Log.w(TAG, "could not create " + d);
+        return d;
+    }
+
+    private Uri newCaptureUri() {
+        File f = new File(photoDir(), "shot_" + System.currentTimeMillis() + ".jpg");
+        return Uri.parse("content://" + PhotoProvider.AUTHORITY + "/" + f.getName());
+    }
+
+    private File photoFile(Uri u) {
+        if (u == null) return null;
+        String n = u.getLastPathSegment();
+        if (n == null || n.isEmpty()) return null;
+        return new File(photoDir(), n);
+    }
+
+    // Photos pile up in the cache until the system reclaims them; trim the
+    // oldest so a long scanning session cannot fill the device.
+    private void prunePhotos() {
+        File[] fs = photoDir().listFiles();
+        if (fs == null || fs.length < 12) return;
+        java.util.Arrays.sort(fs, new java.util.Comparator<File>() {
+            @Override public int compare(File a, File b) {
+                return Long.compare(a.lastModified(), b.lastModified());
+            }
+        });
+        for (int i = 0; i < fs.length - 8; i++) {
+            if (!fs[i].delete()) Log.w(TAG, "could not delete " + fs[i]);
+        }
+    }
+
+    private void grantPhoto(Uri u) {
+        if (u == null) return;
+        Intent probe = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        for (ResolveInfo ri : getPackageManager().queryIntentActivities(probe, 0)) {
+            try {
+                grantUriPermission(ri.activityInfo.packageName, u,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            } catch (Exception e) {
+                Log.w(TAG, "photo grant failed for " + ri.activityInfo.packageName, e);
+            }
+        }
+    }
+
+    private void startCameraCapture() {
+        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (i.resolveActivity(getPackageManager()) == null) {
+            toast("No camera app is available on this device");
+            return;
+        }
+        Uri out = newCaptureUri();
+        captureUri = out;
+        captureForChooser = false;
+        grantPhoto(out);
+        i.putExtra(MediaStore.EXTRA_OUTPUT, out);
+        i.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        try {
+            startActivityForResult(i, RQ_CAPTURE);
+        } catch (Exception e) {
+            captureUri = null;
+            Log.e(TAG, "capture failed", e);
+            toast("Could not open the camera");
         }
     }
 
@@ -619,9 +750,23 @@ public class MainActivity extends Activity {
         }
 
         @JavascriptInterface public void requestCamera() {
-            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.CAMERA}, PERM_CAMERA);
-            }
+            runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, PERM_CAMERA);
+                    } else {
+                        grantCam();
+                    }
+                }
+            });
+        }
+
+        // Fallback used when the WebView camera cannot start: hand the shot to
+        // the camera app that ships with the device.
+        @JavascriptInterface public void capturePhoto() {
+            runOnUiThread(new Runnable() {
+                @Override public void run() { startCameraCapture(); }
+            });
         }
 
         @JavascriptInterface public void openSettings() {
@@ -727,6 +872,10 @@ public class MainActivity extends Activity {
     }
 
     @Override protected void onPause() {
+        if (web != null) {
+            web.evaluateJavascript(
+                    "try{if(typeof CSHOT!=='undefined'&&CSHOT.stream)stopCam()}catch(e){}", null);
+        }
         web.onPause();
         super.onPause();
     }
