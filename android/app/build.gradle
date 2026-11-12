@@ -16,8 +16,8 @@ android {
         applicationId 'com.framegrab.app'
         minSdk 26
         targetSdk 34
-        versionCode 71
-        versionName '1.25.21'
+        versionCode 72
+        versionName '1.25.22'
     }
 
     signingConfigs {
