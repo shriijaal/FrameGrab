@@ -51,8 +51,8 @@ Pages, Netlify, a NAS — works). Opening it straight from disk works for everyt
 2. Drop a video onto the page (or use **Choose video**).
 3. Scrub with the mouse wheel, arrows or the timeline; step frame-by-frame with **◀ ▶** or the ← → keys.
 4. Press **Grab frame** (or `C`) — the still is saved to your Stills library at the video's native resolution.
-5. Open **Toolbox** and pick a tool: crop, filters, OCR, PDF, QR generator… Tools share the loaded image within a
-   session and start clean when you go back to the toolbox.
+5. Open **Toolbox** and pick a tool: crop, filters, OCR, PDF, QR generator… Tools open in place and the image,
+   scans and edits stay put while you move between them — the **Source → Adjust → Export** steps keep the flow clear.
 
 ---
 
@@ -71,6 +71,12 @@ PNG, JPG, WebP, **AVIF** and **JPEG XL** — the encoders are embedded and run l
 libjxl). Resolution presets (never upscale), per-format quality, optional metadata.
 
 ### Toolbox
+
+The Toolbox is one workbench in three steps: **Source** (choose an image, scan a page, or continue where you
+left off), **Adjust** (the tool and its controls) and **Export** (stills, PDF or download). Switching tools,
+leaving the tab or stepping back never loses your picture or edits — only **New** or an explicit discard clears
+them. Scanners open the camera straight away; other tools show their UI first. **All tools** is a searchable
+sheet, with recently used tools surfaced at the top.
 
 Every tool accepts upload, drag & drop, stills, or camera capture.
 
